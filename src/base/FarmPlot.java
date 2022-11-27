@@ -5,14 +5,27 @@ import java.util.HashMap;
 public class FarmPlot {
     private int daytime;
     public FarmPlot(HashMap<Integer, Tile> plot){
+        /* Generate 50 Tiles stored in a HashMap */
         for(int i = 0; i < 50; i++){
-            Tile tile = new Tile(i + 1, null, TileStatus.UNPLOWED);
+            Tile tile = new Tile(i + 1, null, TileStatus.PLOWED);
             plot.put(tile.getPosition(), tile);
         }
         this.daytime = 1;
+        generateEdges(plot);
         //generateRocks(plot);
+
     }
 
+    private void generateEdges(HashMap<Integer, Tile> plot){
+        for(int i = 1; i <= 50; i++){
+            if(i <= 6 || i >= 45) {
+                plot.get(i).setEdge(true);
+            }
+            if((i % 5) == 1 || (i % 5) == 0){
+                plot.get(i).setEdge(true);
+            }
+        }
+    }
     private int rngRockPosition(){
         int lb = 1, ub = 50;
         return (int) Math.floor(Math.random()*(ub-lb+1)+lb);
@@ -53,6 +66,7 @@ public class FarmPlot {
                         case SEED -> "SEED";
                         case WITHERED -> "WITHERED";
                         case PLANT -> "PLANT";
+                        case TREE -> "FTREE";
                     };
 
                     System.out.printf("\t%-11s %-2d ", ("[" + tileStatus + "]"), plot.get(tileCount).getPosition());

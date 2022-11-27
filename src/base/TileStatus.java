@@ -5,6 +5,7 @@ public enum TileStatus {
     UNPLOWED,
     PLOWED,
     PLANT,
+    TREE,
     SEED, //Basically still a seed and growing
     WITHERED,
 

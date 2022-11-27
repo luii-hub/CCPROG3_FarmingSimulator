@@ -2,17 +2,17 @@ package base;
 
 import java.util.*;
 public class Application {
-	
+
 	// Input
 	public static final Scanner input = new Scanner(System.in);
 
 	// Game Initializations and Instantiations
 	public static boolean isRunning = true;
-	public static Farmer player = new Farmer(FarmerType.NOVICE);
+	public static Farmer player = new Farmer(FarmerType.DEFAULT);
 	public static HashMap<Integer, Tile> plot = new HashMap<>();
 	public static FarmPlot MyFarm = new FarmPlot(plot);
 
-	
+
 	public static final List<Crop> seedList = new ArrayList<Crop>(Arrays.asList(
 		new Crop("Turnip", CropType.ROOT_CROP, 2, 1, 2, 0, 1, 5, 6, 1, 2, 5),
 		new Crop("Carrot", CropType.ROOT_CROP, 3, 1, 2, 0, 1, 10, 9, 1, 2, 7.5),
@@ -20,7 +20,7 @@ public class Application {
 		new Crop("Rose", CropType.FLOWER, 1, 1, 2, 0, 1, 5, 5, 1, 1, 2.5),
 		new Crop("Tulip", CropType.FLOWER, 2, 2, 3, 0, 1, 10, 9, 1, 1, 5),
 		new Crop("Sunflower", CropType.FLOWER, 2, 2, 3, 1, 2, 20, 19, 1, 1, 7.5),
-		new Crop("Mango", CropType.FRUIT_TREE, 10, 7, 7, 4, 4, 100, 8, 5, 15, 25),
+		new Crop("Mango", CropType.FRUIT_TREE, 5, 5, 7, 4, 4, 100, 8, 5, 15, 25),
 		new Crop("Apple", CropType.FRUIT_TREE, 10, 7, 7, 5, 5, 200, 5, 10, 15, 25)
 	));
 
@@ -48,7 +48,7 @@ public class Application {
 			var cmd = input.nextLine();
 			performCommand(cmd);
 			updateFarmerLevel();
-			checkGameConditions();
+			//checkGameConditions();
 		}
 		//printFinalState();
 		input.close();
@@ -67,7 +67,7 @@ public class Application {
 		, Collections.frequency(player.getInventory(), seedList.get(1))
 		, Collections.frequency(player.getInventory(), seedList.get(2)));
 	}
-	
+
 	public static void performCommand(String cmd) {
 		/* Function where the program will 'perform' the command that the user wants */
 		int index;
@@ -79,8 +79,8 @@ public class Application {
 					System.out.print("""
 								Which Seed do you want to purchase?
 								[Root Crops]	[Flower Seed]	[Fruit Tree]
-								[1] Turnip		[4] Rose		[7] Apple
-								[2] Carrot		[5] Tulip		[8] Mango
+								[1] Turnip		[4] Rose		[7] Mango
+								[2] Carrot		[5] Tulip		[8] Apple
 								[3] Potato		[6] Sunflower	[9] Exit
 							""");
 					try {
@@ -134,6 +134,7 @@ public class Application {
 									System.out.println("\tError! The tile that you are accessing is currently occupied.");
 
 								} else if (plot.get(index).getStatus().equals(TileStatus.PLOWED)) {
+									// Add Check
 									// Display crop options from seedList
 									for (int i = 0; i < seedList.size(); i++) {
 										int inputIndex = i + 1;
@@ -155,8 +156,32 @@ public class Application {
 									for (Crop crop : seedList) {
 										crop.setChoosable(false);
 									}
-									/* Plant new Instance of Seed (Crop), Set Tile Status to SEED, Update Farmer Inventory */
-									player.plantSeed(plot, index, seedList.get(seedIndex));
+
+									/* If selected Seed is a Fruit Tree, Restriction is added */
+									if(seedList.get(seedIndex).getType().equals(CropType.FRUIT_TREE)){
+										if(plot.get(index).isEdge()) {
+											System.out.println("\tError! You are unable to plant a Fruit Tree at the edges of the farm plot.");
+										} else{
+											if(checkSurroundings(1, index, plot)) {
+												player.plantSeed(plot, index, seedList.get(seedIndex));
+												plot.get(index).setPlantable(false);
+											}
+											else {
+												System.out.println("\tError! You are unable to plant a Fruit Tree because it needs a tile of space to grow.");
+											}
+										}
+									}
+									else{
+										/* Plant new Instance of Seed (Crop), Set Tile Status to SEED, Update Farmer Inventory */
+										if(checkSurroundings(0, index, plot)) {
+											player.plantSeed(plot, index, seedList.get(seedIndex));
+											plot.get(index).setPlantable(false);
+										}
+										else {
+											System.out.println("\tError! You are planting beside a fruit tree. Fruit Trees needs a tile of space to grow.");
+										}
+									}
+
 								} else {
 									System.out.println("\tError! You have selected an Unplowed Tile.");
 								}
@@ -262,7 +287,6 @@ public class Application {
 					if (index > 0 && index <= 50) {
 						/* Execute ShovelTool Method, Update the Crop's Stats */
 						player.shovelTool(plot, (ArrayList<Tool>) toolList, index);
-
 					} else {
 						System.out.println("\tError! Tile Index is out of bounds.");
 					}
@@ -307,16 +331,16 @@ public class Application {
 	public static void checkGameConditions() {
 		int counter = 0;
 		boolean cond1 = false, cond2 = false;
-		for(int i = 0; i < plot.size(); i++){
+		for(int i = 1; i < plot.size(); i++){
 			/* Condition 1.1: No Active/Growing Crops */
-			if(plot.get(i).getStatus().equals(TileStatus.PLANT) || plot.get(i).getStatus().equals(TileStatus.PLANT)){
+			if(!plot.get(i).getStatus().equals(TileStatus.PLANT) && !plot.get(i).getStatus().equals(TileStatus.SEED)){
 				cond1 = true;
 			}
 			/* Condition 1.2: No more ObjectCoins to buy new Seeds */
 			if(player.getInventory().size() == 0 && player.getObjectCoins() == 0){
 				cond2 = true;
 			}
-			
+
 			/* Condition 2: When All Tiles are Withered */
 			if(plot.get(i).getStatus().equals(TileStatus.WITHERED)){
 				counter++;
@@ -417,6 +441,7 @@ public class Application {
 			/* Convert Harvestable PLANTS to WITHERED TileStatus */
 			if(plot.get(i).getStatus().equals(TileStatus.PLANT)){
 				plot.get(i).setStatus(TileStatus.WITHERED);
+				plot.get(i).setPlantable(true);
 				//Also make withered plants unable to harvest, and watered
 			}
 
@@ -460,7 +485,12 @@ public class Application {
 						else if(plot.get(i).getPlantedCrop().getWater() >= plot.get(i).getPlantedCrop().getWaterNeeded()
 								&& plot.get(i).getPlantedCrop().getFertilizer() >= plot.get(i).getPlantedCrop().getFertilizerNeeded()) {
 							System.out.println("Plant is Harvestable");
-							plot.get(i).setStatus(TileStatus.PLANT);
+							if(plot.get(i).getPlantedCrop().getType().equals(CropType.FRUIT_TREE)){
+								plot.get(i).setStatus(TileStatus.TREE);
+							}
+							else{
+								plot.get(i).setStatus(TileStatus.PLANT);
+							}
 						}
 					}
 				}
@@ -469,6 +499,8 @@ public class Application {
 	}
 
 	public static void inspectTile(int index) {
+		System.out.println("\tisEdge: " + plot.get(index).isEdge());
+		System.out.println("\tisPlantable: " + plot.get(index).IsPlantable());
 		/* Inspect the Tile Status of a selected TIle and Print its attributes */
 		/* Inspect Tile containing a SEED */
 		if(plot.get(index).getStatus().equals(TileStatus.SEED)) {
@@ -500,12 +532,53 @@ public class Application {
 		}
 	}
 
-	public static void updateFarmerLevel(){
+	public static boolean checkSurroundings(int checkMode, int cropIndex, HashMap<Integer, Tile> plot){
+		boolean isPlantable = true;
+		int counter = 4;
+		if(checkMode == 1) {
+			/* Check Left and Right Space Index */
+			switch (plot.get(cropIndex + 1).getStatus()) {
+				case ROCK, TREE, PLANT, SEED, WITHERED -> {
+					isPlantable = false;
+				}
+			}
+			switch (plot.get(cropIndex - 1).getStatus()) {
+				case ROCK, TREE, PLANT, SEED, WITHERED -> {
+					isPlantable = false;
+				}
+			}
+
+			/* Check Top, Btm, Diagonal Space Index */
+			for (int i = 0; i < 3; i++) {
+				switch (plot.get(cropIndex + counter).getStatus()) {
+					case ROCK, TREE, PLANT, SEED, WITHERED -> {
+						isPlantable = false;
+					}
+				}
+				switch (plot.get(cropIndex - counter).getStatus()) {
+					case ROCK, TREE, PLANT, SEED, WITHERED -> {
+						isPlantable = false;
+					}
+				}
+				counter++;
+			}
+		}
+		else if (checkMode == 0){
+			if(!plot.get(cropIndex).IsPlantable()){
+				isPlantable = false;
+			}
+		}
+			return isPlantable;
+	}
+
+	public static void updateFarmerLevel() {
 		/* Reset the Farmer's Exp Counter since the CAP is 100 */
-		if(player.getExperience() >= 100){
-			player.setFarmerLevel(player.getFarmerLevel()+1);
-			System.out.println("\tCongratulations, you have leveled up! You are now Level " + player.getFarmerLevel());
-			player.addExperience((-100));
+		if (player.getExperience() >= 100){
+			while (player.getExperience() >= 100) {
+				player.setFarmerLevel(player.getFarmerLevel() + 1);
+				player.addExperience((-100));
+			}
+		System.out.println("\tCongratulations, you have leveled up! You are now Level " + player.getFarmerLevel());
 		}
 
 		if(player.getFarmerLevel() == 5){
@@ -518,6 +591,7 @@ public class Application {
 			System.out.println("\tCongratulations, you are now eligible to promote to a 'Legendary Farmer'. (Costs 400 ObjetCoins)");
 		}
 	}
+
 	public static void cls() {
 		System.out.print("\033[H\033[2J");
 		System.out.flush();

@@ -17,8 +17,8 @@ public class Farmer {
     public Farmer(FarmerType type){
         this.type = type;
         this.farmerLevel = 0;
-        this.experience = 0.0;
-        this.objectCoins = 100;
+        this.experience = 1000.0;
+        this.objectCoins = 10000;
     }
 
     public FarmerType getType() {
@@ -179,7 +179,15 @@ public void fertilizerTool(HashMap<Integer, Tile> plot, ArrayList<Tool> toolList
                 System.out.println("\tYou have successfully removed a Plant.\n\t" +
                         "Player has gained 2 exp and used 7 ObjectCoins.");
             }
-            else if(plot.get(index).getStatus().equals(TileStatus.UNPLOWED) || plot.get(index).getStatus().equals(TileStatus.ROCK)){
+            else if(plot.get(index).getStatus().equals(TileStatus.SEED)){
+                deductObjectCoin(toolList.get(4).getCost());
+                plot.replace(index, new Tile(index, null, TileStatus.UNPLOWED));
+                addExperience(toolList.get(4).getExpGain());
+                System.out.println("\tYou have successfully removed a growing Seed.\n\t" +
+                        "Player has gained 2 exp and used 7 ObjectCoins.");
+
+            }
+            else if(plot.get(index).getStatus().equals(TileStatus.UNPLOWED) || plot.get(index).getStatus().equals(TileStatus.ROCK) || plot.get(index).getStatus().equals(TileStatus.PLOWED)){
                 deductObjectCoin(toolList.get(4).getCost());
                 addExperience(toolList.get(4).getExpGain());
                 System.out.println("\tYou have used a shovel... Nothing Happened...\n\t" +
@@ -195,23 +203,22 @@ public void fertilizerTool(HashMap<Integer, Tile> plot, ArrayList<Tool> toolList
     }
 
     public void harvestPlant(Farmer player, HashMap<Integer, Tile> plot, int index) {
-        if (plot.get(index).getStatus().equals(TileStatus.PLANT)) {
-            //Get Product Produce
-            int earnBonus = 0; //To be implemented later on
-            int minProduce = plot.get(index).getPlantedCrop().getMinProduce();
-            int maxProduce = plot.get(index).getPlantedCrop().getMaxProduce();
-            int productsProduced = plot.get(index).getPlantedCrop().productProduce(minProduce, maxProduce);
-            //Sell and get ObjectCoin, get exp
-            int harvestTotal = productsProduced * ( plot.get(index).getPlantedCrop().getSellPrice() + earnBonus);
-            double totalExpGain = plot.get(index).getPlantedCrop().getExpYield() * productsProduced;
-            player.addObjectCoin(harvestTotal);
-            player.addExperience(totalExpGain);
-            // Display appropriate message based from the report [1 POINT]
-            System.out.println( "\tCongratulations!\n\tYou have harvested & sold " + productsProduced + " " + plot.get(index).getPlantedCrop().getName() + " Crops!" +
-                                "\n\tPlayer has received " + harvestTotal + " ObjectCoins and earned " + totalExpGain + " experience.");
-            //Remove crop from tile and Set to unplowed
-            plot.replace(index, new Tile(index, null, TileStatus.UNPLOWED));
-        }
+
+        //Get Product Produce
+        int earnBonus = 0; //To be implemented later on
+        int minProduce = plot.get(index).getPlantedCrop().getMinProduce();
+        int maxProduce = plot.get(index).getPlantedCrop().getMaxProduce();
+        int productsProduced = plot.get(index).getPlantedCrop().productProduce(minProduce, maxProduce);
+        //Sell and get ObjectCoin, get exp
+        int harvestTotal = productsProduced * ( plot.get(index).getPlantedCrop().getSellPrice() + earnBonus);
+        double totalExpGain = plot.get(index).getPlantedCrop().getExpYield() * productsProduced;
+        player.addObjectCoin(harvestTotal);
+        player.addExperience(totalExpGain);
+        // Display appropriate message based from the report [1 POINT]
+        System.out.println( "\tCongratulations!\n\tYou have harvested & sold " + productsProduced + " " + plot.get(index).getPlantedCrop().getName() + " Crops!" +
+                            "\n\tPlayer has received " + harvestTotal + " ObjectCoins and earned " + totalExpGain + " experience.");
+        //Remove crop from tile and Set to unplowed
+        plot.replace(index, new Tile(index, null, TileStatus.UNPLOWED));
         /* To be implemented Later */
         // Implement FinalHarvestPrice for different farmerLevel, bonusLimit, etc.
     }
