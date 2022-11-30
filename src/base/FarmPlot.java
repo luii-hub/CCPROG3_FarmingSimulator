@@ -7,7 +7,7 @@ public class FarmPlot {
     public FarmPlot(HashMap<Integer, Tile> plot){
         /* Generate 50 Tiles stored in a HashMap */
         for(int i = 0; i < 50; i++){
-            Tile tile = new Tile(i + 1, null, TileStatus.PLOWED);
+            Tile tile = new Tile(i + 1, null, TileStatus.UNPLOWED);
             plot.put(tile.getPosition(), tile);
         }
         this.daytime = 1;

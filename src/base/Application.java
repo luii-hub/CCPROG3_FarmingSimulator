@@ -20,7 +20,7 @@ public class Application {
 		new Crop("Rose", CropType.FLOWER, 1, 1, 2, 0, 1, 5, 5, 1, 1, 2.5),
 		new Crop("Tulip", CropType.FLOWER, 2, 2, 3, 0, 1, 10, 9, 1, 1, 5),
 		new Crop("Sunflower", CropType.FLOWER, 2, 2, 3, 1, 2, 20, 19, 1, 1, 7.5),
-		new Crop("Mango", CropType.FRUIT_TREE, 5, 5, 7, 4, 4, 100, 8, 5, 15, 25),
+		new Crop("Mango", CropType.FRUIT_TREE, 10, 7, 7, 4, 4, 100, 8, 5, 15, 25),
 		new Crop("Apple", CropType.FRUIT_TREE, 10, 7, 7, 5, 5, 200, 5, 10, 15, 25)
 	));
 
@@ -48,7 +48,15 @@ public class Application {
 			var cmd = input.nextLine();
 			performCommand(cmd);
 			updateFarmerLevel();
-			//checkGameConditions();
+			if(!checkGameConditions(isRunning)){
+				player.printFarmerInfo(player);
+				MyFarm.printFarmPlot(plot);
+				isRunning = false;
+				System.out.println("\tGame Over! You cannot continue anymore because you have failed in being a Farmer.");
+				printFinalStats(player);
+				keyContinue();
+				System.out.println("IsRunning: " + isRunning);
+			}
 		}
 		//printFinalState();
 		input.close();
@@ -61,7 +69,7 @@ public class Application {
 		\t[B] Buy Seed		[P] Plow		[F] Fertilize				(1) Turnip : %d
 		\t[C] Plant Seed		[W] Water		[H] Harvest					(2) Carrot : %d
 		\t[I] Inspect Tile	[S] Shovel 		[A] PickAxe					(3) Potato : %d
-		\n\t[N] Next Day	[Q] Quit Game
+		\n\t[N] Next Day	[R] Register	[Q] Quit Game
 							
 		"""	, Collections.frequency(player.getInventory(), seedList.get(0))
 		, Collections.frequency(player.getInventory(), seedList.get(1))
@@ -87,13 +95,11 @@ public class Application {
 						index = input.nextInt();
 						if (index < 9 && index > 0) {
 							buySeed(index, player);
-						} else {
-							if(index == 10){
-								System.out.println("\tGoing Back...");
-							}
-							else {
-								System.out.println("\tUnknown Command.");
-							}
+						} else if (index == 9){
+							System.out.println("\tGoing Back...");
+						}
+						else{
+							System.out.println("\tError! Unknown Command.");
 						}
 					} catch (InputMismatchException ex) {
 						System.out.println("\tInvalid Input!");
@@ -164,6 +170,7 @@ public class Application {
 										} else{
 											if(checkSurroundings(1, index, plot)) {
 												player.plantSeed(plot, index, seedList.get(seedIndex));
+												player.getFarmerStats().addTimesPlanted();
 												plot.get(index).setPlantable(false);
 											}
 											else {
@@ -315,49 +322,73 @@ public class Application {
 				}
 				keyContinue();
 			}
-			case "N" -> {/* Next Day Method */
+			case "N" -> { /* Next Day Method */
 				// Input CheckGameCondition Function
 				nextDay(MyFarm);
 			}
+			case "R" -> { /* Register Farmer Method */
+				if(player.isRegisterable()){
+					registerFarmer(player, input);
+				}
+				else if(player.getRegisterCounter() == 3){
+					System.out.println("\tYou have reached the maximum status as a Farmer.");
+				}
+				else {
+					System.out.println("You cannot register farmer at this time.");
+				}
+				keyContinue();
+			}
 			case "Q" -> { /* Quit Game */
 				isRunning = false;
-				System.out.println("\tExiting the game");
-
+				System.out.println("\tTerminating the game");
+				printFinalStats(player);
+				keyContinue();
 			}
 			/* Print Statistics on Quit Game to be Implemented on Main Function */
 		}
 	}
 
-	public static void checkGameConditions() {
-		int counter = 0;
+	public static boolean checkGameConditions(boolean isRunning) {
+		isRunning = true;
+		int condOneCounter = 0;
+		int condTwoCounter = 0;
 		boolean cond1 = false, cond2 = false;
 		for(int i = 1; i < plot.size(); i++){
 			/* Condition 1.1: No Active/Growing Crops */
-			if(!plot.get(i).getStatus().equals(TileStatus.PLANT) && !plot.get(i).getStatus().equals(TileStatus.SEED)){
-				cond1 = true;
+			if(plot.get(i).getStatus().equals(TileStatus.PLANT) || plot.get(i).getStatus().equals(TileStatus.SEED) || plot.get(i).getStatus().equals(TileStatus.TREE)){
+				condOneCounter++;
 			}
 			/* Condition 1.2: No more ObjectCoins to buy new Seeds */
 			if(player.getInventory().size() == 0 && player.getObjectCoins() == 0){
 				cond2 = true;
 			}
 
-			/* Condition 2: When All Tiles are Withered */
+			/* Condition 2: When All Tiles are Withered, all tiles are not accessible */
 			if(plot.get(i).getStatus().equals(TileStatus.WITHERED)){
-				counter++;
+				condTwoCounter++;
 			}
-
+			if(plot.get(i).getStatus().equals(TileStatus.ROCK)){
+				condTwoCounter++;
+			}
+		}
+		if(condOneCounter == 0){
+			cond1 = true;
 		}
 		/* Force End the Game */
-		if(counter == 50){
+		if(condTwoCounter == 50){
 			isRunning = false;
 		}
 		else if(cond1 && cond2){
 			isRunning = false;
 		}
+		return isRunning;
 	}
 
-	public static void printFinalStats () {
-		// Display info about Tile and Stats
+	public static void printFinalStats (Farmer player) {
+		//Print out Farmer Info
+		//Print out MyFarm Info
+		//Print out Stats
+		System.out.println(player.getFarmerStats().toString());
 	}
 
 	public static void buySeed(int index, Farmer player){
@@ -372,19 +403,21 @@ public class Application {
 			count = input.nextInt();
 			if (count > 0 && count <= 5) {
 				int pricePerCount = count * seedList.get(index).getBuyCost();
-				if (player.getObjectCoins() == pricePerCount) {
+				if (player.getObjectCoins() == pricePerCount && count == 1) {
 					/* If user buys EXACTLY one seed, execute this line of Code */
 					for (int i = 0; i < count; i++) {
 						player.addSeedToInventory(seedList.get(index));
-						player.deductObjectCoin(seedList.get(index).getBuyCost());
+						player.deductObjectCoin((seedList.get(index).getBuyCost() - player.getType().getSeedCostReduction()));
+						player.getFarmerStats().addTimesBoughtSeeds();
 					}
-					System.out.printf("\tSuccessfully purchased %d %s Seed!", count, seedList.get(index).getName());
+					System.out.printf("\tSuccessfully purchased %d %s Seed!\n", count, seedList.get(index).getName());
 
 				} else if (player.getObjectCoins() > pricePerCount) {
 					/* If user buys MORE THAN one seed, execute this line of Code */
 					for (int i = 0; i < count; i++) {
 						player.addSeedToInventory(seedList.get(index));
-						player.deductObjectCoin(seedList.get(index).getBuyCost());
+						player.deductObjectCoin((seedList.get(index).getBuyCost() - player.getType().getSeedCostReduction()));
+						player.getFarmerStats().addTimesBoughtSeeds();
 					}
 					System.out.printf("\tSuccessfully purchased %d %s Seed(s)!\n", count, seedList.get(index).getName());
 				} else {
@@ -471,6 +504,10 @@ public class Application {
 						}
 						else if(plot.get(i).getPlantedCrop().getWater() >= plot.get(i).getPlantedCrop().getWaterNeeded()
 								&& plot.get(i).getPlantedCrop().getFertilizer() == plot.get(i).getPlantedCrop().getFertilizerNeeded()) {
+							System.out.println("Plant is Harvestable");
+							plot.get(i).setStatus(TileStatus.PLANT);
+						}
+						if(plot.get(i).getPlantedCrop().getFertilizerBonus() > 0){
 							System.out.println("Plant is Harvestable");
 							plot.get(i).setStatus(TileStatus.PLANT);
 						}
@@ -581,17 +618,71 @@ public class Application {
 		System.out.println("\tCongratulations, you have leveled up! You are now Level " + player.getFarmerLevel());
 		}
 
-		if(player.getFarmerLevel() == 5){
+		if(player.getFarmerLevel() >= 5 && player.getRegisterCounter() == 0){
 			System.out.println("\tCongratulations, you are now eligible to promote to a 'Registered Farmer'. (Costs 200 ObjetCoins)");
+			player.setRegisterable(true);
 		}
-		else if(player.getFarmerLevel() == 10){
+		else if(player.getFarmerLevel() >= 10 && player.getRegisterCounter() == 1){
 			System.out.println("\tCongratulations, you are now eligible to promote to a 'Distinguished Farmer'. (Costs 300 ObjetCoins)");
+			player.setRegisterable(true);
 		}
-		else if(player.getFarmerLevel() == 15){
+		else if(player.getFarmerLevel() >= 15 && player.getRegisterCounter() == 2){
 			System.out.println("\tCongratulations, you are now eligible to promote to a 'Legendary Farmer'. (Costs 400 ObjetCoins)");
+			player.setRegisterable(true);
 		}
 	}
 
+	public static void registerFarmer(Farmer player, Scanner input){
+		if(player.getFarmerLevel() >= 5 && player.getRegisterCounter() == 0){
+			System.out.println("\tDo you wish to register as a Registered Farmer for 200 ObjectCoins?");
+		}
+		else if(player.getFarmerLevel() >= 10 && player.getRegisterCounter() == 1){
+			System.out.println("\tDo you wish to register as a Distinguished Farmer for 300 ObjectCoins?");
+		}
+		else if(player.getFarmerLevel() >= 15 && player.getRegisterCounter() == 2){
+			System.out.println("\tDo you wish to register as a Legendary Farmer for 400 ObjectCoins?");
+		}
+		var userInput = input.nextLine();
+		switch (userInput){
+			case "Y", "y" -> {
+				if(player.getFarmerLevel() >= 5 && player.getRegisterCounter() == 0){
+					if(player.getObjectCoins() >= 200) {
+						player.deductObjectCoin(200);
+						player.setType(FarmerType.REGISTERED);
+						player.setRegisterCounter(1);
+						player.setRegisterable(false);
+					} else {
+						System.out.println("\tError! Insufficient ObjectCoins!");
+					}
+				}
+				else if(player.getFarmerLevel() >= 10 && player.getRegisterCounter() == 1){
+					if(player.getObjectCoins() >= 300) {
+						player.deductObjectCoin(300);
+						player.setType(FarmerType.DISTINGUISHED);
+						player.setRegisterCounter(2);
+						player.setRegisterable(false);
+					} else {
+						System.out.println("\tError! Insufficient ObjectCoins!");
+					}
+
+				}
+				else if((player.getFarmerLevel() >= 15 && player.getRegisterCounter() == 2)){
+					if(player.getObjectCoins() >= 400) {
+						player.deductObjectCoin(400);
+						player.setType(FarmerType.LEGENDARY);
+						player.setRegisterCounter(3);
+						player.setRegisterable(false);
+					} else {
+						System.out.println("\tError! Insufficient ObjectCoins!");
+					}
+				}
+			}
+			case "N", "n" -> {
+				System.out.println("\tRegistration Cancelled. Going back to MyFarm...");
+			}
+			default -> System.out.println("\tUnknown Command");
+		}
+	}
 	public static void cls() {
 		System.out.print("\033[H\033[2J");
 		System.out.flush();

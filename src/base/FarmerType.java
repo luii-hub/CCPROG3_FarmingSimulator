@@ -1,23 +1,20 @@
 package base;
 
 public enum FarmerType {
-    DEFAULT,
+    DEFAULT("Novice Farmer", 0, 0, 0, 0, 0, 0),
     REGISTERED("Registered Farmer", 5, 1, 1, 0, 0, 200),
     DISTINGUISHED("Distinguished Farmer", 10, 2, 2, 1, 0, 300),
     LEGENDARY("Legendary Farmer", 15, 4, 3, 2, 1, 400);
 
     private String farmerType;
     private int levelRequirement;
-    private double bonusEarnings;
+    private int bonusEarnings;
     private double registrationFee;
     private int fertilizerBonusIncrease;
     private int waterBonusIncrease;
     private int seedCostReduction;
 
-    FarmerType() {
-    }
-
-    FarmerType(String farmerType, int levelRequirement, double bonusEarnings, int seedCostReduction, int waterBonusIncrease, int fertilizerBonusIncrease, double registrationFee) {
+    FarmerType(String farmerType, int levelRequirement, int bonusEarnings, int seedCostReduction, int waterBonusIncrease, int fertilizerBonusIncrease, double registrationFee) {
         this.farmerType = farmerType;
         this.levelRequirement = levelRequirement;
         this.bonusEarnings = bonusEarnings;
@@ -35,7 +32,7 @@ public enum FarmerType {
         return levelRequirement;
     }
 
-    public double getBonusEarnings() {
+    public int getBonusEarnings() {
         return bonusEarnings;
     }
 

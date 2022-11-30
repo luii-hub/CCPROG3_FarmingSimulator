@@ -30,7 +30,7 @@ public class Crop { // DO NOT EDIT
 		this.name = name; // DO NOT EDIT
 		this.type = type;
 		this.harvestTime = harvestTime;
-		this.growTime = 0;
+		this.growTime = 1;
 		this.water = 0; // DO NOT EDIT
 		this.waterNeeded = waterNeeded; // DO NOT EDIT
 		this.waterBonus = waterBonus;
@@ -165,8 +165,9 @@ public class Crop { // DO NOT EDIT
 	@Override
 	public String toString() { // YOU COULD EDIT
 		return "\t[" + name + "] : " + type +
-				"\n\tHarvest Time: " + harvestTime + "\t\tWater Needed: " + waterNeeded +
-				"\n\tSeed Cost: " + buyCost + "\t\tFertilizer Needed: " + fertilizerNeeded +
-				"\n\tBase Price: " + sellPrice + "\t\tProduce/Exp: String / Exp";
+				"\n\tHarvest Time: " + harvestTime + "\t\tProduce/Exp: 1 / " + expYield +
+				"\n\tBase Price: " + sellPrice + "\n\tSeed Cost: " + buyCost +
+				"\t\tWater Needed: " + waterNeeded +"\t\tFertilizer Needed: " + fertilizerNeeded +
+				"\t\tWater Bonus: " + waterBonus + "\t\tFertlizer Bonus: " + fertilizerBonus;
 	}
 }
