@@ -28,6 +28,7 @@ public class Farmer {
         this.registerCounter = 0;
     }
 
+    /* Required Getters */
     public Stats getFarmerStats() {
         return FarmerStats;
     }
@@ -71,6 +72,15 @@ public class Farmer {
         this.type = type;
     }
 
+    public void setRegisterable(boolean registerable) {
+        isRegisterable = registerable;
+
+    }
+    public void setRegisterCounter(int registerCounter) {
+        this.registerCounter = registerCounter;
+    }
+
+    /* Incrementation & Decremental Methods */
     public void addObjectCoin(double objectCoins) {
         this.objectCoins += objectCoins;
     }
@@ -85,15 +95,13 @@ public class Farmer {
     public void removeSeedFromInventory(Crop seed){
         this.inventory.remove(seed);
     }
-    public void setRegisterable(boolean registerable) {
-        isRegisterable = registerable;
 
-    }
-
-    public void setRegisterCounter(int registerCounter) {
-        this.registerCounter = registerCounter;
-    }
-
+    /** This method lets the user buy the desired seed from the the seed shop (seedlist). The user can buy a maximum of
+     *  five seeds per purchase. If the player does not have enough ObjectCoins to buy, this function will be restricted.
+     *
+     * @param index
+     * @param seedList
+     */
     public void buySeed(int index, ArrayList<Crop> seedList){
         index--;
         int count;
@@ -134,6 +142,14 @@ public class Farmer {
             System.out.println("\tInvalid Input!");
         }
     }
+
+    /** This method lets the user plant the desired seed given the desired tile index inside the farmable plot. Player can
+     *  only plant on unoccupied, unplowed tiles. The user has certain limitations when planting a certain seed (i.e. Fruit Tree).
+     *
+     *  @param plot
+     *  @param index
+     *  @param seed
+     */
     public void plantSeed(HashMap<Integer, Tile> plot, int index, Crop seed){
         Crop newCrop = Crop.newCrop(seed);
         plot.get(index).setPlantedCrop(newCrop);
@@ -141,7 +157,15 @@ public class Farmer {
         System.out.println("\tYou have successfully planted a " + newCrop.getName() + "!");
         removeSeedFromInventory(seed);
     }
+
+    /** This method lets the user set a tile's status to PLOWED. Lets the user plant a seed after plowing. It updates the TileStatus of
+     *  the given tile index once certain conditions are met.
+     *  @param plot
+     *  @param toolList
+     *  @param index
+     */
     public void plowTool(HashMap<Integer, Tile> plot, ArrayList<Tool> toolList, int index){
+        /* If selected tile is unplowed, proceed to execute method, else reject the user's command to plow the tile. */
         if(plot.get(index).getStatus().equals(TileStatus.UNPLOWED)){
             //Set Tile Status of selected tile into PlOWED
             plot.get(index).setStatus(TileStatus.PLOWED);
@@ -150,6 +174,7 @@ public class Farmer {
             getFarmerStats().addTimesPlowed();
         }
         else{
+            /* If tile is already plowed or the tile's stauts is !UNPLOWED, there is no need to execute this method */
             if(plot.get(index).getStatus().equals(TileStatus.PLOWED)){
                 System.out.println("\tError! This tile is already Plowed.");
             } else if (plot.get(index).getStatus().equals(TileStatus.WITHERED)){
@@ -161,9 +186,17 @@ public class Farmer {
         }
     }
 
+    /** This method lets the user water the SEED given the tile index. It updates the Crop's (seed) attributes and updates the user
+     *  via feedback to let the user know if the given command was successful or not.
+     *  @param plot
+     *  @param toolList
+     *  @param index
+     */
     public void waterTool(HashMap<Integer, Tile> plot, ArrayList<Tool> toolList, int index){
+        /* If the tile's status is a seed, proceed to watering the tile (crop), else do not execute */
         if(plot.get(index).getStatus().equals(TileStatus.SEED)){
             int maxWaterCount =  plot.get(index).getPlantedCrop().getWaterNeeded() + plot.get(index).getPlantedCrop().getWaterBonus() + getType().getWaterBonusIncrease();
+            /* Water the Crop, Update the Crop's Attributes, If the crop's water requirement reaches a certain threshold, disable exp incrementation */
             if(plot.get(index).getPlantedCrop().getWater() < maxWaterCount) {
                 plot.get(index).getPlantedCrop().setWater(1);
                 plot.get(index).getPlantedCrop().setWatered(true);
@@ -181,13 +214,21 @@ public class Farmer {
 
     }
 
-public void fertilizerTool(HashMap<Integer, Tile> plot, ArrayList<Tool> toolList, int index){
-        /* Validation 1: Check if the player has enough money */
+    /** This method lets the user water the SEED given the tile index. It updates the Crop's (seed) attributes and updates the user
+     *  via feedback to let the user know if the given command was successful or not.
+     *
+     * @param plot
+     * @param toolList
+     * @param index
+     */
+    public void fertilizerTool(HashMap<Integer, Tile> plot, ArrayList<Tool> toolList, int index){
+        /* Validation 1: Check if the player has enough ObjectCoins to fertilize a Seed */
         if(this.objectCoins >= 10) {
-            /* Validation 2: Check if the chosen tile index is a SEED */
+            /* Validation 2: Check if the chosen tile index contains a SEED */
             if (plot.get(index).getStatus().equals(TileStatus.SEED)) {
                 deductObjectCoin(toolList.get(2).getCost());
                 int maxFertilizerCount = plot.get(index).getPlantedCrop().getFertilizerNeeded() + plot.get(index).getPlantedCrop().getFertilizerBonus() + getType().getFertilizerBonusIncrease();
+                /* Fertilize the Crop, Update the Crop's Attributes, If the crop's fertilize requirement reaches a certain threshold, disable exp incrementation */
                 if (plot.get(index).getPlantedCrop().getFertilizer() < maxFertilizerCount) {
                     plot.get(index).getPlantedCrop().setFertilizer(1);
                     plot.get(index).getPlantedCrop().setFertilized(true);
@@ -209,6 +250,13 @@ public void fertilizerTool(HashMap<Integer, Tile> plot, ArrayList<Tool> toolList
         }
     }
 
+    /** This method lets the user removes a ROCK given the tile index. It lets the user remove the rock so that the tile
+     *  will be accessible to the user for future purposes.
+     *
+     *  @param plot
+     *  @param toolList
+     *  @param index
+     */
     public void pickaxeTool(HashMap<Integer, Tile> plot, ArrayList<Tool> toolList, int index) {
         /* Validation 1: Check if player has enough money to use Pickaxe Tool */
         if(this.objectCoins >= 50) {
@@ -230,6 +278,13 @@ public void fertilizerTool(HashMap<Integer, Tile> plot, ArrayList<Tool> toolList
         }
     }
 
+    /** This method lets the user use the shovel tool and remove any given object (Plant) except a Rock.
+     *  Similar to the PickAxe Tool, it also lets the user access the tile for future purposes.
+     *
+     *  @param plot
+     *  @param toolList
+     *  @param index
+     */
     public void shovelTool(HashMap<Integer, Tile> plot, ArrayList<Tool> toolList, int index) {
         /* Validation 1: Check if player has enough money to use Pickaxe Tool */
         if(this.objectCoins >= 7) {
@@ -271,44 +326,54 @@ public void fertilizerTool(HashMap<Integer, Tile> plot, ArrayList<Tool> toolList
         }
     }
 
+    /** This method lets the user harvest a plant once conditions are met (in main function). This method
+     *  generates the number of crop(s) harvested, the amount of experience gained from the harvest, and computes
+     *  the final acquisition of ObjectCoins gained from the harvest. Bonuses are applied given the farmer's type
+     *  of status.
+     *
+     * @param player
+     * @param plot
+     * @param index
+     */
     public void harvestPlant(Farmer player, HashMap<Integer, Tile> plot, int index) {
 
-        //Get Product Produce
+        /* Get the Product Produce of the crop */
         int earnBonus = player.getType().getBonusEarnings();
         int minProduce = plot.get(index).getPlantedCrop().getMinProduce();
         int maxProduce = plot.get(index).getPlantedCrop().getMaxProduce();
         int productsProduced = plot.get(index).getPlantedCrop().productProduce(minProduce, maxProduce);
 
-        //Harvest Total and CropBonuses
+        /* Computation of Harvest Total and Additional Bonuses */
         double harvestTotal = productsProduced * (plot.get(index).getPlantedCrop().getSellPrice() + earnBonus);
         double harvestWaterBonus = (harvestTotal * 0.2 * (plot.get(index).getPlantedCrop().getWater() - 1));
         double harvestFertilizerBonus = (harvestTotal * 0.5 * (plot.get(index).getPlantedCrop().getFertilizer()));
         double finalHarvestPrice = harvestTotal + harvestWaterBonus + harvestFertilizerBonus;
         double totalExpGain = plot.get(index).getPlantedCrop().getExpYield() * productsProduced;
 
-        //Sell and get ObjectCoin, get exp
+        /* If the crop is a flower, it contains a small bonus for the final harvest price */
         if(plot.get(index).getPlantedCrop().getType().equals(CropType.FLOWER)){
             finalHarvestPrice = finalHarvestPrice * 1.1;
         }
+        /* Player received the final amount of ObjectCoins gained and the amount of experience gained */
         player.addObjectCoin(finalHarvestPrice);
         player.addExperience(totalExpGain);
-        //BUG: Fix crop's water and fertilizer Cap
 
-        // Display appropriate message based from the report [1 POINT]
+        /* Display appropriate message based from the report given */
         System.out.println("\tTotal Harvest Price: " + harvestTotal);
         System.out.println("\tBonus ObjectCoins from Watering: " + harvestWaterBonus);
         System.out.println("\tBonus ObjectCoins from Fertilizing: " + harvestFertilizerBonus);
         System.out.println( "\tCongratulations!\n\tYou have harvested & sold " + productsProduced + " " + plot.get(index).getPlantedCrop().getName() + " Crops!" +
                             "\n\tPlayer has received " + finalHarvestPrice + " ObjectCoins and earned " + totalExpGain + " experience.");
 
-        //Remove crop from tile and Set to unplowed
+        /* Remove crop from the tile, set a newly fresh tile */
         plot.replace(index, new Tile(index, null, TileStatus.UNPLOWED));
-
-
-        // Implement FinalHarvestPrice for different farmerLevel, bonusLimit, etc.
         getFarmerStats().addTimesHarvested();
     }
 
+    /** This method simply prints out and display the farmer's information (i.e. type, level, objectcoins
+     *
+     * @param player
+     */
     public void printFarmerInfo(Farmer player){
         System.out.println("\n\t[" + player.getType().getFarmerType() + "]" + "\n" +
                 "\tLvl: " + player.getFarmerLevel() +  " | Experience: " + player.getExperience() + "\n" +
