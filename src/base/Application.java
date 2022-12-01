@@ -1,9 +1,13 @@
 package base;
-
-import java.util.*;
+import java.util.Scanner;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.InputMismatchException;
 public class Application {
 
-	// Input
 	public static final Scanner input = new Scanner(System.in);
 
 	// Game Initializations and Instantiations
@@ -11,8 +15,7 @@ public class Application {
 	public static Farmer player = new Farmer(FarmerType.DEFAULT);
 	public static HashMap<Integer, Tile> plot = new HashMap<>();
 	public static FarmPlot MyFarm = new FarmPlot(plot);
-
-
+	/* List of Plantable Crops */
 	public static final List<Crop> seedList = new ArrayList<Crop>(Arrays.asList(
 		new Crop("Turnip", CropType.ROOT_CROP, 2, 1, 2, 0, 1, 5, 6, 1, 2, 5),
 		new Crop("Carrot", CropType.ROOT_CROP, 3, 1, 2, 0, 1, 10, 9, 1, 2, 7.5),
@@ -23,7 +26,7 @@ public class Application {
 		new Crop("Mango", CropType.FRUIT_TREE, 10, 7, 7, 4, 4, 100, 8, 5, 15, 25),
 		new Crop("Apple", CropType.FRUIT_TREE, 10, 7, 7, 5, 5, 200, 5, 10, 15, 25)
 	));
-
+	/* List of Usable Farmer Tools */
 	public static final List<Tool> toolList = new ArrayList<Tool>(Arrays.asList(
 			new Tool("Plow Tool", 0, 0.5),
 			new Tool("Watering Can", 0, 0.5),
@@ -33,7 +36,7 @@ public class Application {
 	));
 
 	public static void main(String[] args) {
-		/* Run Program until checkConditions Function returns false */
+		/* Run Program until checkGameConditions Function returns false */
 		while (isRunning) {
 			cls();
 			System.out.println("\n\t[My Farm] : Day " + MyFarm.getDaytime());
@@ -48,6 +51,7 @@ public class Application {
 			var cmd = input.nextLine();
 			performCommand(cmd);
 			updateFarmerLevel();
+
 			if(!checkGameConditions(isRunning)){
 				player.printFarmerInfo(player);
 				MyFarm.printFarmPlot(plot);
@@ -58,10 +62,12 @@ public class Application {
 				System.out.println("IsRunning: " + isRunning);
 			}
 		}
-		//printFinalState();
 		input.close();
 	}
 
+	/**	This Method prints out the farmer's (player) available commands
+	 * 	and executions within the whole program.
+	 */
 	public static void printFarmerHUD() {
 		/* Add some restrictions later on MC02 for the other Tools */
 		System.out.printf("""
@@ -76,11 +82,17 @@ public class Application {
 		, Collections.frequency(player.getInventory(), seedList.get(2)));
 	}
 
+	/**	This method takes in a String input and executes the user's selected command.
+	 * 	This method is where all commands and actions by the user takes place. It calls
+	 * 	the necessary method(s) depending on the user's String input parameter.
+	 * 	@param cmd
+	 */
 	public static void performCommand(String cmd) {
 		/* Function where the program will 'perform' the command that the user wants */
 		int index;
 		switch (cmd) {
 			case "B" -> { /* Buy Seed Method */
+				/* Outside Error Handling Validation */
 				if (player.getObjectCoins() <= 0) {
 					System.out.println("\tError! You do not have anymore ObjectCoins. \n\tHint: Get Rich");
 				} else {
@@ -91,10 +103,13 @@ public class Application {
 								[2] Carrot		[5] Tulip		[8] Apple
 								[3] Potato		[6] Sunflower	[9] Exit
 							""");
+					/* Outside Error Catching Validation */
 					try {
 						index = input.nextInt();
+						/* Check if selected input in within the range */
 						if (index < 9 && index > 0) {
-							buySeed(index, player);
+							/* Execute buySeed Method */
+							player.buySeed(index, (ArrayList<Crop>) seedList);
 						} else if (index == 9){
 							System.out.println("\tGoing Back...");
 						}
@@ -109,10 +124,13 @@ public class Application {
 				keyContinue();
 			}
 			case "I" -> { /* Inspect Tile and see its contents */
-				System.out.println("\tWhich Tile do you want to inspect? ");
+				/* Outside Error Catching Validation */
 				try {
+					System.out.println("\tWhich Tile do you want to inspect? ");
 					index = input.nextInt();
+					/* Check if selected tile in within the range */
 					if (index > 0 && index <= 50) {
+						/* Execute inspectTile Method */
 						inspectTile(index);
 					} else {
 						System.out.println("\tInvalid Range");
@@ -124,24 +142,25 @@ public class Application {
 				keyContinue();
 			}
 			case "C" -> { /* Plant Seed Method */
+				/* Outside Error Catching Validation */
 				if (player.getInventory().size() == 0) {
 					System.out.println("\tYou don't have access to Plant Seed since you have not existing Seeds present in your Inventory!");
 					System.out.println("\tHint: Buy Seeds from the Seed Shop.");
 				} else {
-					//Check if Tile is Plowed, Else print an error statement
+					/* Check if Tile is Plowed, Else print an error statement */
 					if (checkTileStatus(plot, "plow")) {
 						System.out.println("\tSelect a Plowed Tile to Plant: ");
+						/* Outside Error Catching Validation */
 						try {
 							index = input.nextInt();
-							//Check if selected tile in within the range
+							/* Check if selected tile in within the range */
 							if (index > 0 && index <= 50) {
-								//Check if selected tile has a different tile status, else proceed to plant
+								/* Check if selected tile has a different tile status, else proceed to execute plantSeed */
 								if (plot.get(index).getStatus().equals(TileStatus.SEED)) {
 									System.out.println("\tError! The tile that you are accessing is currently occupied.");
 
 								} else if (plot.get(index).getStatus().equals(TileStatus.PLOWED)) {
-									// Add Check
-									// Display crop options from seedList
+									/* Display the list of available seeds that the user currently owns */
 									for (int i = 0; i < seedList.size(); i++) {
 										int inputIndex = i + 1;
 										if (Collections.frequency(player.getInventory(), seedList.get(i)) != 0) {
@@ -149,7 +168,7 @@ public class Application {
 											seedList.get(i).setChoosable(true);
 										}
 									}
-									// Ask which crop & Select Seed to plant
+									/* Ask the user's desired seed to plant */
 									System.out.println("\n\tSelect a Seed: ");
 									int seedIndex;
 									do {
@@ -158,16 +177,17 @@ public class Application {
 										}while (seedIndex <= 0 || seedIndex > seedList.size());
 										seedIndex--;
 									}while (!seedList.get(seedIndex).isChoosable());
-									/* Reset crop options for seed list */
+									/* Reset the boolean value of isChoosable for each crop in the seed list (This is for the Farmer Inventory to work as intended) */
 									for (Crop crop : seedList) {
 										crop.setChoosable(false);
 									}
 
-									/* If selected Seed is a Fruit Tree, Restriction is added */
+									/* If Fruit Tree Seed is selected, and the selected tile is an edge, restrict the user from planting since Fruit Trees cannot be planted at the edges */
 									if(seedList.get(seedIndex).getType().equals(CropType.FRUIT_TREE)){
 										if(plot.get(index).isEdge()) {
 											System.out.println("\tError! You are unable to plant a Fruit Tree at the edges of the farm plot.");
 										} else{
+											/* If selected tile in not an edge, check the neighboring tiles if they are occupied, if there are no neighboring objects, continue plantSeed */
 											if(checkSurroundings(1, index, plot)) {
 												player.plantSeed(plot, index, seedList.get(seedIndex));
 												player.getFarmerStats().addTimesPlanted();
@@ -179,14 +199,9 @@ public class Application {
 										}
 									}
 									else{
-										/* Plant new Instance of Seed (Crop), Set Tile Status to SEED, Update Farmer Inventory */
-										if(checkSurroundings(0, index, plot)) {
-											player.plantSeed(plot, index, seedList.get(seedIndex));
-											plot.get(index).setPlantable(false);
-										}
-										else {
-											System.out.println("\tError! You are planting beside a fruit tree. Fruit Trees needs a tile of space to grow.");
-										}
+										/* If Seed is not a FruitTree proceed to execute plantSeed method and continue as is */
+										player.plantSeed(plot, index, seedList.get(seedIndex));
+										plot.get(index).setPlantable(false);
 									}
 
 								} else {
@@ -207,11 +222,13 @@ public class Application {
 				keyContinue();
 			}
 			case "P" -> { /* Plow Tile Method */
-				System.out.println("\tWhich tile do you want to Plow?");
-				/* Error Checking for user-input, if conditions are met, Plow Tile */
+				/* Error Handling Validation for user-input, if conditions are met, plow the Tile */
 				try {
+					System.out.println("\tWhich tile do you want to Plow?");
 					index = input.nextInt();
+					/* Check if selected tile in within the range */
 					if (index > 0 && index <= 50) {
+						/* Execute PlowTool Method */
 						player.plowTool(plot, (ArrayList<Tool>) toolList, index);
 
 					} else {
@@ -223,13 +240,15 @@ public class Application {
 				keyContinue();
 			}
 			case "W" -> { /* WaterCan Tool Method */
+				/* Error Handling Validation for user-input, if conditions are met, water the Tile */
 				if (checkTileStatus(plot, "water")) {
 					/* Error Checking for user-input, if conditions are met, Water Crop/Tile */
 					try {
 						System.out.println("\tWhich tile do you want to Water?");
 						index = input.nextInt();
+						/* Check if selected tile in within the range */
 						if (index > 0 && index <= 50) {
-							/* Water the Crop ONCE per day, Update the Crop's Stats */
+							/* Water the selected Crop & update the Crop's variables */
 							player.waterTool(plot, (ArrayList<Tool>) toolList, index);
 
 						} else {
@@ -245,13 +264,15 @@ public class Application {
 				keyContinue();
 			}
 			case "F" -> { /* Fertilizer Tool Method */
+				/* Error Handling Validation for user-input, if conditions are met, fertilize the Tile's Crop */
 				if (checkTileStatus(plot, "fertilize")) {
-					/* Error Checking for user-input, if conditions are met, Water Crop/Tile */
+					/* Error Checking for user-input, if conditions are met, Fertilize the Crop */
 					try {
 						System.out.println("\tWhich tile do you want to Fertilize?");
 						index = input.nextInt();
+						/* Check if selected tile in within the range */
 						if (index > 0 && index <= 50) {
-							/* Fertilize the Crop ONCE per day, Update the Crop's Stats */
+							/* Fertilize the selected Crop & update the Crop's variables */
 							player.fertilizerTool(plot, (ArrayList<Tool>) toolList, index);
 
 						} else {
@@ -267,13 +288,15 @@ public class Application {
 				keyContinue();
 			}
 			case "H" -> { /* Harvest Plant Method */
+				/* Error Handling Validation for user-input, if conditions are met, Harvest the Tile's Crop */
 				if (checkTileStatus(plot, "harvest")) {
-					/* Error Checking for user-input, if conditions are met, Water Crop/Tile */
+					/* Error Checking for user-input, if conditions are met, Harvest the Crop */
 					System.out.println("\tWhich plant do you want to harvest?");
 					try {
 						index = input.nextInt();
+						/* Check if selected tile in within the range */
 						if (index > 0 && index <= 50) {
-							/* Harvest Crop(s) from Tile, Update Tile Status to Unplowed, Update Farmer ObjectCoin(s) and Experience */
+							/* Harvest Crop(s) from Tile, Update the Tile, Update Farmer ObjectCoin(s) and Experience */
 							player.harvestPlant(player, plot, index);
 						} else {
 							System.out.println("\tError! Tile Index is out of bounds");
@@ -323,10 +346,11 @@ public class Application {
 				keyContinue();
 			}
 			case "N" -> { /* Next Day Method */
-				// Input CheckGameCondition Function
 				nextDay(MyFarm);
 			}
 			case "R" -> { /* Register Farmer Method */
+				/*	If player has met the minimum requirements, allow player the option to register into new role.
+				* 	If player has reached maximum level, disable player to register anymore */
 				if(player.isRegisterable()){
 					registerFarmer(player, input);
 				}
@@ -339,31 +363,38 @@ public class Application {
 				keyContinue();
 			}
 			case "Q" -> { /* Quit Game */
+				/* Change boolean value of isRunning to false, let the program know that the player wants to quit and exit the game */
 				isRunning = false;
 				System.out.println("\tTerminating the game");
 				printFinalStats(player);
 				keyContinue();
 			}
-			/* Print Statistics on Quit Game to be Implemented on Main Function */
 		}
 	}
 
+	/**	This method determines that state of the game. It checks for conditions to determine whether the player cannot continue the game.
+	 * 	If the conditions are met, return isRunning with a boolean value of false and will let the program know to stop and terminate the
+	 * 	program within the main function.
+	 *
+	 * 	@param isRunning
+	 * 	@returns isRunning
+	 */
 	public static boolean checkGameConditions(boolean isRunning) {
 		isRunning = true;
 		int condOneCounter = 0;
 		int condTwoCounter = 0;
 		boolean cond1 = false, cond2 = false;
 		for(int i = 1; i < plot.size(); i++){
-			/* Condition 1.1: No Active/Growing Crops */
+			/* Condition 1.1: IF there are no more active and growing crops present in the farm plot */
 			if(plot.get(i).getStatus().equals(TileStatus.PLANT) || plot.get(i).getStatus().equals(TileStatus.SEED) || plot.get(i).getStatus().equals(TileStatus.TREE)){
 				condOneCounter++;
 			}
-			/* Condition 1.2: No more ObjectCoins to buy new Seeds */
+			/* Condition 1.2: IF the farmer has no more ObjectCoins to buy new seeds and IF the farmer has no more seeds to plant */
 			if(player.getInventory().size() == 0 && player.getObjectCoins() == 0){
 				cond2 = true;
 			}
 
-			/* Condition 2: When All Tiles are Withered, all tiles are not accessible */
+			/* Condition 2: IF all available tiles are all occupied with WITHERED PLANTS */
 			if(plot.get(i).getStatus().equals(TileStatus.WITHERED)){
 				condTwoCounter++;
 			}
@@ -371,10 +402,10 @@ public class Application {
 				condTwoCounter++;
 			}
 		}
+		/* If Conditions are met, depending on the type of end-game condition, return value to false, else return true */
 		if(condOneCounter == 0){
 			cond1 = true;
 		}
-		/* Force End the Game */
 		if(condTwoCounter == 50){
 			isRunning = false;
 		}
@@ -384,6 +415,11 @@ public class Application {
 		return isRunning;
 	}
 
+	/**	This method prints out the player's final statistics and achievements. It contains all the farmer's overall progress
+	 * 	from start to finish. This method runs once the player opts to exit the game or when the game is over.
+	 *
+	 * 	@param player
+	 */
 	public static void printFinalStats (Farmer player) {
 		//Print out Farmer Info
 		//Print out MyFarm Info
@@ -391,47 +427,14 @@ public class Application {
 		System.out.println(player.getFarmerStats().toString());
 	}
 
-	public static void buySeed(int index, Farmer player){
-		index--;
-		int count;
-		/* Print the list of Seeds that are available for Purchase */
-		System.out.println(seedList.get(index).toString());
-		/* Ask user the N amount of Seeds for Purchase */
-		System.out.println("\n\tHow many will you purchase? (Max 5)");
-		/* Error Checking for user-input, if conditions are met, buySeed */
-		try {
-			count = input.nextInt();
-			if (count > 0 && count <= 5) {
-				int pricePerCount = count * seedList.get(index).getBuyCost();
-				if (player.getObjectCoins() == pricePerCount && count == 1) {
-					/* If user buys EXACTLY one seed, execute this line of Code */
-					for (int i = 0; i < count; i++) {
-						player.addSeedToInventory(seedList.get(index));
-						player.deductObjectCoin((seedList.get(index).getBuyCost() - player.getType().getSeedCostReduction()));
-						player.getFarmerStats().addTimesBoughtSeeds();
-					}
-					System.out.printf("\tSuccessfully purchased %d %s Seed!\n", count, seedList.get(index).getName());
-
-				} else if (player.getObjectCoins() > pricePerCount) {
-					/* If user buys MORE THAN one seed, execute this line of Code */
-					for (int i = 0; i < count; i++) {
-						player.addSeedToInventory(seedList.get(index));
-						player.deductObjectCoin((seedList.get(index).getBuyCost() - player.getType().getSeedCostReduction()));
-						player.getFarmerStats().addTimesBoughtSeeds();
-					}
-					System.out.printf("\tSuccessfully purchased %d %s Seed(s)!\n", count, seedList.get(index).getName());
-				} else {
-					System.out.println("\tError! You do not have enough ObjectCoins for purchasing the selected amount");
-				}
-			} else {
-				System.out.println("\tError! Invalid Input.");
-			}
-		}
-		catch (InputMismatchException ex) {
-			System.out.println("\tInvalid Input!");
-		}
-	}
-
+	/**	This multipurpose method checks the tileStatus of the tile and returns the boolean value depending on the inputted name
+	 * 	of the tool. Different farmer tools require different tile statuses to proceed & it helps in error handling and method
+	 * 	requirements as imposed in the Machine Project Specifications.
+	 *
+	 * 	@param plot
+	 * 	@param toolName
+	 * 	@returns status
+	 */
 	public static boolean checkTileStatus(HashMap<Integer, Tile> plot, String toolName){
 		/* Returns TRUE if the condition(s) of using a tool is met before using it on a TILE */
 		boolean status = false;
@@ -468,16 +471,23 @@ public class Application {
 		return status;
 	}
 
+	/**	This method increments the number of days and it "proceeds to the next day". Once this method is executed,
+	 * 	it the crop's variables (i.e. growth time) and updates the status of every plant (i.e. if plant is harvestable
+	 * 	on the next day or if plant withers the next day).
+	 *
+	 * 	@param MyFarm
+	 */
 	public static void nextDay(FarmPlot MyFarm){
 		MyFarm.setDaytime(1);
+		/* Loop through each of the tiles in the farm plot and check and update every single tile or plant */
 		for(int i = 1 ; i <= plot.size(); i++){
-			/* Convert Harvestable PLANTS to WITHERED TileStatus */
+			/* Convert Harvestable PLANTS to WITHERED crops (TileStatus)  */
 			if(plot.get(i).getStatus().equals(TileStatus.PLANT)){
 				plot.get(i).setStatus(TileStatus.WITHERED);
 				plot.get(i).setPlantable(true);
-				//Also make withered plants unable to harvest, and watered
 			}
 
+			/* If selected tile contains a SEED, manipulate its contents depending on the conditions applied to it */
 			if(plot.get(i).getStatus().equals(TileStatus.SEED)){
 				/* Increment the growth time (life) of a Seed */
 				if(plot.get(i).getPlantedCrop().getGrowTime() <= plot.get(i).getPlantedCrop().getHarvestTime()) {
@@ -492,10 +502,10 @@ public class Application {
 					plot.get(i).getPlantedCrop().setFertilized(false);
 				}
 
-				/* 	Convert the Seed (SEED) into a harvestable (PLANT) once the harvest conditions are met,
-					If the conditions are not met within the harvest time, convert the seed into a WITHERED plant */
+				/* 	Convert the SEED into a harvestable PLANT once the harvest conditions of a given seed is met,
+					If the conditions are not met within the harvest conditions, convert the seed into a WITHERED plant */
 				if(plot.get(i).getPlantedCrop().getGrowTime() == plot.get(i).getPlantedCrop().getHarvestTime()){
-					/* Convert Seed into Harvestable Plants/Withered Plants with FertilizerNeeded = 0 */
+					/* Convert SEED into Harvestable PLANT or Harvestable PLANT to WITHERED with FertilizerNeeded = 0 */
 					if (plot.get(i).getPlantedCrop().getFertilizerNeeded() == 0){
 						if (plot.get(i).getPlantedCrop().getWater() < plot.get(i).getPlantedCrop().getWaterNeeded()
 								&& plot.get(i).getPlantedCrop().getFertilizer() == plot.get(i).getPlantedCrop().getFertilizerNeeded()) {
@@ -507,12 +517,13 @@ public class Application {
 							System.out.println("Plant is Harvestable");
 							plot.get(i).setStatus(TileStatus.PLANT);
 						}
+						/* If the selected Harvestable Plant's Fertilizer requirement is 0, but it overrides due to fertilizer bonuses, run this line of code */
 						if(plot.get(i).getPlantedCrop().getFertilizerBonus() > 0){
 							System.out.println("Plant is Harvestable");
 							plot.get(i).setStatus(TileStatus.PLANT);
 						}
 					}
-					/* Convert Seed into Harvestable Plants/Withered Plants with FertilizerNeeded > 0 */
+					/* Convert SEED into Harvestable PLANT or Harvestable PLANT to WITHERED with FertilizerNeeded > 0 */
 					else if(plot.get(i).getPlantedCrop().getFertilizerNeeded() > 0){
 						if (plot.get(i).getPlantedCrop().getWater() < plot.get(i).getPlantedCrop().getWaterNeeded()
 								&& plot.get(i).getPlantedCrop().getFertilizer() < plot.get(i).getPlantedCrop().getFertilizerNeeded()) {
@@ -522,6 +533,7 @@ public class Application {
 						else if(plot.get(i).getPlantedCrop().getWater() >= plot.get(i).getPlantedCrop().getWaterNeeded()
 								&& plot.get(i).getPlantedCrop().getFertilizer() >= plot.get(i).getPlantedCrop().getFertilizerNeeded()) {
 							System.out.println("Plant is Harvestable");
+							/* If selected seed is a FRUIT TREE, instead of turning it into a PLANT, set it into a TREE as its TileStatus */
 							if(plot.get(i).getPlantedCrop().getType().equals(CropType.FRUIT_TREE)){
 								plot.get(i).setStatus(TileStatus.TREE);
 							}
@@ -535,6 +547,11 @@ public class Application {
 		}
 	}
 
+	/**	This multipurpose method inspects the tile's TileStatus and prints out the Tile's statistics depending on the selected tile's TileStatus
+	 * 	given the index of the tile. Different TileStatus prints out different information to the user.
+	 *
+	 * 	@param index
+	 */
 	public static void inspectTile(int index) {
 		System.out.println("\tisEdge: " + plot.get(index).isEdge());
 		System.out.println("\tisPlantable: " + plot.get(index).IsPlantable());
@@ -569,6 +586,14 @@ public class Application {
 		}
 	}
 
+	/** This method's purpose is specifically for the plantSeed method in order certain restrictions and validations to work properly, as imposed from
+	 * 	the Machine Project Specifications. The selected tile checks the neighboring tiles if they are currently occupied by any Object, it returns true
+	 * 	if there are no occupied objects, else returns false. This is implemented in collaboration with the Fruit Tree specification.
+	 * 	@param checkMode
+	 * 	@param cropIndex
+	 * 	@param plot
+	 * 	@return isPlantable
+	 */
 	public static boolean checkSurroundings(int checkMode, int cropIndex, HashMap<Integer, Tile> plot){
 		boolean isPlantable = true;
 		int counter = 4;
@@ -608,6 +633,9 @@ public class Application {
 			return isPlantable;
 	}
 
+	/** This method updates the farmer's level once the farmer's experience reaches a certain threshold. It also lets the user know if the user is
+	 * 	eligible for registration/promotion into a new farmer status and let the program enable the user to access the 'registerFarmer' method.
+	 */
 	public static void updateFarmerLevel() {
 		/* Reset the Farmer's Exp Counter since the CAP is 100 */
 		if (player.getExperience() >= 100){
@@ -632,7 +660,14 @@ public class Application {
 		}
 	}
 
+	/**	This method lets the user register himself/herself for a new farmer status, which costs ObjectCoins depending on the type of
+	 * 	status the player wishes to register. You cannot jump status and the method updates the registerCounter so that the program
+	 * 	disables the function once the player reaches maximum level.
+	 * 	@param player
+	 * 	@param input
+	 */
 	public static void registerFarmer(Farmer player, Scanner input){
+		/* Ask the user if he/she wishes to register depending on the farmer status */
 		if(player.getFarmerLevel() >= 5 && player.getRegisterCounter() == 0){
 			System.out.println("\tDo you wish to register as a Registered Farmer for 200 ObjectCoins?");
 		}
@@ -643,6 +678,8 @@ public class Application {
 			System.out.println("\tDo you wish to register as a Legendary Farmer for 400 ObjectCoins?");
 		}
 		var userInput = input.nextLine();
+		/* 	Register the farmer (player) depending on the type of farmer status given,
+			If the player does not have enough ObjectCoins, terminate the registration. */
 		switch (userInput){
 			case "Y", "y" -> {
 				if(player.getFarmerLevel() >= 5 && player.getRegisterCounter() == 0){
@@ -683,11 +720,14 @@ public class Application {
 			default -> System.out.println("\tUnknown Command");
 		}
 	}
+
+	/* Simple Method for clearing the console output (For Terminal Purposes) */
 	public static void cls() {
 		System.out.print("\033[H\033[2J");
 		System.out.flush();
 	}
 
+	/* "Press any key to Continue" Method */
 	public static void keyContinue(){
 		System.out.println("\tPress any key to continue");
 		input.nextLine(); input.nextLine();

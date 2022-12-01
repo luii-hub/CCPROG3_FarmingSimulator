@@ -1,5 +1,5 @@
 package base;
-
+/* This class represented the Farmer's type or status within the game. Different farmer category holds different benefits for the player */
 public enum FarmerType {
     DEFAULT("Novice Farmer", 0, 0, 0, 0, 0, 0),
     REGISTERED("Registered Farmer", 5, 1, 1, 0, 0, 200),

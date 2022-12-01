@@ -12,6 +12,7 @@ public class Tool {
 
     }
 
+    /* Required Getters */
     public double getExpGain() {
         return expGain;
     }

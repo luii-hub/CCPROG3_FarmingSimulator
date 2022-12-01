@@ -1,10 +1,7 @@
 package base;
 
-import java.util.HashMap;
-
 public class Tile {
 	private Crop plantedCrop = null;
-	// Additional appropriate attribute  [1 POINT]
 	private TileStatus status;
 	private final int position;
 	private boolean IsPlantable;
@@ -19,8 +16,9 @@ public class Tile {
 		this.IsPlantable = true;
 	};
 
-	public Crop getPlantedCrop() { // DO NOT EDIT
-		return plantedCrop; // DO NOT EDIT
+	/* Required Getters */
+	public Crop getPlantedCrop() {
+		return plantedCrop;
 	}
 
 	public int getPosition() {
@@ -31,6 +29,7 @@ public class Tile {
 		return status;
 	}
 
+	/* Required Setters */
 	public void setPlantedCrop(Crop plantedCrop) {
 		this.plantedCrop = plantedCrop;
 	}
@@ -56,7 +55,7 @@ public class Tile {
 	}
 
 	@Override
-	public String toString() { // YOU COULD EDIT
-		return "Tile [plantedCrop=" + plantedCrop + "]"; // YOU COULD EDIT
+	public String toString() {
+		return "Tile [plantedCrop=" + plantedCrop + "]";
 	}
 }

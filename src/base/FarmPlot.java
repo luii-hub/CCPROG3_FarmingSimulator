@@ -4,6 +4,11 @@ import java.util.HashMap;
 
 public class FarmPlot {
     private int daytime;
+
+    /** This method generates the farmable plot of the MyFarm Game. This function is only executed once
+     *
+     *  @param plot
+     */
     public FarmPlot(HashMap<Integer, Tile> plot){
         /* Generate 50 Tiles stored in a HashMap */
         for(int i = 0; i < 50; i++){
@@ -11,11 +16,16 @@ public class FarmPlot {
             plot.put(tile.getPosition(), tile);
         }
         this.daytime = 1;
+        /* Find the 'edges' of the Board for Fruit Tree Usage */
         generateEdges(plot);
         //generateRocks(plot);
 
     }
 
+    /** This method declared what tile index is at the edge of the board. This function is only executed once
+     *
+     *  @param plot
+     */
     private void generateEdges(HashMap<Integer, Tile> plot){
         for(int i = 1; i <= 50; i++){
             if(i <= 6 || i >= 45) {
@@ -53,6 +63,11 @@ public class FarmPlot {
             }
         }
     }
+
+    /** This method simply prints the FarmPlot at the interface. This method is only executed once.
+     *
+     * @param plot
+     */
     public void printFarmPlot(HashMap<Integer, Tile> plot){
         String tileStatus = "" ;
         int tileCount = 1, i, j;
@@ -76,6 +91,7 @@ public class FarmPlot {
             }
         }
     }
+
 
     public int getDaytime() {
         return daytime;

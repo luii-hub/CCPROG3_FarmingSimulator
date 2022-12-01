@@ -2,6 +2,7 @@ package base;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 
 import static base.Application.input;
 import static base.Application.player;
@@ -93,6 +94,46 @@ public class Farmer {
         this.registerCounter = registerCounter;
     }
 
+    public void buySeed(int index, ArrayList<Crop> seedList){
+        index--;
+        int count;
+        /* Print the list of Seeds that are available for Purchase */
+        System.out.println(seedList.get(index).toString());
+        /* Ask user the N amount of Seeds for Purchase */
+        System.out.println("\n\tHow many will you purchase? (Max 5)");
+        /* Error Checking for user-input, if conditions are met, buySeed */
+        try {
+            count = input.nextInt();
+            if (count > 0 && count <= 5) {
+                int pricePerCount = count * seedList.get(index).getBuyCost();
+                if (getObjectCoins() == pricePerCount && count == 1) {
+                    /* If user buys EXACTLY one seed, execute this line of Code */
+                    for (int i = 0; i < count; i++) {
+                        addSeedToInventory(seedList.get(index));
+                        deductObjectCoin((seedList.get(index).getBuyCost() - getType().getSeedCostReduction()));
+                        getFarmerStats().addTimesBoughtSeeds();
+                    }
+                    System.out.printf("\tSuccessfully purchased %d %s Seed!\n", count, seedList.get(index).getName());
+
+                } else if (getObjectCoins() > pricePerCount) {
+                    /* If user buys MORE THAN one seed, execute this line of Code */
+                    for (int i = 0; i < count; i++) {
+                        addSeedToInventory(seedList.get(index));
+                        deductObjectCoin((seedList.get(index).getBuyCost() - getType().getSeedCostReduction()));
+                        getFarmerStats().addTimesBoughtSeeds();
+                    }
+                    System.out.printf("\tSuccessfully purchased %d %s Seed(s)!\n", count, seedList.get(index).getName());
+                } else {
+                    System.out.println("\tError! You do not have enough ObjectCoins for purchasing the selected amount");
+                }
+            } else {
+                System.out.println("\tError! Invalid Input.");
+            }
+        }
+        catch (InputMismatchException ex) {
+            System.out.println("\tInvalid Input!");
+        }
+    }
     public void plantSeed(HashMap<Integer, Tile> plot, int index, Crop seed){
         Crop newCrop = Crop.newCrop(seed);
         plot.get(index).setPlantedCrop(newCrop);

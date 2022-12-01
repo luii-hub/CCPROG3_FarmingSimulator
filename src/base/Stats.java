@@ -1,4 +1,5 @@
 package base;
+/* This Class is simply the Player's overall statisics or progress within the duration of the game */
 public class Stats {
 
     private int timesPlanted = 0;
@@ -8,8 +9,8 @@ public class Stats {
     private int timesHarvested = 0;
     private int timesHarvestedSuccessfully = 0;
     private int timesBoughtSeeds = 0;
-    /* Convenience methods for value++ */
 
+    /* Methods for Incrementation  */
     public int addTimesPlowed() {
         return ++timesPlowed;
     }
