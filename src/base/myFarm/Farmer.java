@@ -1,11 +1,10 @@
-package base;
+package base.myFarm;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 
-import static base.Application.input;
-import static base.Application.player;
+import static base.myFarm.Application.input;
 
 public class Farmer {
     private Stats FarmerStats;

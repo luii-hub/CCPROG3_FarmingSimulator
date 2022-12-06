@@ -1,4 +1,4 @@
-package base;
+package base.myFarm;
 
 public enum TileStatus {
     ROCK, /* If tile contains a ROCK */

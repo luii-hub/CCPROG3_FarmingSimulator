@@ -1,4 +1,4 @@
-package base;
+package base.myFarm;
 public class Crop { 
 	private String name; 
 	private  CropType type;

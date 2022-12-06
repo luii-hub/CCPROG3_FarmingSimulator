@@ -1,4 +1,4 @@
-package base;
+package base.myFarm;
 /* This Class is simply the Player's overall statisics or progress within the duration of the game */
 public class Stats {
 

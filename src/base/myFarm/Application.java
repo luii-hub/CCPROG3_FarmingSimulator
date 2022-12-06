@@ -1,4 +1,4 @@
-package base;
+package base.myFarm;
 import java.util.Scanner;
 import java.util.Collections;
 import java.util.HashMap;

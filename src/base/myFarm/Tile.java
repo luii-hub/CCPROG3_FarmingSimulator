@@ -1,4 +1,4 @@
-package base;
+package base.myFarm;
 
 public class Tile {
 	private Crop plantedCrop = null;

@@ -1,4 +1,4 @@
-package base;
+package base.myFarm;
 
 public enum CropType {
     ROOT_CROP, /* If crop is of type Root Crop */

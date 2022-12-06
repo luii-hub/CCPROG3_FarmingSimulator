@@ -1,4 +1,4 @@
-package base;
+package base.myFarm;
 
 public class Tool {
     private String name;
