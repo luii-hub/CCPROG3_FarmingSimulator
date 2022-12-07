@@ -9,7 +9,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -41,10 +43,21 @@ public class MyFarmView extends JFrame {
     private final JLabel farmerExpLabel = new JLabel();
     private final JLabel farmerTypeLabel = new JLabel();
     private final JLabel farmerObjectCoinLabel = new JLabel();
+    private final JButton registerFarmerButton = new JButton();
+    private final JButton nextDayButton = new JButton();
+
+    //Farmer Inventory Panel & Attributes
+    private final JPanel farmerInventoryPanel = new JPanel();
+    private final JLabel farmerInventoryTitle = new JLabel();
+    private final HashMap<Integer, JLabel> farmerSeedInventoryLabel = new HashMap<>();
+
+    //Farmer's Market Panel & Attributes
+    private final JPanel seedShopPanel = new JPanel();
+    private final JLabel seedShopTitle = new JLabel();
+    private final HashMap<Integer, JButton> seedShopButtons = new HashMap<>();
 
     //Farmer Commands Panel & Attributes
     private final JPanel farmerCommandPanel = new JPanel();
-    private final JLabel farmerCommandTitle = new JLabel();
 
     //Farmer Command Buttons
     private final JButton plowButton = new JButton();
@@ -58,78 +71,82 @@ public class MyFarmView extends JFrame {
 
     public MyFarmView() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1280, 720);
+        setSize(1280, 760);
         setLayout(null);
         setLocationRelativeTo(null);
-        setResizable(true);
+        setResizable(false);
         setVisible(true);
     }
 
-    public void init(){
+    public void init() {
 
         //LEFT PANEL
-        leftPanel.setBackground(Color.CYAN);
+        leftPanel.setBackground(Color.decode("#70a270"));
         leftPanel.setLayout(null);
-        leftPanel.setBounds(0, 0, 1280/4, getHeight());
+        leftPanel.setBounds(0, 0, 320, 720);
         setFarmerDetailsPanel();
+        setFarmerInventoryPanel();
 
         //RIGHT PANEL
-        rightPanel.setBackground(Color.MAGENTA);
+        //rightPanel.setBackground(Color.decode("#70a270"));
         rightPanel.setLayout(null);
-        rightPanel.setBounds(960, 0, 1280/4, getHeight());
+        rightPanel.setBounds(960, 0, 320, 720);
+        setSeedShopPanel();
 
-        //MiDDLE PANEL (TILES)
-        centerPanel.setBackground(Color.ORANGE);
+        //MIDDLE PANEL (TILES)
+        //centerPanel.setBackground(Color.decode("#70a270"));
         centerPanel.setLayout(null);
-        centerPanel.setBounds(1280/4, 0, 640, getHeight());
+        centerPanel.setBounds(320, 0, 640, 720);
 
+        //plotDetailsPanel.setBackground(Color.decode("#70a270"));
+        plotDetailsLabel.setLayout(null);
+        setPlotDetailsPanel();
 
-            plotDetailsPanel.setBackground(Color.PINK);
-            plotDetailsLabel.setLayout(null);
-            setPlotDetailsPanel();
+        farmPlotPanel.setBackground(Color.decode("#70a270"));
+        farmPlotPanel.setLayout(new GridLayout(10, 5, 5, 5));
+        setFarmPlotPanel();
 
-            farmPlotPanel.setBackground(Color.GREEN);
-            farmPlotPanel.setLayout(new GridLayout(10, 5, 5, 5));
-            setFarmPlotPanel();
-
-            farmerCommandPanel.setBackground(Color.YELLOW);
-            farmerCommandPanel.setLayout(new GridLayout(1, 8, 5, 5));
-            setFarmerCommandPanel();
-
-//        //FarmerDetailsPanel
-//        farmerDetailsPanel.setBackground(Color.RED);
-//        farmerDetailsPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-//        farmerDetailsPanel.setLayout(new GridLayout(7, 1, 10, 10));
-//        setFarmerDetailsPanel();
-
+        //farmerCommandPanel.setBackground(Color.decode("#70a270"));
+        farmerCommandPanel.setLayout(new GridLayout(2, 5, 5, 5));
+        setFarmerCommandPanel();
 
     }
 
-    public void initializePanels(){
+    public void initializePanels() {
+
+        this.add(rightPanel);
+        this.rightPanel.add(seedShopPanel);
 
         this.add(leftPanel);
-        this.leftPanel.add(farmerDetailsPanel);
+        this.leftPanel.add(registerFarmerButton);
+        this.leftPanel.add(nextDayButton);
+        registerFarmerButton.setBounds(55, 200, 100, 30);
+        nextDayButton.setBounds(165, 200, 100, 30);
 
+        this.leftPanel.add(farmerDetailsPanel);
+        this.leftPanel.add(farmerInventoryPanel);
 
         this.add(centerPanel, BorderLayout.CENTER);
         this.centerPanel.add(plotDetailsPanel);
         this.centerPanel.add(farmPlotPanel);
         this.centerPanel.add(farmerCommandPanel);
 
-        this.add(rightPanel, BorderLayout.EAST);
     }
 
     private void setFarmerDetailsPanel() {
+        Font OpenSansTitle = new Font("OpenSans", Font.BOLD | Font.ITALIC, 20);
         Font OpenSans = new Font("OpenSans", Font.ITALIC, 18);
+
+        farmerDetailsTitle.setFont(OpenSansTitle);
         farmerLevelLabel.setFont(OpenSans);
         farmerTypeLabel.setFont(OpenSans);
         farmerExpLabel.setFont(OpenSans);
         farmerObjectCoinLabel.setFont(OpenSans);
-        farmerDetailsTitle.setFont(new Font("OpenSans", Font.BOLD | Font.ITALIC, 20));
 
-        farmerDetailsPanel.setBounds(0,0, 320, 240);
-        farmerDetailsPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        farmerDetailsPanel.setLayout(new GridLayout(5, 1, 1, 1));
+        //farmerDetailsPanel.setBackground(Color.BLUE);
+        farmerDetailsPanel.setBounds(0, 0, 320, 240);
+        farmerDetailsPanel.setBorder(new EmptyBorder(5, 60, 5, 5));
+        farmerDetailsPanel.setLayout(new GridLayout(6, 1, 1, 1));
 
         farmerDetailsPanel.add(farmerDetailsTitle);
         farmerDetailsPanel.add(farmerTypeLabel);
@@ -137,11 +154,9 @@ public class MyFarmView extends JFrame {
         farmerDetailsPanel.add(farmerExpLabel);
         farmerDetailsPanel.add(farmerObjectCoinLabel);
 
-
-
     }
 
-    private void setPlotDetailsPanel(){
+    private void setPlotDetailsPanel() {
 
         Font OpenSans = new Font("OpenSans", Font.ITALIC, 24);
 
@@ -150,7 +165,9 @@ public class MyFarmView extends JFrame {
         plotDetailsPanel.setBounds(0, 0, 640, 60);
 
         plotDetailsPanel.add(plotDetailsLabel);
+        plotDetailsLabel.setAlignmentX(CENTER_ALIGNMENT);
         plotDetailsPanel.add(plotDetailsTitle);
+        plotDetailsTitle.setAlignmentX(CENTER_ALIGNMENT);
 
     }
 
@@ -169,7 +186,7 @@ public class MyFarmView extends JFrame {
         }
     }
 
-    private void setFarmerCommandPanel(){
+    private void setFarmerCommandPanel() {
 
         plowButton.setSize(100, 100);
         waterButton.setSize(100, 100);
@@ -180,8 +197,16 @@ public class MyFarmView extends JFrame {
         plowButton.setSize(100, 100);
         plowButton.setSize(100, 100);
 
-        farmerCommandPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        farmerCommandPanel.setBounds(0, 610, 640, 50);
+        farmerCommandPanel.setBorder(new EmptyBorder(10, 5, 10, 5));
+        farmerCommandPanel.setBounds(0, 610, 640, 80);
+        plowButton.setText("Hoe");
+        waterButton.setText("WaterCan");
+        fertilizerButton.setText("Fertilizer");
+        shovelButton.setText("Shovel");
+        pickaxeButton.setText("Pickaxe");
+        buySeedButton.setText("Buy Seed");
+        plantSeedButton.setText("Plant Seed");
+        harvestSeedButton.setText("Harvest Plant");
 
         farmerCommandPanel.add(plowButton);
         farmerCommandPanel.add(waterButton);
@@ -195,18 +220,78 @@ public class MyFarmView extends JFrame {
 
     }
 
+    private void setFarmerInventoryPanel() {
+        Font OpenSansTitle = new Font("OpenSans", Font.BOLD | Font.ITALIC, 20);
+        Font OpenSans = new Font("OpenSans", Font.ITALIC, 18);
+
+        farmerInventoryTitle.setFont(OpenSansTitle);
+        //farmerInventoryPanel.setBackground(Color.RED);
+        farmerInventoryPanel.setBounds(0, 240, 320, 480);
+        farmerInventoryPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        farmerInventoryPanel.setLayout(null);
+
+        farmerInventoryTitle.setBounds(30, 10, 300, 40);
+        farmerInventoryPanel.add(farmerInventoryTitle);
+
+        int y_axis = 60;
+        for (int position = 1; position <= 8; position++) {
+            JLabel seedLabel = new JLabel();
+            farmerSeedInventoryLabel.put(position, seedLabel);
+            farmerSeedInventoryLabel.get(position).setBounds(50, y_axis, 200, 40);
+            farmerInventoryPanel.add(farmerSeedInventoryLabel.get(position));
+            farmerSeedInventoryLabel.get(position).setFont(OpenSans);
+            y_axis += 50;
+        }
+    }
+
+    private void setSeedShopPanel(){
+        Font OpenSansTitle = new Font("OpenSans", Font.BOLD | Font.ITALIC, 20);
+        Font OpenSans = new Font("OpenSans", Font.ITALIC, 18);
+        seedShopTitle.setFont(OpenSansTitle);
+
+        //seedShopPanel.setBackground(Color.RED);
+        seedShopPanel.setBounds(0, 240, 320, 480);
+        seedShopPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        seedShopPanel.setLayout(null);
+
+        seedShopTitle.setBounds(40, 10, 300, 40);
+        seedShopPanel.add(seedShopTitle);
+
+        int y_axis = 60;
+        for (int position = 1; position <= 8; position++) {
+            JButton seedButton = new JButton();
+            seedShopButtons.put(position, seedButton);
+            seedShopButtons.get(position).setBounds(50,y_axis,200, 40);
+            seedShopPanel.add(seedShopButtons.get(position));
+            seedShopButtons.get(position).setFont(OpenSans);
+            y_axis += 50;
+        }
+    }
+
     public JLabel getFarmerDetailsTitle() {
         return farmerDetailsTitle;
     }
+
     public JLabel getFarmerExpLabel() {
         return farmerExpLabel;
     }
+
     public JLabel getFarmerLevelLabel() {
         return farmerLevelLabel;
     }
+
     public JLabel getFarmerTypeLabel() {
         return farmerTypeLabel;
     }
+
+    public JButton getRegisterFarmerButton() {
+        return registerFarmerButton;
+    }
+
+    public JButton getNextDayButton() {
+        return nextDayButton;
+    }
+
     public JLabel getFarmerObjectCoinLabel() {
         return farmerObjectCoinLabel;
     }
@@ -214,7 +299,22 @@ public class MyFarmView extends JFrame {
     public JLabel getPlotDetailsTitle() {
         return plotDetailsTitle;
     }
+
     public JLabel getPlotDetailsLabel() {
         return plotDetailsLabel;
+    }
+
+    public JLabel getFarmerInventoryTitle() {
+        return farmerInventoryTitle;
+    }
+    public HashMap<Integer, JLabel> getFarmerSeedInventoryLabel() {
+        return farmerSeedInventoryLabel;
+    }
+
+    public JLabel getSeedShopTitle() {
+        return seedShopTitle;
+    }
+    public HashMap<Integer, JButton> getSeedShopButtons() {
+        return seedShopButtons;
     }
 }
