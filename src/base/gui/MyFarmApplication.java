@@ -8,7 +8,7 @@ public class MyFarmApplication {
         MyFarmModel model = new MyFarmModel();
 
         MyFarmController controller = new MyFarmController(view, model);
-        controller.intializeGame();
+        controller.runGame();
         view.setVisible(true);
 
 

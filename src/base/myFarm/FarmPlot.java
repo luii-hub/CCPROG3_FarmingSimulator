@@ -83,8 +83,8 @@ public class FarmPlot {
                         case PLANT -> "PLANT";
                         case TREE -> "FTREE";
                     };
-
-                    System.out.printf("\t%-11s %-2d ", ("[" + tileStatus + "]"), plot.get(tileCount).getPosition());
+                    //System.out.printf("\t%-11s %-2d ", ("[" + plot.get(tileCount).isEdge() + "]"));
+                    //System.out.printf("\t%-11s %-2d ", ("[" + tileStatus + "]"), plot.get(tileCount).getPosition());
                     tileCount++;
                 }
                 System.out.println(" ");

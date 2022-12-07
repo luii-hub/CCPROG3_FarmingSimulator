@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.Button;
@@ -51,6 +52,10 @@ public class MyFarmView extends JFrame {
     private final JLabel farmerInventoryTitle = new JLabel();
     private final HashMap<Integer, JLabel> farmerSeedInventoryLabel = new HashMap<>();
 
+    //Game Text Field Presenter
+    private final JPanel gameTextPanel = new JPanel();
+    private final JLabel gameTextLabel = new JLabel();
+
     //Farmer's Market Panel & Attributes
     private final JPanel seedShopPanel = new JPanel();
     private final JLabel seedShopTitle = new JLabel();
@@ -88,9 +93,10 @@ public class MyFarmView extends JFrame {
         setFarmerInventoryPanel();
 
         //RIGHT PANEL
-        //rightPanel.setBackground(Color.decode("#70a270"));
+        rightPanel.setBackground(Color.decode("#70a270"));
         rightPanel.setLayout(null);
         rightPanel.setBounds(960, 0, 320, 720);
+        setGameTextLabel();
         setSeedShopPanel();
 
         //MIDDLE PANEL (TILES)
@@ -115,6 +121,7 @@ public class MyFarmView extends JFrame {
     public void initializePanels() {
 
         this.add(rightPanel);
+        this.rightPanel.add(gameTextPanel);
         this.rightPanel.add(seedShopPanel);
 
         this.add(leftPanel);
@@ -160,13 +167,13 @@ public class MyFarmView extends JFrame {
 
         Font OpenSans = new Font("OpenSans", Font.ITALIC, 24);
 
-        plotDetailsLabel.setFont(OpenSans);
+        plotDetailsTitle.setFont(OpenSans);
         plotDetailsLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         plotDetailsPanel.setBounds(0, 0, 640, 60);
 
+        plotDetailsPanel.add(plotDetailsTitle);
         plotDetailsPanel.add(plotDetailsLabel);
         plotDetailsLabel.setAlignmentX(CENTER_ALIGNMENT);
-        plotDetailsPanel.add(plotDetailsTitle);
         plotDetailsTitle.setAlignmentX(CENTER_ALIGNMENT);
 
     }
@@ -268,6 +275,20 @@ public class MyFarmView extends JFrame {
         }
     }
 
+    private void setGameTextLabel(){
+        Font OpenSansTitle = new Font("OpenSans", Font.BOLD | Font.ITALIC, 20);
+        Font OpenSans = new Font("OpenSans", Font.ITALIC, 18);
+
+        gameTextPanel.setBounds(0, 0, 320, 240);
+        gameTextPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        gameTextPanel.setLayout(null);
+
+        gameTextLabel.setBounds(25, 40, 250, 200);
+        gameTextLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        gameTextPanel.add(gameTextLabel);
+    }
+
     public JLabel getFarmerDetailsTitle() {
         return farmerDetailsTitle;
     }
@@ -317,4 +338,43 @@ public class MyFarmView extends JFrame {
     public HashMap<Integer, JButton> getSeedShopButtons() {
         return seedShopButtons;
     }
+
+    public JLabel getGameTextLabel() {
+        return gameTextLabel;
+    }
+
+    public JButton getPlowButton() {
+        return plowButton;
+    }
+
+    public JButton getWaterButton() {
+        return waterButton;
+    }
+
+    public JButton getFertilizerButton() {
+        return fertilizerButton;
+    }
+
+    public JButton getShovelButton() {
+        return shovelButton;
+    }
+
+    public JButton getPickaxeButton() {
+        return pickaxeButton;
+    }
+
+    public JButton getBuySeedButton() {
+        return buySeedButton;
+    }
+
+    public JButton getPlantSeedButton() {
+        return plantSeedButton;
+    }
+
+    public JButton getHarvestSeedButton() {
+        return harvestSeedButton;
+    }
+
+
+
 }
