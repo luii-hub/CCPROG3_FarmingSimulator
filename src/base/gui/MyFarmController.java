@@ -90,12 +90,12 @@ public class MyFarmController{
         shovelMouseListener();
         pickaxeMouseListener();
         buySeedMouseListener();
+        buySeedActionListener();
         plantSeedMouseListener();
         harvestPlantMouseListener();
         registerFarmerMouseListener();
-
         nextDayMouseListener();
-        //nextDayActionListener();
+        nextDayActionListener();
 
     }
 
@@ -247,10 +247,6 @@ public class MyFarmController{
         farmView.getBuySeedButton().addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
                 /* Buy Seed Method */
                 System.out.println("BuySeed Button");
                 //farmView.getBuySeedButton().setEnabled(true);
@@ -261,7 +257,10 @@ public class MyFarmController{
                         farmView.getSeedShopButtons().get(i).setEnabled(true);
                     }
                 }
-                buySeedActionListener();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
             }
 
             @Override
@@ -281,7 +280,17 @@ public class MyFarmController{
         });
     }
 
+    private void buySeedUpdater(){
+        farmView.getFarmerExpLabel().setText(" Experience: " + String.valueOf(farmModel.player.getExperience()));
+        farmView.getFarmerObjectCoinLabel().setText(" ObjectCoins: " + String.valueOf(farmModel.player.getObjectCoins()));
+
+        /* Update Buy Seed Button Restrictions */
+        for(int i = 1; i <= farmModel.seedList.size(); i++) {
+            farmView.getSeedShopButtons().get(i).setEnabled(false);
+        }
+    }
     private void buySeedActionListener(){
+        boolean select = true;
 
         farmView.getSeedShopButtons().get(1).addActionListener(new ActionListener() {
             @Override
@@ -290,19 +299,82 @@ public class MyFarmController{
                 inventory = " [" + 1 + "] " + farmModel.seedList.get(0).getName()
                         + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(0));
                 farmView.getFarmerSeedInventoryLabel().get(1).setText(inventory);
-
-                /* Update Farmer Details */
-                farmView.getFarmerExpLabel().setText(" Experience: " + String.valueOf(farmModel.player.getExperience()));
-                farmView.getFarmerObjectCoinLabel().setText(" ObjectCoins: " + String.valueOf(farmModel.player.getObjectCoins()));
-
-                /* Update Buy Seed Button Restrictions */
-                for(int i = 1; i <= farmModel.seedList.size(); i++) {
-                    farmView.getSeedShopButtons().get(i).setEnabled(false);
-                }
+                buySeedUpdater();
+            }
+        });
+        farmView.getSeedShopButtons().get(2).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                farmModel.player.buySeed(2, (ArrayList<Crop>) farmModel.seedList);
+                inventory = " [" + 2 + "] " + farmModel.seedList.get(1).getName()
+                        + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(1));
+                farmView.getFarmerSeedInventoryLabel().get(2).setText(inventory);
+                buySeedUpdater();
+            }
+        });
+        farmView.getSeedShopButtons().get(3).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                farmModel.player.buySeed(3, (ArrayList<Crop>) farmModel.seedList);
+                inventory = " [" + 3 + "] " + farmModel.seedList.get(2).getName()
+                        + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(2));
+                farmView.getFarmerSeedInventoryLabel().get(3).setText(inventory);
+                buySeedUpdater();
+            }
+        });
+        farmView.getSeedShopButtons().get(4).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                farmModel.player.buySeed(4, (ArrayList<Crop>) farmModel.seedList);
+                inventory = " [" + 4 + "] " + farmModel.seedList.get(3).getName()
+                        + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(3));
+                farmView.getFarmerSeedInventoryLabel().get(4).setText(inventory);
+                buySeedUpdater();
+            }
+        });
+        farmView.getSeedShopButtons().get(5).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                farmModel.player.buySeed(5, (ArrayList<Crop>) farmModel.seedList);
+                inventory = " [" + 5 + "] " + farmModel.seedList.get(4).getName()
+                        + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(4));
+                farmView.getFarmerSeedInventoryLabel().get(5).setText(inventory);
+                buySeedUpdater();
+            }
+        });
+        farmView.getSeedShopButtons().get(6).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                farmModel.player.buySeed(6, (ArrayList<Crop>) farmModel.seedList);
+                inventory = " [" + 6 + "] " + farmModel.seedList.get(5).getName()
+                        + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(5));
+                farmView.getFarmerSeedInventoryLabel().get(6).setText(inventory);
+                buySeedUpdater();
+            }
+        });
+        farmView.getSeedShopButtons().get(7).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                farmModel.player.buySeed(7, (ArrayList<Crop>) farmModel.seedList);
+                inventory = " [" + 7 + "] " + farmModel.seedList.get(6).getName()
+                        + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(6));
+                farmView.getFarmerSeedInventoryLabel().get(7).setText(inventory);
+                buySeedUpdater();
+            }
+        });
+        farmView.getSeedShopButtons().get(8).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                farmModel.player.buySeed(8, (ArrayList<Crop>) farmModel.seedList);
+                inventory = " [" + 8 + "] " + farmModel.seedList.get(7).getName()
+                        + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(7));
+                farmView.getFarmerSeedInventoryLabel().get(8).setText(inventory);
+                buySeedUpdater();
             }
         });
 
     }
+
     private void plantSeedMouseListener() {
         farmView.getPlantSeedButton().addMouseListener(new MouseListener() {
             @Override
