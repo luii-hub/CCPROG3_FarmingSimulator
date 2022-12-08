@@ -77,18 +77,21 @@ public class Tile {
 						"Use the pickaxe tool to remove the rock <p> </html>";
 			}
 			case PLANT -> {
-				tileDetails = "<html> Tile Status: " + getStatus() + "<p>" +
+				tileDetails = "<html> Plant: " + getPlantedCrop().getName() + " Plant <p>" +
+						"Tile Status: " + getStatus() + "<p>" +
 						"This plant is very healthy and is very much ready to harvest. <p>" +
 						"Note: Forgetting to Harvest a plant may face you consequences for doing so <p> </html>";
 			}
 			case TREE -> {
-				tileDetails = "<html> Tile Status: " + getStatus() + "<p>" +
+				tileDetails = "<html> Tree: " + getPlantedCrop().getName() + " Tree <p>" +
+						"Tile Status: " + getStatus() + "<p>" +
 						"This tile contains a chunky fruit tree and is very much ready to harvest <p>" +
 						"Note: Forgetting to Harvest a fruit tree may face you consequences for doing so <p> </html>";
 			}
 			case SEED -> {
-				tileDetails = "<html> Tile Status: " + getStatus() + "<p>" +
-						"This tile contains a seed of type: " + getPlantedCrop().getType() + "<p>" +
+				tileDetails = "<html> Planted Seed: " + getPlantedCrop().getName() + " Seed <p>" +
+						"Tile Status: " + getStatus() + "<p>" +
+						"Seed Type: " + getPlantedCrop().getType() + "<p>" +
 						"Times Watered: " + getPlantedCrop().getWater() + "<p>" +
 						"Times Fertilized: " + getPlantedCrop().getFertilizer() + "<p>" +
 						"Growth Time: " + getPlantedCrop().getGrowTime() + "<p> </html>";

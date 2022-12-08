@@ -578,12 +578,14 @@ public class MyFarmController {
             public void mouseClicked(MouseEvent e) {
                 //System.out.println("Plant Seed Button Clicked");
                 /* Access SeedShopButtons Depending on available Seeds */
+                int checker = 0;
                 for (int i = 0; i < farmModel.seedList.size(); i++) {
                     int inputIndex = i + 1;
                     if (Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(i)) != 0) {
                         farmModel.seedList.get(i).setChoosable(true);
                         farmView.getFarmerSeedInventoryButtons().get(inputIndex).setEnabled(true);
                     }
+
                 }
             }
 
@@ -617,7 +619,6 @@ public class MyFarmController {
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
-                    //farmModel.player.plantSeed(farmModel.plot, finalI, farmModel.seedList.get();
                     int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Plant On", "Plant Selection",
                             JOptionPane.QUESTION_MESSAGE));
 
@@ -625,7 +626,6 @@ public class MyFarmController {
                             "Plant Seed Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                         if (farmModel.checkTileStatus(farmModel.plot, "plant")) {
                             farmModel.player.plantSeed(farmModel.plot, tileIndex, farmModel.seedList.get(finalI));
-                            farmModel.player.removeSeedFromInventory(farmModel.seedList.get(finalI));
                             updateFarmerInventory();
                             farmDetailsUpdater();
                         } else {
@@ -646,47 +646,44 @@ public class MyFarmController {
     }
 
     private void harvestPlantMouseListener() {
-        for (int i = 1; i <= farmView.getFarmerSeedInventoryButtons().size(); i++) {
-            int finalI = i - 1;
-            farmView.getHarvestSeedButton().addMouseListener(new MouseListener() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    System.out.println("Harvest Button Clicked");
-                    //farmModel.player.plantSeed(farmModel.plot, finalI, farmModel.seedList.get();
-                    int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Harvest", "Harvest Selection",
-                            JOptionPane.QUESTION_MESSAGE));
+        farmView.getHarvestSeedButton().addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("Harvest Button Clicked");
+                //farmModel.player.plantSeed(farmModel.plot, finalI, farmModel.seedList.get();
+                int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Harvest", "Harvest Selection",
+                        JOptionPane.QUESTION_MESSAGE));
 
-                    if (JOptionPane.showConfirmDialog(null, "Are you sure to Harvest on this Plant?",
-                            "Harvest Plant Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                        if (farmModel.checkTileStatus(farmModel.plot, "harvest")) {
-                            farmModel.player.harvestPlant(farmModel.player, farmModel.plot, tileIndex);
-                            updateFarmerInventory();
-                            farmDetailsUpdater();
-                        } else {
-                            JOptionPane.showInternalMessageDialog(null, "Error! You cannot access this feature unless you have a Plant.",
-                                    "Harvest Plant Validation", JOptionPane.INFORMATION_MESSAGE);
-                            System.out.println("Error! You cannot access this feature unless you have a Plant.");
-                        }
+                if (JOptionPane.showConfirmDialog(null, "Are you sure to Harvest on this Plant?",
+                        "Harvest Plant Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    if (farmModel.checkTileStatus(farmModel.plot, "harvest")) {
+                        farmModel.player.harvestPlant(farmModel.player, farmModel.plot, tileIndex);
+                        updateFarmerInventory();
+                        farmDetailsUpdater();
+                    } else {
+                        JOptionPane.showInternalMessageDialog(null, "Error! You cannot access this feature unless you have a Plant.",
+                                "Harvest Plant Validation", JOptionPane.INFORMATION_MESSAGE);
+                        System.out.println("Error! You cannot access this feature unless you have a Plant.");
                     }
                 }
+            }
 
-                @Override public void mousePressed(MouseEvent e) {}
-                @Override public void mouseReleased(MouseEvent e) {}
-                @Override public void mouseEntered(MouseEvent e) {
-                    farmView.getGameTextLabel().setText(
-                            "<html> Harvest a harvestable Plant on the farm plot. " +
-                                    "Can only harvest a crop that is harvestable " +
-                                    "Different Crops have different attributes, harvesting them may contain other benefits" +
-                                    "</html> ");
-                }
+            @Override public void mousePressed(MouseEvent e) {}
+            @Override public void mouseReleased(MouseEvent e) {}
+            @Override public void mouseEntered(MouseEvent e) {
+                farmView.getGameTextLabel().setText(
+                        "<html> Harvest a harvestable Plant on the farm plot. " +
+                                "Can only harvest a crop that is harvestable " +
+                                "Different Crops have different attributes, harvesting them may contain other benefits" +
+                                "</html> ");
+            }
 
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    farmView.getGameTextLabel().setText("");
-                }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                farmView.getGameTextLabel().setText("");
+            }
 
-            });
-        }
+        });
     }
 
     private void registerFarmerMouseListener() {
@@ -738,7 +735,7 @@ public class MyFarmController {
             @Override
             public void mouseEntered(MouseEvent e) {
                 farmView.getGameTextLabel().setText(
-                        "<html> Take a good night's rest and advance unto the next day." +
+                        "<html> Take a good nights rest and advance unto the next day. " +
                                 "Resting resets all parameters and updates the gameplay.</html> ");
             }
 
