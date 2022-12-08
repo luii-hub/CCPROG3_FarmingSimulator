@@ -56,6 +56,46 @@ public class Tile {
 
 	@Override
 	public String toString() {
-		return "Tile [plantedCrop=" + plantedCrop + "]";
+		String tileDetails = null;
+		switch (status){
+			case PLOWED -> {
+				tileDetails = "<html> Tile Status: " + getStatus() + "<p>" +
+						"This tile is cultivated, and ready to be planted. </html>";
+			}
+			case UNPLOWED -> {
+				tileDetails = "<html> Tile Status: " + getStatus() + "<p>" +
+						"This tile is Unplowed, cultivate the tile using the Hoe in order to plant a seed. </html>";
+			}
+			case WITHERED -> {
+				tileDetails = "<html> Tile Status: " + getStatus() + "<p>" +
+						"This tile contains a Withered plant. <p>" +
+						"You are unable to do anything to this tile unless you use a pickaxe to remove it. </html>";
+			}
+			case ROCK -> {
+				tileDetails = "<html> Tile Status: " + getStatus() + "<p>" +
+						"This tile contains a Rock. Rocks are annoying and they block you from accessing the Tile. <p>" +
+						"Use the pickaxe tool to remove the rock <p> </html>";
+			}
+			case PLANT -> {
+				tileDetails = "<html> Tile Status: " + getStatus() + "<p>" +
+						"This plant is very healthy and is very much ready to harvest. <p>" +
+						"Note: Forgetting to Harvest a plant may face you consequences for doing so <p> </html>";
+			}
+			case TREE -> {
+				tileDetails = "<html> Tile Status: " + getStatus() + "<p>" +
+						"This tile contains a chunky fruit tree and is very much ready to harvest <p>" +
+						"Note: Forgetting to Harvest a fruit tree may face you consequences for doing so <p> </html>";
+			}
+			case SEED -> {
+				tileDetails = "<html> Tile Status: " + getStatus() + "<p>" +
+						"This tile contains a seed of type: " + getPlantedCrop().getType() + "<p>" +
+						"Times Watered: " + getPlantedCrop().getWater() + "<p>" +
+						"Times Fertilized: " + getPlantedCrop().getFertilizer() + "<p>" +
+						"Growth Time: " + getPlantedCrop().getGrowTime() + "<p> </html>";
+
+			}
+
+		}
+		return tileDetails;
 	}
 }

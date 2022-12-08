@@ -50,7 +50,7 @@ public class MyFarmView extends JFrame {
     //Farmer Inventory Panel & Attributes
     private final JPanel farmerInventoryPanel = new JPanel();
     private final JLabel farmerInventoryTitle = new JLabel();
-    private final HashMap<Integer, JLabel> farmerSeedInventoryLabel = new HashMap<>();
+    private final HashMap<Integer, JButton> farmerSeedInventoryButtons = new HashMap<>();
 
     //Game Text Field Presenter
     private final JPanel gameTextPanel = new JPanel();
@@ -108,7 +108,7 @@ public class MyFarmView extends JFrame {
         plotDetailsLabel.setLayout(null);
         setPlotDetailsPanel();
 
-        farmPlotPanel.setBackground(Color.decode("#70a270"));
+        //farmPlotPanel.setBackground(Color.decode("#70a270"));
         farmPlotPanel.setLayout(new GridLayout(10, 5, 5, 5));
         setFarmPlotPanel();
 
@@ -189,6 +189,7 @@ public class MyFarmView extends JFrame {
             tileButton.setContentAreaFilled(false);
             tileButton.setText("Tile " + position);
             tileButton.setSize(new Dimension(5, 5));
+            tileButton.setEnabled(false);
             farmPlotPanel.add(farmPlotButtons.get(position));
         }
     }
@@ -242,11 +243,12 @@ public class MyFarmView extends JFrame {
 
         int y_axis = 60;
         for (int position = 1; position <= 8; position++) {
-            JLabel seedLabel = new JLabel();
-            farmerSeedInventoryLabel.put(position, seedLabel);
-            farmerSeedInventoryLabel.get(position).setBounds(50, y_axis, 200, 40);
-            farmerInventoryPanel.add(farmerSeedInventoryLabel.get(position));
-            farmerSeedInventoryLabel.get(position).setFont(OpenSans);
+            JButton seedInventoryButton = new JButton();
+            farmerSeedInventoryButtons.put(position, seedInventoryButton);
+            farmerSeedInventoryButtons.get(position).setBounds(50, y_axis, 220, 40);
+            farmerInventoryPanel.add(farmerSeedInventoryButtons.get(position));
+            farmerSeedInventoryButtons.get(position).setEnabled(false);
+            farmerSeedInventoryButtons.get(position).setFont(OpenSans);
             y_axis += 50;
         }
     }
@@ -328,8 +330,8 @@ public class MyFarmView extends JFrame {
     public JLabel getFarmerInventoryTitle() {
         return farmerInventoryTitle;
     }
-    public HashMap<Integer, JLabel> getFarmerSeedInventoryLabel() {
-        return farmerSeedInventoryLabel;
+    public HashMap<Integer, JButton> getFarmerSeedInventoryButtons() {
+        return farmerSeedInventoryButtons;
     }
 
     public JLabel getSeedShopTitle() {
@@ -375,6 +377,7 @@ public class MyFarmView extends JFrame {
         return harvestSeedButton;
     }
 
-
-
+    public HashMap<Integer, JButton> getFarmPlotButtons() {
+        return farmPlotButtons;
+    }
 }

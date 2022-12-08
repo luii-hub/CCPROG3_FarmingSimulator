@@ -148,7 +148,7 @@ public class Application {
 					System.out.println("\tHint: Buy Seeds from the Seed Shop.");
 				} else {
 					/* Check if Tile is Plowed, Else print an error statement */
-					if (checkTileStatus(plot, "plow")) {
+					if (checkTileStatus(plot, "plant")) {
 						System.out.println("\tSelect a Plowed Tile to Plant: ");
 						/* Outside Error Catching Validation */
 						try {
@@ -439,7 +439,7 @@ public class Application {
 		/* Returns TRUE if the condition(s) of using a tool is met before using it on a TILE */
 		boolean status = false;
 		switch (toolName){
-			case "plow" :
+			case "plant" :
 				for(int i = 1; i <= plot.size(); i++){
 					if(plot.get(i).getStatus().equals(TileStatus.PLOWED)){
 						status = true;

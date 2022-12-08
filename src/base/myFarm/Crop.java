@@ -148,10 +148,11 @@ public class Crop {
 	}
 	@Override
 	public String toString() {
-		return "\t[" + name + "] : " + type +
-				"\n\tHarvest Time: " + harvestTime + "\t\tProduce/Exp: 1 / " + expYield +
-				"\n\tBase Price: " + sellPrice + "\n\tSeed Cost: " + buyCost +
-				"\t\tWater Needed: " + waterNeeded +"\t\tFertilizer Needed: " + fertilizerNeeded +
-				"\t\tWater Bonus: " + waterBonus + "\t\tFertlizer Bonus: " + fertilizerBonus;
+		return "<html> [" + name + "] : " + type + "<p>" +
+				"Harvest Time: " + harvestTime +  "<p>" +
+				"Base Price: " + sellPrice + "<p>" + "Seed Cost: " + buyCost + "<p>" +
+				"Water Needed: " + waterNeeded + "<p>" + "Water Bonus: " + fertilizerNeeded + "<p>" +
+				"Fertilizer Needed: " + waterBonus + "<p>" + "Fertilizer Bonus: " + fertilizerBonus + "<p>" +
+				"Exp Gained Per Produce: " + expYield +"</html>";
 	}
 }

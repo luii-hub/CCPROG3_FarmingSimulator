@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 
 public class MyFarmModel {
 
@@ -103,7 +104,100 @@ public class MyFarmModel {
         }
     }
 
+    /**	This method lets the user register himself/herself for a new farmer status, which costs ObjectCoins depending on the type of
+     * 	status the player wishes to register. You cannot jump status and the method updates the registerCounter so that the program
+     * 	disables the function once the player reaches maximum level.
+     * 	@param player
+     */
+    public void registerFarmer(Farmer player){
+		/* 	Register the farmer (player) depending on the type of farmer status given,
+			If the player does not have enough ObjectCoins, terminate the registration. */
+        switch (player.getRegisterCounter()){
+            case 0 -> {
+                if (player.getFarmerLevel() >= 5) {
+                    if (player.getObjectCoins() >= 200) {
+                        player.deductObjectCoin(200);
+                        player.setType(FarmerType.REGISTERED);
+                        player.setRegisterCounter(1);
+                        player.setRegisterable(false);
+                    } else {
+                        System.out.println("\tError! Insufficient ObjectCoins!");
+                    }
+                }
+            }
+            case 1 -> {
+                if (player.getFarmerLevel() >= 10) {
+                    if (player.getObjectCoins() >= 300) {
+                        player.deductObjectCoin(300);
+                        player.setType(FarmerType.DISTINGUISHED);
+                        player.setRegisterCounter(2);
+                        player.setRegisterable(false);
+                    } else {
+                        System.out.println("\tError! Insufficient ObjectCoins!");
+                    }
+                }
+            }
+            case 2 -> {
+                if (player.getFarmerLevel() >= 15){
+                    if (player.getObjectCoins() >= 400) {
+                        player.deductObjectCoin(400);
+                        player.setType(FarmerType.LEGENDARY);
+                        player.setRegisterCounter(3);
+                        player.setRegisterable(false);
+                    } else {
+                        System.out.println("\tError! Insufficient ObjectCoins!");
+                    }
+                }
+            }
+            case 3 -> {
+                System.out.println("You have reached maximum farmer status");
+            }
+            default -> System.out.println("\tRegistration Cancelled. Going back to MyFarm...");
+        }
+    }
 
-
+    /**	This multipurpose method checks the tileStatus of the tile and returns the boolean value depending on the inputted name
+     * 	of the tool. Different farmer tools require different tile statuses to proceed & it helps in error handling and method
+     * 	requirements as imposed in the Machine Project Specifications.
+     *
+     * 	@param plot
+     * 	@param toolName
+     * 	@returns status
+     */
+    public boolean checkTileStatus(HashMap<Integer, Tile> plot, String toolName){
+        /* Returns TRUE if the condition(s) of using a tool is met before using it on a TILE */
+        boolean status = false;
+        switch (toolName){
+            case "plant" :
+                for(int i = 1; i <= plot.size(); i++){
+                    if(plot.get(i).getStatus().equals(TileStatus.PLOWED)){
+                        status = true;
+                    }
+                }
+                break;
+            case "harvest":
+                for(int i = 1; i <= plot.size(); i++){
+                    if(plot.get(i).getStatus().equals(TileStatus.PLANT) || plot.get(i).getStatus().equals(TileStatus.TREE)){
+                        status = true;
+                    }
+                }
+                break;
+            case "water", "fertilize" :
+                for(int i = 1; i <= plot.size(); i++){
+                    if(plot.get(i).getStatus().equals(TileStatus.SEED)){
+                        status = true;
+                    }
+                }
+                break;
+            case "pickaxe":
+                for(int i = 1; i <= plot.size(); i++){
+                    if(plot.get(i).getStatus().equals(TileStatus.ROCK)){
+                        status = true;
+                    }
+                }
+                break;
+        }
+        return status;
+    }
 
 }

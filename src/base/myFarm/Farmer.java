@@ -104,7 +104,7 @@ public class Farmer {
     public void buySeed(int index, ArrayList<Crop> seedList) {
         index--;
         addSeedToInventory(seedList.get(index));
-        deductObjectCoin((seedList.get(index).getBuyCost() - getType().getSeedCostReduction()));
+        deductObjectCoin(seedList.get(index).getBuyCost());
         getFarmerStats().addTimesBoughtSeeds();
     }
 
@@ -117,7 +117,7 @@ public class Farmer {
      */
     public void plantSeed(HashMap<Integer, Tile> plot, int index, Crop seed){
         Crop newCrop = Crop.newCrop(seed);
-        plot.get(index).setPlantedCrop(newCrop);
+            plot.get(index).setPlantedCrop(newCrop);
         plot.get(index).setStatus(TileStatus.SEED);
         System.out.println("\tYou have successfully planted a " + newCrop.getName() + "!");
         removeSeedFromInventory(seed);
