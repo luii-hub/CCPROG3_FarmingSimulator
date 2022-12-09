@@ -22,7 +22,7 @@ public class Farmer {
         this.type = type;
         this.farmerLevel = 4;
         this.experience = 0.0;
-        this.objectCoins = 300;
+        this.objectCoins = 199;
         this.isRegisterable = false;
         this.registerCounter = 0;
     }

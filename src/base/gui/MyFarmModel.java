@@ -1,11 +1,11 @@
 package base.gui;
 import base.myFarm.*;
 
+import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
 
 public class MyFarmModel {
 
@@ -122,8 +122,9 @@ public class MyFarmModel {
                         player.setType(FarmerType.REGISTERED);
                         player.setRegisterCounter(1);
                         player.setRegisterable(false);
+                        registerSuccess();
                     } else {
-                        System.out.println("\tError! Insufficient ObjectCoins!");
+                        registerFailed();
                     }
                 }
             }
@@ -134,8 +135,9 @@ public class MyFarmModel {
                         player.setType(FarmerType.DISTINGUISHED);
                         player.setRegisterCounter(2);
                         player.setRegisterable(false);
+                        registerSuccess();
                     } else {
-                        System.out.println("\tError! Insufficient ObjectCoins!");
+                        registerFailed();
                     }
                 }
             }
@@ -146,8 +148,9 @@ public class MyFarmModel {
                         player.setType(FarmerType.LEGENDARY);
                         player.setRegisterCounter(3);
                         player.setRegisterable(false);
+                        registerSuccess();
                     } else {
-                        System.out.println("\tError! Insufficient ObjectCoins!");
+                        registerFailed();
                     }
                 }
             }
@@ -158,6 +161,18 @@ public class MyFarmModel {
         }
     }
 
+    private void registerSuccess(){
+        JOptionPane.showMessageDialog(
+                null, "Registration Success!",
+                " Farmer Registration",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+    private void registerFailed(){
+        JOptionPane.showMessageDialog(null,
+                "Registration Failed! Insufficient ObjectCoins",
+                " Farmer Registration", JOptionPane.INFORMATION_MESSAGE);
+        System.out.println("\tError! Insufficient ObjectCoins!");
+    }
     /**	This multipurpose method checks the tileStatus of the tile and returns the boolean value depending on the inputted name
      * 	of the tool. Different farmer tools require different tile statuses to proceed & it helps in error handling and method
      * 	requirements as imposed in the Machine Project Specifications.

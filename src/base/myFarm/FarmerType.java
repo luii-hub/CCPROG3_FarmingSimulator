@@ -48,8 +48,13 @@ public enum FarmerType {
         return fertilizerBonusIncrease;
     }
 
-    public double getRegistrationFee() {
-        return registrationFee;
+    @Override
+    public String toString() {
+        return "<html> [" + getFarmerType() + "] : <p>" +
+                "Bonus Earning(s): " + getBonusEarnings() + "<p>" +
+                "Seed Cost Reduction: " + getSeedCostReduction() + "<p>" +
+                "Water B.Limit Increase: " + getWaterBonusIncrease() + "<p>" +
+                "Fertilizer B.Limit Increase: " + getFertilizerBonusIncrease() + "<p> <html>";
     }
 }
 

@@ -4,6 +4,7 @@ import base.myFarm.Tool;
 
 import javax.swing.JOptionPane;
 import java.awt.event.MouseAdapter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.awt.event.ActionEvent;
@@ -13,6 +14,7 @@ import java.awt.event.MouseEvent;
 public class MyFarmController {
     private final MyFarmView farmView;
     private final MyFarmModel farmModel;
+    private final DecimalFormat decimalFormat = new DecimalFormat("#.##");
     String inventory = null;
 
     MyFarmController(MyFarmView farmView, MyFarmModel model) {
@@ -39,8 +41,8 @@ public class MyFarmController {
     private void updateFarmerDetailsPanel() {
         farmView.getFarmerDetailsTitle().setText(" - Farmer Details -");
         farmView.getFarmerLevelLabel().setText(" Farmer Level: " + String.valueOf(farmModel.player.getFarmerLevel()));
-        farmView.getFarmerExpLabel().setText(" Experience: " + String.valueOf(farmModel.player.getExperience()));
-        farmView.getFarmerObjectCoinLabel().setText(" ObjectCoins: " + String.valueOf(farmModel.player.getObjectCoins()));
+        farmView.getFarmerExpLabel().setText(" Experience: " + String.valueOf(decimalFormat.format(farmModel.player.getExperience())));
+        farmView.getFarmerObjectCoinLabel().setText(" ObjectCoins: " + String.valueOf(decimalFormat.format(farmModel.player.getObjectCoins())));
         farmView.getFarmerTypeLabel().setText(" Status: " + String.valueOf(farmModel.player.getType().getFarmerType()));
         farmView.getRegisterFarmerButton().setText(" Register");
         farmView.getNextDayButton().setText(" Rest");
@@ -61,7 +63,16 @@ public class MyFarmController {
             System.out.println(inventory);
         }
     }
-
+    private void famerStatusMouseListener(){
+        farmView.getFarmerDetailsPanel().addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                farmView.getGameTextLabel().setText(String.valueOf(farmModel.player.getType().toString()));
+            }
+            @Override public void mouseExited(MouseEvent e) {
+                farmView.getGameTextLabel().setText("");
+            }
+        });
+    }
     public void updateFarmerLevel() {
         /* Reset the Farmer's Exp Counter since the CAP is 100 */
         if (farmModel.player.getExperience() >= 100){
@@ -99,9 +110,10 @@ public class MyFarmController {
 
     private void actionCommand() {
 
-        /* Tile Methods & Details */
+        /* Misc Methods & Details */
         showTileInfoListener();
         updateTileStatuses();
+        famerStatusMouseListener();
 
         /* Farmer Action Command MouseListeners */
         plowMouseListener();
@@ -239,7 +251,7 @@ public class MyFarmController {
                             case ROCK -> {
                                 if (JOptionPane.showConfirmDialog(null, "Are you sure to Pickaxe this tile?",
                                         "Pickaxe Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                                    farmModel.player.shovelTool(farmModel.plot, (ArrayList<Tool>) farmModel.toolList, tileIndex);
+                                    farmModel.player.pickaxeTool(farmModel.plot, (ArrayList<Tool>) farmModel.toolList, tileIndex);
                                     updateTileStatuses();
                                     updateGame();
                                     JOptionPane.showMessageDialog(
@@ -263,15 +275,10 @@ public class MyFarmController {
                      * 	If player has reached maximum level, disable player to register anymore */
                     try {
                         if (farmModel.player.isRegisterable()) {
-                            if (JOptionPane.showConfirmDialog(null, "Do you want to register to a new Farmer Title?",
-                                    "Farmer Registration", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                                farmModel.registerFarmer(farmModel.player);
-                                JOptionPane.showMessageDialog(
-                                        null, "You have successfully used a Pickaxe",
-                                        "Pickaxe Tile Message",
-                                        JOptionPane.INFORMATION_MESSAGE);
-                                farmModel.registerFarmer(farmModel.player);
-                            }
+                                if (JOptionPane.showConfirmDialog(null, "Do you want to register to a new Farmer Title?",
+                                        "Farmer Registration Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                                    farmModel.registerFarmer(farmModel.player);
+                                }
                         } else if (farmModel.player.getRegisterCounter() == 3) {
                             JOptionPane.showInternalMessageDialog(null, "You have reached the maximum status as a Farmer.",
                                     "Farmer Registration", JOptionPane.INFORMATION_MESSAGE);
@@ -608,7 +615,11 @@ public class MyFarmController {
             @Override
             public void mouseEntered(MouseEvent e) {
                 farmView.getGameTextLabel().setText(
-                        "<html> Register your status to become a newly pledged farmer." +
+                        "<html> Register your status to become a newly pledged farmer.<p><p>" +
+                                "Novice Farmer: (Default Status)<p><p>" +
+                                "Registered Farmer: Cost 200 OC<p><p>" +
+                                "Distinguished Farmer: Cost 300 OC<p><p>" +
+                                "Legendary Farmer: Cost 400 OC" +
                                 "</html> ");
             }
             @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("");}

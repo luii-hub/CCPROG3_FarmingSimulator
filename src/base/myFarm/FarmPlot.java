@@ -1,5 +1,8 @@
 package base.myFarm;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 
 public class FarmPlot {
@@ -10,16 +13,45 @@ public class FarmPlot {
      *  @param plot
      */
     public FarmPlot(HashMap<Integer, Tile> plot){
-        /* Generate 50 Tiles stored in a HashMap */
-        for(int i = 0; i < 50; i++){
-            Tile tile = new Tile(i + 1, null, TileStatus.UNPLOWED);
-            plot.put(tile.getPosition(), tile);
-        }
         this.daytime = 1;
-        /* Find the 'edges' of the Board for Fruit Tree Usage */
-        generateEdges(plot);
-        //generateRocks(plot);
+        try {
+            /* Generate 50 Tiles stored in a HashMap */
+            for (int i = 0; i < 50; i++) {
+                Tile tile = new Tile(i + 1, null, TileStatus.UNPLOWED);
+                plot.put(tile.getPosition(), tile);
+            }
+            generateManualRocks(plot);
+            /* Find the 'edges' of the Board for Fruit Tree Usage */
+            generateEdges(plot);
 
+        } catch (Exception exception){
+            exception.getStackTrace();
+        }
+
+    }
+
+    private void generateManualRocks(HashMap<Integer, Tile> plot) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader("rocks.txt"));
+
+        String line = null;
+        int rockValue;
+        int tileIndex = 1;
+        while((line = br.readLine()) != null){
+            String[] values = line.split(",");
+            for (String value : values) {
+                try {
+                    rockValue = Integer.parseInt(value);
+                    if (rockValue == 1) {
+                        plot.get(tileIndex).setStatus(TileStatus.ROCK);
+                    }
+
+                } catch (NumberFormatException nfe) {
+                    continue;
+                }
+                tileIndex++;
+            }
+        }
+        br.close();
     }
 
     /** This method declared what tile index is at the edge of the board. This function is only executed once
@@ -46,12 +78,11 @@ public class FarmPlot {
         return (int) Math.floor(Math.random()*(maxRocks-minRocks+1)+minRocks);
     }
 
-    private void generateRocks(HashMap<Integer, Tile> plot){
+    private void generateRocks(HashMap<Integer, Tile> plot, int rockCount){
         int index;
-        int randomRock = rngRockCount();
         int counter = 0;
-        for(int i = 0; i < randomRock; i++){
-            while(counter != randomRock){
+        for(int i = 0; i < rockCount; i++){
+            while(counter != rockCount){
                 index = rngRockPosition();
                 if(plot.get(index).getStatus().equals(TileStatus.ROCK)){
                     continue;
@@ -83,8 +114,6 @@ public class FarmPlot {
                         case PLANT -> "PLANT";
                         case TREE -> "FTREE";
                     };
-                    //System.out.printf("\t%-11s %-2d ", ("[" + plot.get(tileCount).isEdge() + "]"));
-                    //System.out.printf("\t%-11s %-2d ", ("[" + tileStatus + "]"), plot.get(tileCount).getPosition());
                     tileCount++;
                 }
                 System.out.println(" ");

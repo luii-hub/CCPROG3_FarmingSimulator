@@ -379,4 +379,8 @@ public class MyFarmView extends JFrame {
     public HashMap<Integer, JButton> getFarmPlotButtons() {
         return farmPlotButtons;
     }
+
+    public JPanel getFarmerDetailsPanel() {
+        return farmerDetailsPanel;
+    }
 }
