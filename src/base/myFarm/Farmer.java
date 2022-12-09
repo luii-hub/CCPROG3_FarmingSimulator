@@ -20,9 +20,9 @@ public class Farmer {
     public Farmer(FarmerType type){
         FarmerStats = new Stats();
         this.type = type;
-        this.farmerLevel = 0;
+        this.farmerLevel = 4;
         this.experience = 0.0;
-        this.objectCoins = 100;
+        this.objectCoins = 300;
         this.isRegisterable = false;
         this.registerCounter = 0;
     }
@@ -95,7 +95,7 @@ public class Farmer {
         this.inventory.remove(seed);
     }
 
-    /** This method lets the user buy the desired seed from the the seed shop (seedlist). The user can buy a maximum of
+    /** This method lets the user buy the desired seed from the seed shop (seedlist). The user can buy a maximum of
      *  five seeds per purchase. If the player does not have enough ObjectCoins to buy, this function will be restricted.
      *
      * @param index
@@ -162,7 +162,7 @@ public class Farmer {
         if(plot.get(index).getStatus().equals(TileStatus.SEED)){
             int maxWaterCount =  plot.get(index).getPlantedCrop().getWaterNeeded() + plot.get(index).getPlantedCrop().getWaterBonus() + getType().getWaterBonusIncrease();
             /* Water the Crop, Update the Crop's Attributes, If the crop's water requirement reaches a certain threshold, disable exp incrementation */
-            if(plot.get(index).getPlantedCrop().getWater() < maxWaterCount) {
+            if(plot.get(index).getPlantedCrop().getWater() <= maxWaterCount) {
                 plot.get(index).getPlantedCrop().setWater(1);
                 plot.get(index).getPlantedCrop().setWatered(true);
                 addExperience(toolList.get(1).getExpGain());
@@ -194,7 +194,7 @@ public class Farmer {
                 deductObjectCoin(toolList.get(2).getCost());
                 int maxFertilizerCount = plot.get(index).getPlantedCrop().getFertilizerNeeded() + plot.get(index).getPlantedCrop().getFertilizerBonus() + getType().getFertilizerBonusIncrease();
                 /* Fertilize the Crop, Update the Crop's Attributes, If the crop's fertilize requirement reaches a certain threshold, disable exp incrementation */
-                if (plot.get(index).getPlantedCrop().getFertilizer() < maxFertilizerCount) {
+                if (plot.get(index).getPlantedCrop().getFertilizer() <= maxFertilizerCount) {
                     plot.get(index).getPlantedCrop().setFertilizer(1);
                     plot.get(index).getPlantedCrop().setFertilized(true);
                     addExperience(toolList.get(2).getExpGain());

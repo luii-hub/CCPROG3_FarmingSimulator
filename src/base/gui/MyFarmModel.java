@@ -27,7 +27,7 @@ public class MyFarmModel {
     ));
 
     protected final List<Tool> toolList = new ArrayList<Tool>(Arrays.asList(
-            new Tool("Plow Tool", 0, 0.5),
+            new Tool("Plow Tool", 0, 25),
             new Tool("Watering Can", 0, 0.5),
             new Tool("Fertilizer", 10, 4),
             new Tool("Pickaxe", 50, 15),
@@ -201,5 +201,6 @@ public class MyFarmModel {
         }
         return status;
     }
+
 
 }

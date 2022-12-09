@@ -187,7 +187,6 @@ public class MyFarmView extends JFrame {
             JButton tileButton = new JButton();
             farmPlotButtons.put(position, tileButton);
             tileButton.setContentAreaFilled(false);
-            tileButton.setText("Tile " + position);
             tileButton.setSize(new Dimension(5, 5));
             tileButton.setEnabled(false);
             farmPlotPanel.add(farmPlotButtons.get(position));
