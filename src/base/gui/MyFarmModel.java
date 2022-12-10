@@ -11,13 +11,15 @@ import java.util.List;
  * This class represents the Model of the GUI which contains all the back-end general logic, attributes, and methods of the program.
  */
 public class MyFarmModel {
+    /** Boolean value to check if the program should keep running or not */
     protected boolean isRunning = true;
+    /** Farmer Object where it holds all attributes for a player character entity */
     protected final Farmer player = new Farmer(FarmerType.DEFAULT);
-
+    /** A HashMap of Tile Objects such that each tile holds a Crop Object */
     protected final HashMap<Integer, Tile> plot = new HashMap<>();
-
+    /** MyFarm Class where we generate the farm plot or the 10 by 5 of object Tiles */
     protected final FarmPlot MyFarm = new FarmPlot(plot);
-
+    /** List of Plantable Crops */
     protected final List<Crop> seedList = new ArrayList<>(Arrays.asList(
             new Crop("Turnip", CropType.ROOT_CROP, 2, 1, 2, 0, 1, 5, 6, 1, 2, 5),
             new Crop("Carrot", CropType.ROOT_CROP, 3, 1, 2, 0, 1, 10, 9, 1, 2, 7.5),
@@ -28,15 +30,21 @@ public class MyFarmModel {
             new Crop("Mango", CropType.FRUIT_TREE, 10, 7, 7, 4, 4, 100, 8, 5, 15, 25),
             new Crop("Apple", CropType.FRUIT_TREE, 10, 7, 7, 5, 5, 200, 5, 10, 15, 25)
     ));
-
+    /** List of Usable Farmer Tools */
     protected final List<Tool> toolList = new ArrayList<>(Arrays.asList(
-            new Tool("Plow Tool", 0, 25),
+            new Tool("Plow Tool", 0, 0.5),
             new Tool("Watering Can", 0, 0.5),
             new Tool("Fertilizer", 10, 4),
             new Tool("Pickaxe", 50, 15),
             new Tool("Shovel", 7, 2)
     ));
 
+    /**	This method increments the number of days and it "proceeds to the next day". Once this method is executed,
+     * 	it the crop's variables (i.e. growth time) and updates the status of every plant (i.e. if plant is harvestable
+     * 	on the next day or if plant withers the next day).
+     *
+     * 	@param MyFarm The FarmPlot class which is essentially the Board which hold the daytime variable
+     */
     public void nextDay(FarmPlot MyFarm){
         MyFarm.setDaytime(1);
         /* Loop through each of the tiles in the farm plot and check and update every single tile or plant */
@@ -162,12 +170,18 @@ public class MyFarmModel {
         }
     }
 
+    /**
+     * Shows an Information Message that lets the user know that farmer registration is a success
+     */
     private void registerSuccess(){
         JOptionPane.showMessageDialog(
                 null, "Registration Success!",
                 " Farmer Registration",
                 JOptionPane.INFORMATION_MESSAGE);
     }
+    /**
+     * Shows an Information Message that lets the user know that farmer registration has failed
+     */
     private void registerFailed(){
         JOptionPane.showMessageDialog(null,
                 "Registration Failed! Insufficient ObjectCoins",
@@ -195,7 +209,10 @@ public class MyFarmModel {
                 break;
             case "harvest":
                 for(int i = 1; i <= plot.size(); i++){
-                    if(plot.get(i).getStatus().equals(TileStatus.PLANT) || plot.get(i).getStatus().equals(TileStatus.TREE)){
+                    if(plot.get(i).getStatus().equals(TileStatus.PLANT)){
+                        status = true;
+                    }
+                    if(plot.get(i).getStatus().equals(TileStatus.TREE)){
                         status = true;
                     }
                 }
@@ -263,7 +280,46 @@ public class MyFarmModel {
         return isRunning;
     }
 
+    /** This method's purpose is specifically for the plantSeed method in order certain restrictions and validations to work properly, as imposed from
+     * 	the Machine Project Specifications. The selected tile checks the neighboring tiles if they are currently occupied by any Object, it returns true
+     * 	if there are no occupied objects, else returns false. This is implemented in collaboration with the Fruit Tree specification.
+     * 	@param checkMode An integer value which represents the type of validation this function will execute
+     * 	@param tileIndex An integer value which represents the tile's index from the HashMap of Tiles.
+     * 	@param plot An attribute which holds the HashMap of Tiles.
+     * 	@return A boolean value whether the selected tile can be planted by a Fruit Tree or not
+     */
+    public boolean checkSurroundings(int checkMode, int tileIndex, HashMap<Integer, Tile> plot){
+        boolean isPlantable = true;
+        int counter = 4;
+        if(checkMode == 1) {
+            /* Check Left and Right Space Index */
+            switch (plot.get(tileIndex + 1).getStatus()) {
+                case ROCK, TREE, PLANT, SEED, WITHERED -> isPlantable = false;
+            }
+            switch (plot.get(tileIndex - 1).getStatus()) {
+                case ROCK, TREE, PLANT, SEED, WITHERED -> isPlantable = false;
+            }
+
+            /* Check Top, Btm, Diagonal Space Index */
+            for (int i = 0; i < 3; i++) {
+                switch (plot.get(tileIndex + counter).getStatus()) {
+                    case ROCK, TREE, PLANT, SEED, WITHERED -> isPlantable = false;
+                }
+                switch (plot.get(tileIndex - counter).getStatus()) {
+                    case ROCK, TREE, PLANT, SEED, WITHERED -> isPlantable = false;
+                }
+                counter++;
+            }
+        }
+        else if (checkMode == 0){
+            if(!plot.get(tileIndex).IsPlantable()){
+                isPlantable = false;
+            }
+        }
+        return isPlantable;
+    }
     /* Needed Getters */
+    /** Returns the isRunning Boolean Value of the Application */
     public boolean isRunning() {
         return isRunning;
     }

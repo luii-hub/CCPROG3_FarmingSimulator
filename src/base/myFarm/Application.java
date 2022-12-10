@@ -18,16 +18,25 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.InputMismatchException;
-public class Application {
 
+/**
+ * This Class is the main driver and executable Application for console-output program. It is generally
+ * the skeleton of the whole MyFarm Project and the interconnections of all classes and objects.
+ */
+public class Application {
+	/** Scan for User Input */
 	public static final Scanner input = new Scanner(System.in);
 
 	// Game Initializations and Instantiations
+	/** Boolean value to check if the program should keep running or not */
 	public static boolean isRunning = true;
+	/** Farmer Object where it holds all attributes for a player character entity */
 	public static Farmer player = new Farmer(FarmerType.DEFAULT);
+	/** A HashMap of Tile Objects such that each tile holds a Crop Object */
 	public static HashMap<Integer, Tile> plot = new HashMap<>();
+	/** MyFarm Class where we generate the farm plot or the 10 by 5 of object Tiles */
 	public static FarmPlot MyFarm = new FarmPlot(plot);
-	/* List of Plantable Crops */
+	/** List of Plantable Crops */
 	public static final List<Crop> seedList = new ArrayList<>(Arrays.asList(
 		new Crop("Turnip", CropType.ROOT_CROP, 2, 1, 2, 0, 1, 5, 6, 1, 2, 5),
 		new Crop("Carrot", CropType.ROOT_CROP, 3, 1, 2, 0, 1, 10, 9, 1, 2, 7.5),
@@ -38,7 +47,7 @@ public class Application {
 		new Crop("Mango", CropType.FRUIT_TREE, 10, 7, 7, 4, 4, 100, 8, 5, 15, 25),
 		new Crop("Apple", CropType.FRUIT_TREE, 10, 7, 7, 5, 5, 200, 5, 10, 15, 25)
 	));
-	/* List of Usable Farmer Tools */
+	/** List of Usable Farmer Tools */
 	public static final List<Tool> toolList = new ArrayList<>(Arrays.asList(
 			new Tool("Plow Tool", 0, 0.5),
 			new Tool("Watering Can", 0, 0.5),
@@ -47,6 +56,10 @@ public class Application {
 			new Tool("Shovel", 7, 2)
 	));
 
+	/**
+	 * The main function where we can execute the whole program.
+	 * @param args String Argument
+	 */
 	public static void main(String[] args) {
 		/* Run Program until checkGameConditions Function returns false */
 		while (isRunning) {
@@ -719,13 +732,17 @@ public class Application {
 		}
 	}
 
-	/* Simple Method for clearing the console output (For Terminal Purposes) */
+	/**
+	 *  Simple Method for clearing the console output (For Terminal Purposes)
+	 */
 	public static void cls() {
 		System.out.print("\033[H\033[2J");
 		System.out.flush();
 	}
 
-	/* "Press any key to Continue" Method */
+	/**
+	 *  Method which is basically a "Press any key to Continue" Method
+	 */
 	public static void keyContinue(){
 		System.out.println("\tPress any key to continue");
 		input.nextLine(); input.nextLine();

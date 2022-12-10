@@ -1,5 +1,6 @@
 package base.gui;
 import base.myFarm.Crop;
+import base.myFarm.CropType;
 import base.myFarm.Tool;
 
 import javax.swing.JOptionPane;
@@ -14,9 +15,13 @@ import java.awt.event.MouseEvent;
  * This is the Controller Class of MyFarm where all the interactions between the view and the model take place.
  */
 public class MyFarmController {
+    /** View of the GUI*/
     private final MyFarmView farmView;
+    /** Model of the GUI */
     private final MyFarmModel farmModel;
+    /** Forces decimal values to have a decimal place */
     private final DecimalFormat decimalFormat = new DecimalFormat("#.##");
+    /** String Name of Seed in the Inventory*/
     String inventory = null;
 
     /**
@@ -695,7 +700,31 @@ public class MyFarmController {
                     if (JOptionPane.showConfirmDialog(null, "Are you sure to Plant on this tile?",
                             "Plant Seed Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                         if (farmModel.checkTileStatus(farmModel.plot, "plant")) {
-                            farmModel.player.plantSeed(farmModel.plot, tileIndex, farmModel.seedList.get(finalI));
+                            if(farmModel.seedList.get(finalI).getType().equals(CropType.FRUIT_TREE)) {
+                                if (farmModel.plot.get(tileIndex).isEdge()) {
+                                    System.out.println("\tError! You are unable to plant a Fruit Tree at the edges of the farm plot.");
+                                    JOptionPane.showInternalMessageDialog(null,
+                                            "Error! You are unable to plant a Fruit Tree at the edges of the farm plot.",
+                                            "Plant Seed Validation", JOptionPane.INFORMATION_MESSAGE);
+                                    System.out.println("Error! You can only plant on unoccupied, PLOWED tiles.");
+                                } else {
+                                    /* If selected tile in not an edge, check the neighboring tiles if they are occupied, if there are no neighboring objects, continue plantSeed */
+                                    if (farmModel.checkSurroundings(1, tileIndex, farmModel.plot)) {
+                                        farmModel.player.plantSeed(farmModel.plot, tileIndex, farmModel.seedList.get(finalI));
+                                        farmModel.plot.get(tileIndex).setPlantable(false);
+                                    } else {
+                                        System.out.println("\tError! You are unable to plant a Fruit Tree because it needs a tile of space to grow.");
+                                        JOptionPane.showInternalMessageDialog(null,
+                                                "Error! You are unable to plant a Fruit Tree because it needs a tile of space to grow.",
+                                                "Plant Seed Validation", JOptionPane.INFORMATION_MESSAGE);
+                                    }
+                                }
+                            }
+                            else{
+                                /* If Seed is not a FruitTree proceed to execute plantSeed method and continue as is */
+                                farmModel.player.plantSeed(farmModel.plot, tileIndex, farmModel.seedList.get(finalI));
+                                farmModel.plot.get(tileIndex).setPlantable(false);
+                            }
                             updateGame();
                         } else {
                             JOptionPane.showInternalMessageDialog(null, "Error! You can only plant on unoccupied, PLOWED tiles.",
@@ -734,7 +763,7 @@ public class MyFarmController {
                     int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Harvest", "Harvest Selection",
                             JOptionPane.QUESTION_MESSAGE));
                     switch (farmModel.plot.get(tileIndex).getStatus()) {
-                        case PLANT -> {
+                        case PLANT, TREE -> {
                             if (JOptionPane.showConfirmDialog(null, "Are you sure to Harvest on this Plant?",
                                     "Harvest Plant Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                                 if (farmModel.checkTileStatus(farmModel.plot, "harvest")) {
@@ -752,7 +781,7 @@ public class MyFarmController {
                             }
                             updateTileStatuses();
                         }
-                        case SEED, ROCK, TREE, WITHERED, PLOWED, UNPLOWED -> {
+                        case SEED, ROCK, WITHERED, PLOWED, UNPLOWED -> {
                             JOptionPane.showInternalMessageDialog(null, "Error! You cannot access this feature unless you have a Plant.",
                                     "Harvest Plant Validation", JOptionPane.INFORMATION_MESSAGE);
                             System.out.println("Error! You cannot access this feature unless you have a Plant.");

@@ -13,7 +13,7 @@
 package base.gui;
 
 /**
- * The driver class or the runnable application of the GUI MyFarm
+ * The driver class or the runnable application of the GUI MyFarm which holds the Model, View, and Controller of the Application
  */
 public class MyFarmApplication {
 

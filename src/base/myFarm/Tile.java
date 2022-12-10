@@ -1,5 +1,8 @@
 package base.myFarm;
 
+/**
+ * This class represents a TILE object in the game where it holds a planted crop and lets where the user access
+ */
 public class Tile {
 	private Crop plantedCrop;
 	private TileStatus status;
@@ -7,7 +10,12 @@ public class Tile {
 	private boolean IsPlantable;
 	private boolean edge;
 
-
+	/**
+	 * Constructs a Tile Object that contains a crop, a position in the board, and also has a status
+	 * @param position Position in the hashmap
+	 * @param plantedCrop Crop object in the tile (can be null)
+	 * @param status the tile's status within the game
+	 */
 	public Tile(int position, Crop plantedCrop, TileStatus status){
 		this.plantedCrop = plantedCrop;
 		this.position = position;
@@ -17,38 +25,41 @@ public class Tile {
 	}
 
 	/* Required Getters */
+	/** Returns the present Crop Object in the tile */
 	public Crop getPlantedCrop() {
 		return plantedCrop;
 	}
-
+	/** Returns the present position of the tile in the HashMap*/
 	public int getPosition() {
 		return position;
 	}
-
+	/** Returns the status  of the tile */
 	public TileStatus getStatus() {
 		return status;
 	}
 
 	/* Required Setters */
+	/** Sets the crop present in the tile */
 	public void setPlantedCrop(Crop plantedCrop) {
 		this.plantedCrop = plantedCrop;
 	}
-
+	/** Sets the Tile Status of the tile */
 	public void setStatus(TileStatus status) {
 		this.status = status;
 	}
+	/** Sets the Plantable Boolean value of the tile */
 	public void setPlantable(boolean occupied) {
 		IsPlantable = occupied;
 	}
-
+	/** Sets the tile if it is located in the edges of the board */
 	public void setEdge(boolean edge) {
 		this.edge = edge;
 	}
-
+	/** Returns the boolean value the tile if it is located in the edges of the board */
 	public boolean isEdge() {
 		return edge;
 	}
-
+	/** Returns the boolean value the tile if it can be planted */
 	public boolean IsPlantable() {
 		return IsPlantable;
 	}

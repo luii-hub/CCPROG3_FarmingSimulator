@@ -4,12 +4,33 @@ package base.myFarm;
  * This class represents the status of a single Tile Object and represents a title in the program.
  */
 public enum TileStatus {
-    ROCK, /* If tile contains a ROCK */
-    UNPLOWED, /* If tile is UNPLOWED */
-    PLOWED, /* If tile is PLOWED */
-    PLANT, /* If tile has a PLANT */
-    TREE, /* If tile has a FRUIT TREE */
-    SEED, /* If tile has a SEED that's basically growing */
-    WITHERED, /* If tile has a WITHERED plant */
+    /**
+     * A tile with this status means that it is being occupied by a ROCK.
+     */
+    ROCK,
+    /**
+     * A tile with this status means that it is not cultivated it is not plowed.
+     */
+    UNPLOWED,
+    /**
+     * A tile with this status means that it is cultivated and plowed.
+     */
+    PLOWED,
+    /**
+     * A tile with this status means that it is being occupied by a HARVESTABLE PLANT.
+     */
+    PLANT,
+    /**
+     * A tile with this status means that it is being occupied by a HARVESTABLE FRUIT TREE.
+     */
+    TREE,
+    /**
+     * A tile with this status means that it is being occupied by a GROWING SEED .
+     */
+    SEED,
+    /**
+     * A tile with this status means that it is being occupied by a WITHERED PLANT.
+     */
+    WITHERED,
 
 }

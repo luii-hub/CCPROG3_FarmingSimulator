@@ -4,6 +4,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class is the Farmer Object where it holds the player entity and your actual character in game.
+ */
 public class Farmer {
     private final Stats FarmerStats;
     private FarmerType type;
@@ -21,74 +24,80 @@ public class Farmer {
         this.type = type;
         this.farmerLevel = 0;
         this.experience = 0.0;
-        this.objectCoins = 10;
+        this.objectCoins = 100;
         this.isRegisterable = false;
         this.registerCounter = 0;
     }
 
     /* Required Getters */
+    /** Return stats of farmer */
     public Stats getFarmerStats() {
         return FarmerStats;
     }
+    /** Return type of farmer */
     public FarmerType getType() {
         return type;
     }
-
+    /** Return level of farmer */
     public int getFarmerLevel() {
         return farmerLevel;
     }
-
+    /** Return exp of farmer */
     public double getExperience() {
         return experience;
     }
-
+    /** Return objectCoin of farmer */
     public double getObjectCoins() {
         return objectCoins;
     }
-
+    /** Return register boolean value of farmer */
     public boolean isRegisterable() {
         return isRegisterable;
     }
-
+    /** Return registerCounter of farmer */
     public int getRegisterCounter() {
         return registerCounter;
     }
-
+    /** Return arrayList of inventory of farmer */
     public ArrayList<Crop> getInventory() {
         return inventory;
     }
-
+    /** Sets the level of the farmer */
     public void setFarmerLevel(int farmerLevel) {
         this.farmerLevel = farmerLevel;
     }
-
+    /** Sets the type of the farmer */
     public void setType(FarmerType type) {
         this.type = type;
     }
-
+    /** Sets the register boolean value of the farmer */
     public void setRegisterable(boolean registerable) {
         isRegisterable = registerable;
 
     }
+    /** Sets the register counter of the farmer */
     public void setRegisterCounter(int registerCounter) {
         this.registerCounter = registerCounter;
     }
 
     /* Incrementation & Decremental Methods */
+    /** Increments the experience of the farmer */
     public void addExperience(double experience) {
         this.experience += experience;
     }
+    /** Increments the objectCoin of the farmer */
     public void addObjectCoin(double objectCoins) {
         this.objectCoins += objectCoins;
     }
-
+    /** Deducts the objetCoin of the farmer */
     public void deductObjectCoin(double objectCoins){
         this.objectCoins -= objectCoins;
     }
-
+    /** Adds a crop to the inventory of the farmer */
     public void addSeedToInventory(Crop seed){
         this.inventory.add(seed);
     }
+    /** Removes a crop to the inventory of the farmer */
     public void removeSeedFromInventory(Crop seed){
         this.inventory.remove(seed);
     }
@@ -118,6 +127,7 @@ public class Farmer {
             plot.get(index).setPlantedCrop(newCrop);
         plot.get(index).setStatus(TileStatus.SEED);
         System.out.println("\tYou have successfully planted a " + newCrop.getName() + "!");
+        getFarmerStats().addTimesPlanted();
         removeSeedFromInventory(seed);
     }
 
@@ -298,6 +308,7 @@ public class Farmer {
      * @param player The Farmer Class which basically the player entity itself
      * @param plot   A hashmap of tiles which dictates the farm board
      * @param index  An integer value which dictates which tile Index did the player chose from the HashMap of Tiles
+     * @return Returns the feedback of harvested crops, exp, and objectCoins gained via String Output
      */
     public String harvestPlant(Farmer player, HashMap<Integer, Tile> plot, int index) {
 

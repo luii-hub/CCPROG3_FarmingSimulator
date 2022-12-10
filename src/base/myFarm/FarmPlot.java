@@ -5,7 +5,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
+/**
+ * This class contains the farm plot where it takes a HashMap of Tiles and constructs the whole farm board.
+ */
 public class FarmPlot {
+    /** The number of days passed in game */
     private int daytime;
 
     /** This method generates the farmable plot of the MyFarm Game. This function is only executed once
@@ -100,11 +104,11 @@ public class FarmPlot {
         }
     }
 
-
+    /** Returns the day time of the game*/
     public int getDaytime() {
         return daytime;
     }
-
+    /** Sets the day time of the game*/
     public void setDaytime(int daytime) {
         this.daytime = this.daytime + daytime;
     }
