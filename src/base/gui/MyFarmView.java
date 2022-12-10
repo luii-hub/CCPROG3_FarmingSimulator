@@ -14,13 +14,16 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.HashMap;
 
+/**
+ * This class represents the View of the MyFarm GUI where all interfaces, layouts, and designs of the GUI is implemented
+ */
 public class MyFarmView extends JFrame {
 
     /* Major JPanels of GUI */
-    private JPanel centerPanel = new JPanel();
-    private JPanel farmPlotPanel = new JPanel();
-    private JPanel rightPanel = new JPanel();
-    private JPanel leftPanel = new JPanel();
+    private final JPanel centerPanel = new JPanel();
+    private final JPanel farmPlotPanel = new JPanel();
+    private final JPanel rightPanel = new JPanel();
+    private final JPanel leftPanel = new JPanel();
 
     /* FarmPlotPanel Attributes (Tiles) */
     private final HashMap<Integer, JButton> farmPlotButtons = new HashMap<>();
@@ -68,6 +71,9 @@ public class MyFarmView extends JFrame {
     private final JButton buySeedButton = new JButton();
     private final JButton quitGameButton = new JButton();
 
+    /**
+     * Constructor for MyFarm View
+     */
     MyFarmView() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1280, 760);
@@ -78,7 +84,7 @@ public class MyFarmView extends JFrame {
     }
 
     /**
-     * This method basically initializes all the entirety of the GUI, the foundation
+     * Initializes all the entirety of the GUI, the foundation
      * and the skeleton of all the GUI Panels, Labels, and Buttons.
      * This method basically sets up all the panels for every category of the GUI.
      */
@@ -114,7 +120,7 @@ public class MyFarmView extends JFrame {
     }
 
     /**
-     * This method simply just adds all the panels, sub-panels, and the buttons in the frame.
+     * Initializes all the Panels by adding all the panels, sub-panels, and the buttons in the frame.
      */
     public void initializePanels() {
         this.add(rightPanel);
@@ -142,7 +148,7 @@ public class MyFarmView extends JFrame {
     }
 
     /**
-     * This method simply sets up the Farmer Details Panel (the top Left Panel) and also
+     * Sets up the Farmer Details Panel and also
      * sets the formatting, layout, and the overall design of the Panel.
      */
     private void setFarmerDetailsPanel() {
@@ -169,7 +175,7 @@ public class MyFarmView extends JFrame {
     }
 
     /**
-     * This method simply sets up the Plot Details Panel (the top-middle Panel) and also
+     * This method simply sets up the Plot Details Panel and also
      * sets the formatting, layout, and the overall design of the Title Panel
      */
     private void setPlotDetailsPanel() {
@@ -188,7 +194,7 @@ public class MyFarmView extends JFrame {
     }
 
     /**
-     * This method simply sets up the Farm Plot Panel (the middle) and also
+     * This method simply sets up the Farm Plot Panel and also
      * sets the formatting, layout, and the overall design of the Panel, and
      * each of the Tiles.
      */
@@ -208,7 +214,7 @@ public class MyFarmView extends JFrame {
     }
 
     /**
-     * This method simply sets up the Farmer Command Panel (the mid-btm panel)
+     * This method simply sets up the Farmer Command Panel
      * and also sets the formatting, layout, and the overall design of the Panel,
      * and also adds all the action command buttons for the farmer to interact with.
      */
@@ -238,7 +244,7 @@ public class MyFarmView extends JFrame {
     }
 
     /**
-     * This method simply sets up the Farmer Inventory Panel (mid-right panel) and also
+     * This method simply sets up the Farmer Inventory Panel and also
      * sets the formatting, layout, and the overall design of the Inventory Panel. This
      * also sets up all the Inventory Buttons for the user to interact with.
      */
@@ -268,7 +274,7 @@ public class MyFarmView extends JFrame {
     }
 
     /**
-     * This method simply sets up the Farmer Supermarket Panel (left-side panel) and also
+     * This method simply sets up the Farmer Supermarket Panel and also
      * sets the formatting, layout, and the overall design of the Seed Shop Panel. This
      * also sets up all the Farmer Seed Shop Buttons for the user to interact with.
      */
@@ -296,14 +302,12 @@ public class MyFarmView extends JFrame {
     }
 
     /**
-     * This method sets up the Game Text Label (top-left panel) for the user to see.
+     * This method sets up the Game Text Label for the user to see which provides feedback and information to the user.
      * This is a vital part of the GUI since this panel shows the feedback and information
      * for all attributes, methods, buttons, and panels of the GUI and guides the user within
      * the whole duration of the game.
      */
     private void setGameTextLabel(){
-        Font OpenSansTitle = new Font("OpenSans", Font.BOLD | Font.ITALIC, 20);
-        Font OpenSans = new Font("OpenSans", Font.ITALIC, 18);
 
         gameTextPanel.setBounds(0, 0, 320, 240);
         gameTextPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

@@ -1,3 +1,15 @@
+/*************************************************************************************************************
+ This is to certify that this project is of own work, based on my personal efforts in studying and in applying
+ the concepts learned throughout this course. All functions, methods, implementations, and algorithms are indeed
+ typed and coded by myself. The program was run, tested, and debugged by my own efforts and I certify that
+ I have not 100% copied in part or whole or otherwise plagiarized the work of other students and/or persons.
+
+ RANA, Luis Miguel D. F. | 12179124
+ CCPROG3 - S21 | Submitted to Prof. Jun Rey Puertollano
+
+ This program is a revised version of the previous applications written by the Author.
+ *************************************************************************************************************/
+
 package base.myFarm;
 import java.util.Scanner;
 import java.util.Collections;
@@ -16,7 +28,7 @@ public class Application {
 	public static HashMap<Integer, Tile> plot = new HashMap<>();
 	public static FarmPlot MyFarm = new FarmPlot(plot);
 	/* List of Plantable Crops */
-	public static final List<Crop> seedList = new ArrayList<Crop>(Arrays.asList(
+	public static final List<Crop> seedList = new ArrayList<>(Arrays.asList(
 		new Crop("Turnip", CropType.ROOT_CROP, 2, 1, 2, 0, 1, 5, 6, 1, 2, 5),
 		new Crop("Carrot", CropType.ROOT_CROP, 3, 1, 2, 0, 1, 10, 9, 1, 2, 7.5),
 		new Crop("Potato", CropType.ROOT_CROP, 5, 3, 4, 1, 2, 20, 3, 1, 10, 12.5),
@@ -27,7 +39,7 @@ public class Application {
 		new Crop("Apple", CropType.FRUIT_TREE, 10, 7, 7, 5, 5, 200, 5, 10, 15, 25)
 	));
 	/* List of Usable Farmer Tools */
-	public static final List<Tool> toolList = new ArrayList<Tool>(Arrays.asList(
+	public static final List<Tool> toolList = new ArrayList<>(Arrays.asList(
 			new Tool("Plow Tool", 0, 0.5),
 			new Tool("Watering Can", 0, 0.5),
 			new Tool("Fertilizer", 10, 4),
@@ -85,7 +97,7 @@ public class Application {
 	/**	This method takes in a String input and executes the user's selected command.
 	 * 	This method is where all commands and actions by the user takes place. It calls
 	 * 	the necessary method(s) depending on the user's String input parameter.
-	 * 	@param cmd
+	 * 	@param cmd The String Input of the user generated from the keyboard
 	 */
 	public static void performCommand(String cmd) {
 		/* Function where the program will 'perform' the command that the user wants */
@@ -296,9 +308,9 @@ public class Application {
 						index = input.nextInt();
 						/* Check if selected tile in within the range */
 						if (index > 0 && index <= 50) {
-							String feedback = null;
+							String feedback;
 							/* Harvest Crop(s) from Tile, Update the Tile, Update Farmer ObjectCoin(s) and Experience */
-							feedback = player.harvestPlant(player, plot, index, null);
+							feedback = player.harvestPlant(player, plot, index);
 							System.out.println(feedback);
 						} else {
 							System.out.println("\tError! Tile Index is out of bounds");
@@ -347,9 +359,7 @@ public class Application {
 				}
 				keyContinue();
 			}
-			case "N" -> { /* Next Day Method */
-				nextDay(MyFarm);
-			}
+			case "N" -> /* Next Day Method */ nextDay(MyFarm);
 			case "R" -> { /* Register Farmer Method */
 				/*	If player has met the minimum requirements, allow player the option to register into new role.
 				* 	If player has reached maximum level, disable player to register anymore */
@@ -378,11 +388,10 @@ public class Application {
 	 * 	If the conditions are met, return isRunning with a boolean value of false and will let the program know to stop and terminate the
 	 * 	program within the main function.
 	 *
-	 * 	@param isRunning
-	 * 	@returns isRunning
+	 * 	@param isRunning A boolean value which dictates whether the program should keep running or not
+	 * 	@return the isRunning boolean value
 	 */
 	public static boolean checkGameConditions(boolean isRunning) {
-		isRunning = true;
 		int condOneCounter = 0;
 		int condTwoCounter = 0;
 		boolean cond1 = false, cond2 = false;
@@ -420,22 +429,19 @@ public class Application {
 	/**	This method prints out the player's final statistics and achievements. It contains all the farmer's overall progress
 	 * 	from start to finish. This method runs once the player opts to exit the game or when the game is over.
 	 *
-	 * 	@param player
+	 * 	@param player The Farmer class which is basically the player entity itself
 	 */
 	public static void printFinalStats (Farmer player) {
-		//Print out Farmer Info
-		//Print out MyFarm Info
-		//Print out Stats
 		System.out.println(player.getFarmerStats().toString());
 	}
 
 	/**	This multipurpose method checks the tileStatus of the tile and returns the boolean value depending on the inputted name
-	 * 	of the tool. Different farmer tools require different tile statuses to proceed & it helps in error handling and method
+	 * 	of the tool. Different farmer tools require different tile statuses to proceed, and it helps in error handling and method
 	 * 	requirements as imposed in the Machine Project Specifications.
 	 *
-	 * 	@param plot
-	 * 	@param toolName
-	 * 	@returns status
+	 * 	@param plot A hashmap of tiles which dictates the farm board
+	 * 	@param toolName The tool's name which determines what line of code is to be executed
+	 * 	@return A boolean value of status if we can proceed unto the next method
 	 */
 	public static boolean checkTileStatus(HashMap<Integer, Tile> plot, String toolName){
 		/* Returns TRUE if the condition(s) of using a tool is met before using it on a TILE */
@@ -477,7 +483,7 @@ public class Application {
 	 * 	it the crop's variables (i.e. growth time) and updates the status of every plant (i.e. if plant is harvestable
 	 * 	on the next day or if plant withers the next day).
 	 *
-	 * 	@param MyFarm
+	 * 	@param MyFarm The FarmPlot class which is essentially the Board which hold the daytime variable
 	 */
 	public static void nextDay(FarmPlot MyFarm){
 		MyFarm.setDaytime(1);
@@ -552,7 +558,7 @@ public class Application {
 	/**	This multipurpose method inspects the tile's TileStatus and prints out the Tile's statistics depending on the selected tile's TileStatus
 	 * 	given the index of the tile. Different TileStatus prints out different information to the user.
 	 *
-	 * 	@param index
+	 * 	@param index Represents the index of the Tile inside the HashMap of Tiles.
 	 */
 	public static void inspectTile(int index) {
 		System.out.println("\tisEdge: " + plot.get(index).isEdge());
@@ -591,44 +597,36 @@ public class Application {
 	/** This method's purpose is specifically for the plantSeed method in order certain restrictions and validations to work properly, as imposed from
 	 * 	the Machine Project Specifications. The selected tile checks the neighboring tiles if they are currently occupied by any Object, it returns true
 	 * 	if there are no occupied objects, else returns false. This is implemented in collaboration with the Fruit Tree specification.
-	 * 	@param checkMode
-	 * 	@param cropIndex
-	 * 	@param plot
-	 * 	@return isPlantable
+	 * 	@param checkMode An integer value which represents the type of validation this function will execute
+	 * 	@param tileIndex An integer value which represents the tile's index from the HashMap of Tiles.
+	 * 	@param plot An attribute which holds the HashMap of Tiles.
+	 * 	@return A boolean value whether the selected tile can be planted by a Fruit Tree or not
 	 */
-	public static boolean checkSurroundings(int checkMode, int cropIndex, HashMap<Integer, Tile> plot){
+	public static boolean checkSurroundings(int checkMode, int tileIndex, HashMap<Integer, Tile> plot){
 		boolean isPlantable = true;
 		int counter = 4;
 		if(checkMode == 1) {
 			/* Check Left and Right Space Index */
-			switch (plot.get(cropIndex + 1).getStatus()) {
-				case ROCK, TREE, PLANT, SEED, WITHERED -> {
-					isPlantable = false;
-				}
+			switch (plot.get(tileIndex + 1).getStatus()) {
+				case ROCK, TREE, PLANT, SEED, WITHERED -> isPlantable = false;
 			}
-			switch (plot.get(cropIndex - 1).getStatus()) {
-				case ROCK, TREE, PLANT, SEED, WITHERED -> {
-					isPlantable = false;
-				}
+			switch (plot.get(tileIndex - 1).getStatus()) {
+				case ROCK, TREE, PLANT, SEED, WITHERED -> isPlantable = false;
 			}
 
 			/* Check Top, Btm, Diagonal Space Index */
 			for (int i = 0; i < 3; i++) {
-				switch (plot.get(cropIndex + counter).getStatus()) {
-					case ROCK, TREE, PLANT, SEED, WITHERED -> {
-						isPlantable = false;
-					}
+				switch (plot.get(tileIndex + counter).getStatus()) {
+					case ROCK, TREE, PLANT, SEED, WITHERED -> isPlantable = false;
 				}
-				switch (plot.get(cropIndex - counter).getStatus()) {
-					case ROCK, TREE, PLANT, SEED, WITHERED -> {
-						isPlantable = false;
-					}
+				switch (plot.get(tileIndex - counter).getStatus()) {
+					case ROCK, TREE, PLANT, SEED, WITHERED -> isPlantable = false;
 				}
 				counter++;
 			}
 		}
 		else if (checkMode == 0){
-			if(!plot.get(cropIndex).IsPlantable()){
+			if(!plot.get(tileIndex).IsPlantable()){
 				isPlantable = false;
 			}
 		}
@@ -665,8 +663,8 @@ public class Application {
 	/**	This method lets the user register himself/herself for a new farmer status, which costs ObjectCoins depending on the type of
 	 * 	status the player wishes to register. You cannot jump status and the method updates the registerCounter so that the program
 	 * 	disables the function once the player reaches maximum level.
-	 * 	@param player
-	 * 	@param input
+	 * 	@param player The Farmer Class which is basically the player entity itself.
+	 * 	@param input An input generated by the user
 	 */
 	public static void registerFarmer(Farmer player, Scanner input){
 		/* Ask the user if he/she wishes to register depending on the farmer status */
@@ -716,9 +714,7 @@ public class Application {
 					}
 				}
 			}
-			case "N", "n" -> {
-				System.out.println("\tRegistration Cancelled. Going back to MyFarm...");
-			}
+			case "N", "n" -> System.out.println("\tRegistration Cancelled. Going back to MyFarm...");
 			default -> System.out.println("\tUnknown Command");
 		}
 	}

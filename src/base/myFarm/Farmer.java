@@ -3,12 +3,9 @@ package base.myFarm;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.InputMismatchException;
-
-import static base.myFarm.Application.input;
 
 public class Farmer {
-    private Stats FarmerStats;
+    private final Stats FarmerStats;
     private FarmerType type;
     private double experience;
     private int farmerLevel;
@@ -65,10 +62,6 @@ public class Farmer {
         this.farmerLevel = farmerLevel;
     }
 
-    public void addExperience(double experience) {
-        this.experience += experience;
-    }
-
     public void setType(FarmerType type) {
         this.type = type;
     }
@@ -82,6 +75,9 @@ public class Farmer {
     }
 
     /* Incrementation & Decremental Methods */
+    public void addExperience(double experience) {
+        this.experience += experience;
+    }
     public void addObjectCoin(double objectCoins) {
         this.objectCoins += objectCoins;
     }
@@ -97,11 +93,11 @@ public class Farmer {
         this.inventory.remove(seed);
     }
 
-    /** This method lets the user buy the desired seed from the seed shop (seedlist). The user can buy a maximum of
+    /** This method lets the user buy the desired seed from the seed shop (seedList). The user can buy a maximum of
      *  five seeds per purchase. If the player does not have enough ObjectCoins to buy, this function will be restricted.
      *
-     * @param index
-     * @param seedList
+     * @param index An integer value which represents the index of which seed to buy from the seedList
+     * @param seedList An ArrayList of Crops which represent the seeds.
      */
     public void buySeed(int index, ArrayList<Crop> seedList) {
         index--;
@@ -110,12 +106,12 @@ public class Farmer {
         getFarmerStats().addTimesBoughtSeeds();
     }
 
-    /** This method lets the user plant the desired seed given the desired tile index inside the farmable plot. Player can
+    /** This method lets the user plant the desired seed given the desired tile index inside the farm plot. Player can
      *  only plant on unoccupied, unplowed tiles. The user has certain limitations when planting a certain seed (i.e. Fruit Tree).
      *
-     *  @param plot
-     *  @param index
-     *  @param seed
+     *  @param plot A hashmap of tiles which dictates the farm board
+     *  @param index An integer value which represents the index of which tile did the player choose to plant
+     *  @param seed The Crop the that farmer wishes to plant
      */
     public void plantSeed(HashMap<Integer, Tile> plot, int index, Crop seed){
         Crop newCrop = Crop.newCrop(seed);
@@ -127,9 +123,9 @@ public class Farmer {
 
     /** This method lets the user set a tile's status to PLOWED. Lets the user plant a seed after plowing. It updates the TileStatus of
      *  the given tile index once certain conditions are met.
-     *  @param plot
-     *  @param toolList
-     *  @param index
+     *  @param plot A hashmap of tiles which dictates the farm board
+     *  @param toolList An ArrayList of Tool Objects which represents the farmer's tool actions
+     *  @param index An integer value which represents the index of which tile did the player choose to plow
      */
     public void plowTool(HashMap<Integer, Tile> plot, ArrayList<Tool> toolList, int index){
         /* If selected tile is unplowed, proceed to execute method, else reject the user's command to plow the tile. */
@@ -141,7 +137,7 @@ public class Farmer {
             getFarmerStats().addTimesPlowed();
         }
         else{
-            /* If tile is already plowed or the tile's stauts is !UNPLOWED, there is no need to execute this method */
+            /* If tile is already plowed or the tile's status is !UNPLOWED, there is no need to execute this method */
             if(plot.get(index).getStatus().equals(TileStatus.PLOWED)){
                 System.out.println("\tError! This tile is already Plowed.");
             } else if (plot.get(index).getStatus().equals(TileStatus.WITHERED)){
@@ -155,9 +151,9 @@ public class Farmer {
 
     /** This method lets the user water the SEED given the tile index. It updates the Crop's (seed) attributes and updates the user
      *  via feedback to let the user know if the given command was successful or not.
-     *  @param plot
-     *  @param toolList
-     *  @param index
+     *  @param plot A hashmap of tiles which dictates the farm board
+     *  @param toolList An ArrayList of Tool Objects which represents the farmer's tool actions
+     *  @param index An integer value which represents the index of which tile with a seed did the player choose to water
      */
     public void waterTool(HashMap<Integer, Tile> plot, ArrayList<Tool> toolList, int index){
         /* If the tile's status is a seed, proceed to watering the tile (crop), else do not execute */
@@ -184,9 +180,9 @@ public class Farmer {
     /** This method lets the user water the SEED given the tile index. It updates the Crop's (seed) attributes and updates the user
      *  via feedback to let the user know if the given command was successful or not.
      *
-     * @param plot
-     * @param toolList
-     * @param index
+     *  @param plot A hashmap of tiles which dictates the farm board
+     *  @param toolList An ArrayList of Tool Objects which represents the farmer's tool actions
+     *  @param index An integer value which represents the index of which tile with a seed did the player choose to fertilize
      */
     public void fertilizerTool(HashMap<Integer, Tile> plot, ArrayList<Tool> toolList, int index){
         /* Validation 1: Check if the player has enough ObjectCoins to fertilize a Seed */
@@ -220,9 +216,9 @@ public class Farmer {
     /** This method lets the user removes a ROCK given the tile index. It lets the user remove the rock so that the tile
      *  will be accessible to the user for future purposes.
      *
-     *  @param plot
-     *  @param toolList
-     *  @param index
+     *  @param plot A hashmap of tiles which dictates the farm board
+     *  @param toolList An ArrayList of Tool Objects which represents the farmer's tool actions
+     *  @param index An integer value which represents the index of which tile with a Rock did the player choose to pickaxe
      */
     public void pickaxeTool(HashMap<Integer, Tile> plot, ArrayList<Tool> toolList, int index) {
         /* Validation 1: Check if player has enough money to use Pickaxe Tool */
@@ -248,9 +244,9 @@ public class Farmer {
     /** This method lets the user use the shovel tool and remove any given object (Plant) except a Rock.
      *  Similar to the PickAxe Tool, it also lets the user access the tile for future purposes.
      *
-     *  @param plot
-     *  @param toolList
-     *  @param index
+     *  @param plot A hashmap of tiles which dictates the farm board
+     *  @param toolList An ArrayList of Tool Objects which represents the farmer's tool actions
+     *  @param index An integer value which represents the index of which tile with an object did the player choose to shovel
      */
     public void shovelTool(HashMap<Integer, Tile> plot, ArrayList<Tool> toolList, int index) {
         /* Validation 1: Check if player has enough money to use Pickaxe Tool */
@@ -293,16 +289,17 @@ public class Farmer {
         }
     }
 
-    /** This method lets the user harvest a plant once conditions are met (in main function). This method
-     *  generates the number of crop(s) harvested, the amount of experience gained from the harvest, and computes
-     *  the final acquisition of ObjectCoins gained from the harvest. Bonuses are applied given the farmer's type
-     *  of status.
+    /**
+     * This method lets the user harvest a plant once conditions are met (in main function). This method
+     * generates the number of crop(s) harvested, the amount of experience gained from the harvest, and computes
+     * the final acquisition of ObjectCoins gained from the harvest. Bonuses are applied given the farmer's type
+     * of status.
      *
-     * @param player
-     * @param plot
-     * @param index
+     * @param player The Farmer Class which basically the player entity itself
+     * @param plot   A hashmap of tiles which dictates the farm board
+     * @param index  An integer value which dictates which tile Index did the player chose from the HashMap of Tiles
      */
-    public String harvestPlant(Farmer player, HashMap<Integer, Tile> plot, int index, String feedback) {
+    public String harvestPlant(Farmer player, HashMap<Integer, Tile> plot, int index) {
 
         /* Get the Product Produce of the crop */
         int earnBonus = player.getType().getBonusEarnings();
@@ -326,7 +323,7 @@ public class Farmer {
         player.addExperience(totalExpGain);
 
         /* Display appropriate message based from the report given */
-        feedback = "<html> Congratulations! <p>" +
+        String feedback = "<html> Congratulations! <p>" +
                 "<p> You have harvested & sold " + productsProduced + " " + plot.get(index).getPlantedCrop().getName() + " Crops!" +
                 "<p> Player has received " + decimalFormat.format(finalHarvestPrice) + " ObjectCoins and earned " + decimalFormat.format(totalExpGain) + " experience. <html>";
 
@@ -341,15 +338,14 @@ public class Farmer {
         return feedback;
     }
 
-    /** This method simply prints out and display the farmer's information (i.e. type, level, objectcoins
+    /** This method simply prints out and display the farmer's information (i.e. type, level, objectCoins)
      *
-     * @param player
+     * @param player The Farmer Class which basically the player entity itself
      */
     public void printFarmerInfo(Farmer player){
         System.out.println("\n\t[" + player.getType().getFarmerType() + "]" + "\n" +
                 "\tLvl: " + player.getFarmerLevel() +  " | Experience: " + player.getExperience() + "\n" +
                 "\tCoins: " + player.getObjectCoins() + "\n");
     }
-
 
 }

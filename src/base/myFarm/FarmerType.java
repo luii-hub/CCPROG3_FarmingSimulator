@@ -1,18 +1,18 @@
 package base.myFarm;
-/* This class represented the Farmer's type or status within the game. Different farmer category holds different benefits for the player */
+
 public enum FarmerType {
     DEFAULT("Novice Farmer", 0, 0, 0, 0, 0, 0),
     REGISTERED("Registered Farmer", 5, 1, 1, 0, 0, 200),
     DISTINGUISHED("Distinguished Farmer", 10, 2, 2, 1, 0, 300),
     LEGENDARY("Legendary Farmer", 15, 4, 3, 2, 1, 400);
 
-    private String farmerType;
-    private int levelRequirement;
-    private int bonusEarnings;
-    private double registrationFee;
-    private int fertilizerBonusIncrease;
-    private int waterBonusIncrease;
-    private int seedCostReduction;
+    private final String farmerType;
+    private final int levelRequirement;
+    private final int bonusEarnings;
+    private final double registrationFee;
+    private final int fertilizerBonusIncrease;
+    private final int waterBonusIncrease;
+    private final int seedCostReduction;
 
     FarmerType(String farmerType, int levelRequirement, int bonusEarnings, int seedCostReduction, int waterBonusIncrease, int fertilizerBonusIncrease, double registrationFee) {
         this.farmerType = farmerType;
@@ -26,10 +26,6 @@ public enum FarmerType {
 
     public String getFarmerType() {
         return farmerType;
-    }
-
-    public int getLevelRequirement() {
-        return levelRequirement;
     }
 
     public int getBonusEarnings() {

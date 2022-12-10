@@ -1,5 +1,8 @@
 package base.myFarm;
 
+/**
+ * This class represents the status of a single Tile Object and represents a title in the program.
+ */
 public enum TileStatus {
     ROCK, /* If tile contains a ROCK */
     UNPLOWED, /* If tile is UNPLOWED */

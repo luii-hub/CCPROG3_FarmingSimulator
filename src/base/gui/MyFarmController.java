@@ -7,7 +7,6 @@ import java.awt.event.MouseAdapter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
@@ -20,6 +19,11 @@ public class MyFarmController {
     private final DecimalFormat decimalFormat = new DecimalFormat("#.##");
     String inventory = null;
 
+    /**
+     * Constructor for the Controller of MyFarm in MVC
+     * @param farmView MyFarm View Class
+     * @param model MyFarm Model Class
+     */
     MyFarmController(MyFarmView farmView, MyFarmModel model) {
         this.farmView = farmView;
         this.farmModel = model;
@@ -39,8 +43,8 @@ public class MyFarmController {
     }
 
     /**
-     * This method checks where the program should stop running if some conditions are met. This function will determine if the program
-     * should keep running or not once certain conditions are met.
+     * This method checks where the program should stop running if some conditions are met and
+     * will determine if the program should keep running or not once certain conditions are met.
      */
     private void checkEndGame(){
         if(!farmModel.checkGameConditions(farmModel.isRunning())){
@@ -76,34 +80,32 @@ public class MyFarmController {
     }
 
     /**
-     * This method updates the farmer details in the farmer panel located at the top left of the screen.
-     * Once this method is called, it updates what is inside the farmer details interface.
+     * This method updates the farmer details in the farmer panel located at the top left of the screen,
+     * and it updates what is inside the farmer details interface.
      */
     private void updateFarmerDetailsPanel() {
         farmView.getFarmerDetailsTitle().setText(" - Farmer Details -");
-        farmView.getFarmerLevelLabel().setText(" Farmer Level: " + String.valueOf(farmModel.player.getFarmerLevel()));
-        farmView.getFarmerExpLabel().setText(" Experience: " + String.valueOf(decimalFormat.format(farmModel.player.getExperience())));
-        farmView.getFarmerObjectCoinLabel().setText(" ObjectCoins: " + String.valueOf(decimalFormat.format(farmModel.player.getObjectCoins())));
-        farmView.getFarmerTypeLabel().setText(" Status: " + String.valueOf(farmModel.player.getType().getFarmerType()));
+        farmView.getFarmerLevelLabel().setText(" Farmer Level: " + farmModel.player.getFarmerLevel());
+        farmView.getFarmerExpLabel().setText(" Experience: " + decimalFormat.format(farmModel.player.getExperience()));
+        farmView.getFarmerObjectCoinLabel().setText(" ObjectCoins: " + decimalFormat.format(farmModel.player.getObjectCoins()));
+        farmView.getFarmerTypeLabel().setText(" Status: " + farmModel.player.getType().getFarmerType());
         farmView.getRegisterFarmerButton().setText(" Register");
         farmView.getNextDayButton().setText(" Rest");
 
     }
 
     /**
-     * This method updates the farm plot in the game board located at the middle of the screen.
-     * Once this method is called, it updates what is inside the farm plot interface once certain
-     * attributes are manipulated by certain events.
+     * Updates the farm plot in the game board, and it updates what is inside
+     * the farm plot interface once certain attributes are manipulated by certain events.
      */
     private void updateFarmPlotPanel() {
         farmView.getPlotDetailsTitle().setText("Mi Sakahan");
-        farmView.getPlotDetailsLabel().setText("Day: " + String.valueOf(farmModel.MyFarm.getDaytime()));
+        farmView.getPlotDetailsLabel().setText("Day: " + farmModel.MyFarm.getDaytime());
     }
 
     /**
-     * This method updates the farmer inventory located on the left side of the screen.
-     * Once this method is called, whether the farmer buys a seed or plants a seed,
-     * it updates the amount of each seed that the farmer has.
+     * Updates the farmer inventory located on the left side of the screen; and refreshes
+     * whether the farmer buys a seed or plants a seed, it updates the amount of each seed that the farmer has.
      */
     private void updateFarmerInventory() {
         farmView.getFarmerInventoryTitle().setText(" - Farmer Seed Inventory -");
@@ -115,7 +117,7 @@ public class MyFarmController {
     }
 
     /**
-     * This method updates the farmer's level once the farmer's level reaches a certain threshold. This method
+     * Updates the farmer's level once the farmer's level reaches a certain threshold and
      * also allows the farmer to register once the farmer reaches a certain level.
      */
     public void updateFarmerLevel() {
@@ -143,7 +145,7 @@ public class MyFarmController {
     }
 
     /**
-     * This method basically generates and setups the farmer market or the seed shop for the user.
+     * Generates and setups the farmer market or the seed shop for the user.
      */
     private void farmMarket() {
         farmView.getSeedShopTitle().setText("- Farmer SuperMarket -");
@@ -156,7 +158,7 @@ public class MyFarmController {
     }
 
     /**
-     * This multipurpose method is an all-in-one method where it nests all the event listeners and holds all the
+     * An all-in-one method where it nests all the event listeners and holds all the
      * farmer's action commands. This contains the farmer tool options, farmers self options, and also what the
      * farmer basically wants to do within the game.
      */
@@ -186,7 +188,7 @@ public class MyFarmController {
     }
 
     /**
-     * This method basically updates every tile and its tile status depending on after a tile has been manipulated or not.
+     * Updates every tile and its tile status depending on after a tile has been manipulated or not by the user.
      * Once this method is called, it sets the tile status for all the tiles in the farm-plot in the interface
      */
     private void updateTileStatuses(){
@@ -196,7 +198,7 @@ public class MyFarmController {
     }
 
     /**
-     * This method basically updates the farmer's options at the farmer supermarket or seedshop. If the farmer does not have
+     * Updates the farmer's options at the farmer supermarket or seed shop given certain conditions. If the farmer does not have
      * enough ObjectCoins to purchase a seed, That seed's button will be disabled by the user at the interface.
      */
     private void updateSeedShop() {
@@ -207,14 +209,14 @@ public class MyFarmController {
     }
 
     /**
-     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * An event listener for the Farmer Status Button which listens to the cursor and mouse movements of the user.
      * Once this method is called, it changes some attributes of the game label, and it manipulates information
      * on the farmer details label for the user's convenience.
      */
     private void farmerStatusMouseListener(){
         farmView.getFarmerDetailsPanel().addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
-                farmView.getGameTextLabel().setText(String.valueOf(farmModel.player.getType().toString()));
+                farmView.getGameTextLabel().setText(farmModel.player.getType().toString());
             }
             @Override public void mouseExited(MouseEvent e) {
                 farmView.getGameTextLabel().setText("");
@@ -223,205 +225,194 @@ public class MyFarmController {
     }
 
     /**
-     * This multipurpose method contains all the action listeners for every farmer command action (button).
+     * A multipurpose method contains all the action listeners for every farmer command action (button).
      * This method make sures that only one button can only be executed, and it listens to that button after the user
      * clicks on that button (via mouseListener).
      */
     private void farmCommandActionListener() {
-        ActionListener commandListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Object buttonSource = e.getSource();
+        ActionListener commandListener = e -> {
+            Object buttonSource = e.getSource();
 
-                /* Plow Tool Button Action Command */
-                if (buttonSource == farmView.getPlowButton()) {
-                    System.out.println("Plow Button Action Performed");
-                    try {
-                        int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Plow On", "Plow Selection",
-                                JOptionPane.QUESTION_MESSAGE));
-                        switch (farmModel.plot.get(tileIndex).getStatus()) {
-                            case UNPLOWED -> {
-                                if (JOptionPane.showConfirmDialog(null, "Are you sure to Plow this tile?",
-                                        "Plow Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                                    farmModel.player.plowTool(farmModel.plot, (ArrayList<Tool>) farmModel.toolList, tileIndex);
-                                    updateTileStatuses();
-                                    updateGame();
-                                    checkEndGame();
-                                }
-                            }
-                            case SEED, PLANT, TREE, WITHERED, ROCK, PLOWED -> {
-                                JOptionPane.showMessageDialog(null,
-                                        "Error! You can only use the Hoe at Unplowed Tiles!",
-                                        "Plow Tool Tile Validation", JOptionPane.ERROR_MESSAGE);
+            /* Plow Tool Button Action Command */
+            if (buttonSource == farmView.getPlowButton()) {
+                System.out.println("Plow Button Action Performed");
+                try {
+                    int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Plow On", "Plow Selection",
+                            JOptionPane.QUESTION_MESSAGE));
+                    switch (farmModel.plot.get(tileIndex).getStatus()) {
+                        case UNPLOWED -> {
+                            if (JOptionPane.showConfirmDialog(null, "Are you sure to Plow this tile?",
+                                    "Plow Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                                farmModel.player.plowTool(farmModel.plot, (ArrayList<Tool>) farmModel.toolList, tileIndex);
+                                updateTileStatuses();
+                                updateGame();
+                                checkEndGame();
                             }
                         }
-                    } catch (Exception error) {
-                        displayErrorMessage();
+                        case SEED, PLANT, TREE, WITHERED, ROCK, PLOWED -> JOptionPane.showMessageDialog(null,
+                                "Error! You can only use the Hoe at Unplowed Tiles!",
+                                "Plow Tool Tile Validation", JOptionPane.ERROR_MESSAGE);
                     }
+                } catch (Exception error) {
+                    displayErrorMessage();
                 }
-                /* Water Tool Button Action Command */
-                else if (buttonSource == farmView.getWaterButton()) {
-                    System.out.println("Water Button Action Performed");
-                    try {
-                        int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Water On", "Water Selection",
-                                JOptionPane.QUESTION_MESSAGE));
-                        switch (farmModel.plot.get(tileIndex).getStatus()) {
-                            case SEED -> {
-                                if (JOptionPane.showConfirmDialog(null, "Are you sure to Water tile?",
-                                        "Water Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                                    farmModel.player.waterTool(farmModel.plot, (ArrayList<Tool>) farmModel.toolList, tileIndex);
-                                    updateTileStatuses();
-                                    updateGame();
-                                }
-                            }
-                            case PLOWED, PLANT, UNPLOWED, ROCK, TREE, WITHERED -> {
-                                JOptionPane.showMessageDialog(null,
-                                        "Error! You can only water tiles that contains a Seed!",
-                                        "Water Seed Tile Validation", JOptionPane.ERROR_MESSAGE);
+            }
+            /* Water Tool Button Action Command */
+            else if (buttonSource == farmView.getWaterButton()) {
+                System.out.println("Water Button Action Performed");
+                try {
+                    int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Water On", "Water Selection",
+                            JOptionPane.QUESTION_MESSAGE));
+                    switch (farmModel.plot.get(tileIndex).getStatus()) {
+                        case SEED -> {
+                            if (JOptionPane.showConfirmDialog(null, "Are you sure to Water tile?",
+                                    "Water Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                                farmModel.player.waterTool(farmModel.plot, (ArrayList<Tool>) farmModel.toolList, tileIndex);
+                                updateTileStatuses();
+                                updateGame();
                             }
                         }
-                    } catch (Exception error) {
-                        displayErrorMessage();
+                        case PLOWED, PLANT, UNPLOWED, ROCK, TREE, WITHERED -> JOptionPane.showMessageDialog(null,
+                                "Error! You can only water tiles that contains a Seed!",
+                                "Water Seed Tile Validation", JOptionPane.ERROR_MESSAGE);
                     }
-                    checkEndGame();
+                } catch (Exception error) {
+                    displayErrorMessage();
                 }
-                /* Fertilizer Tool Button Action Command */
-                else if (buttonSource == farmView.getFertilizerButton()) {
-                    System.out.println("Fertilizer Button Action Performed");
-                    try {
-                        int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Fertilize On", "Fertilize Selection",
-                                JOptionPane.QUESTION_MESSAGE));
-                        switch (farmModel.plot.get(tileIndex).getStatus()) {
-                            case SEED -> {
-                                if (JOptionPane.showConfirmDialog(null, "Are you sure to Fertilizer this tile?",
-                                        "Fertilizer Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                                    farmModel.player.fertilizerTool(farmModel.plot, (ArrayList<Tool>) farmModel.toolList, tileIndex);
-                                    updateTileStatuses();
-                                    updateGame();
-                                }
-                            }
-                            case PLOWED, PLANT, UNPLOWED, ROCK, TREE, WITHERED -> {
-                                JOptionPane.showMessageDialog(null,
-                                        "Error! You can only fertilize tiles that contains a Seed!",
-                                        "Fertilize Seed Tile Validation", JOptionPane.ERROR_MESSAGE);
+                checkEndGame();
+            }
+            /* Fertilizer Tool Button Action Command */
+            else if (buttonSource == farmView.getFertilizerButton()) {
+                System.out.println("Fertilizer Button Action Performed");
+                try {
+                    int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Fertilize On", "Fertilize Selection",
+                            JOptionPane.QUESTION_MESSAGE));
+                    switch (farmModel.plot.get(tileIndex).getStatus()) {
+                        case SEED -> {
+                            if (JOptionPane.showConfirmDialog(null, "Are you sure to Fertilizer this tile?",
+                                    "Fertilizer Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                                farmModel.player.fertilizerTool(farmModel.plot, (ArrayList<Tool>) farmModel.toolList, tileIndex);
+                                updateTileStatuses();
+                                updateGame();
                             }
                         }
-                    } catch (Exception error) {
-                        displayErrorMessage();
+                        case PLOWED, PLANT, UNPLOWED, ROCK, TREE, WITHERED -> JOptionPane.showMessageDialog(null,
+                                "Error! You can only fertilize tiles that contains a Seed!",
+                                "Fertilize Seed Tile Validation", JOptionPane.ERROR_MESSAGE);
                     }
-                    checkEndGame();
+                } catch (Exception error) {
+                    displayErrorMessage();
                 }
-                /* Shovel Tool Button Action Command */
-                else if (buttonSource == farmView.getShovelButton()) {
-                    System.out.println("Shovel Button Action Performed");
-                    try {
-                        int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Shovel On", "Shovel Selection",
-                                JOptionPane.QUESTION_MESSAGE));
-                        switch (farmModel.plot.get(tileIndex).getStatus()) {
-                            case SEED, PLANT, ROCK, TREE, WITHERED, PLOWED, UNPLOWED -> {
-                                if (JOptionPane.showConfirmDialog(null, "Are you sure to Shovel this tile?",
-                                        "Shovel Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                                    farmModel.player.shovelTool(farmModel.plot, (ArrayList<Tool>) farmModel.toolList, tileIndex);
-                                    updateTileStatuses();
-                                    updateGame();
-                                    JOptionPane.showMessageDialog(
-                                            null, "You have successfully used the Shovel",
-                                            "Shovel Tile Message",
-                                            JOptionPane.INFORMATION_MESSAGE);
-                                }
+                checkEndGame();
+            }
+            /* Shovel Tool Button Action Command */
+            else if (buttonSource == farmView.getShovelButton()) {
+                System.out.println("Shovel Button Action Performed");
+                try {
+                    int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Shovel On", "Shovel Selection",
+                            JOptionPane.QUESTION_MESSAGE));
+                    switch (farmModel.plot.get(tileIndex).getStatus()) {
+                        case SEED, PLANT, ROCK, TREE, WITHERED, PLOWED, UNPLOWED -> {
+                            if (JOptionPane.showConfirmDialog(null, "Are you sure to Shovel this tile?",
+                                    "Shovel Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                                farmModel.player.shovelTool(farmModel.plot, (ArrayList<Tool>) farmModel.toolList, tileIndex);
+                                updateTileStatuses();
+                                updateGame();
+                                JOptionPane.showMessageDialog(
+                                        null, "You have successfully used the Shovel",
+                                        "Shovel Tile Message",
+                                        JOptionPane.INFORMATION_MESSAGE);
                             }
                         }
-                    } catch (Exception error) {
-                        displayErrorMessage();
                     }
-                    checkEndGame();
+                } catch (Exception error) {
+                    displayErrorMessage();
                 }
-                /* Pickaxe Tool Button Action Command */
-                else if (buttonSource == farmView.getPickaxeButton()) {
-                    System.out.println("Pickaxe Button Action Performed");
-                    try {
-                        int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Pickaxe On", "Pickaxe Selection",
-                                JOptionPane.QUESTION_MESSAGE));
-                        switch (farmModel.plot.get(tileIndex).getStatus()) {
-                            case ROCK -> {
-                                if (JOptionPane.showConfirmDialog(null, "Are you sure to Pickaxe this tile?",
-                                        "Pickaxe Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                                    farmModel.player.pickaxeTool(farmModel.plot, (ArrayList<Tool>) farmModel.toolList, tileIndex);
-                                    updateTileStatuses();
-                                    updateGame();
-                                    JOptionPane.showMessageDialog(
-                                            null, "You have successfully used a Pickaxe",
-                                            "Pickaxe Tile Message",
-                                            JOptionPane.INFORMATION_MESSAGE);
-                                }
-                            }
-                            case SEED, PLANT, PLOWED, UNPLOWED, TREE, WITHERED -> {
-                                JOptionPane.showMessageDialog(null,
-                                        "Error! You can only use the Pickaxe Tool on Tiles that contains a Rock!",
-                                        "Pickaxe Tool Tile Validation", JOptionPane.ERROR_MESSAGE);
+                checkEndGame();
+            }
+            /* Pickaxe Tool Button Action Command */
+            else if (buttonSource == farmView.getPickaxeButton()) {
+                System.out.println("Pickaxe Button Action Performed");
+                try {
+                    int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Pickaxe On", "Pickaxe Selection",
+                            JOptionPane.QUESTION_MESSAGE));
+                    switch (farmModel.plot.get(tileIndex).getStatus()) {
+                        case ROCK -> {
+                            if (JOptionPane.showConfirmDialog(null, "Are you sure to Pickaxe this tile?",
+                                    "Pickaxe Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                                farmModel.player.pickaxeTool(farmModel.plot, (ArrayList<Tool>) farmModel.toolList, tileIndex);
+                                updateTileStatuses();
+                                updateGame();
+                                JOptionPane.showMessageDialog(
+                                        null, "You have successfully used a Pickaxe",
+                                        "Pickaxe Tile Message",
+                                        JOptionPane.INFORMATION_MESSAGE);
                             }
                         }
-                    } catch (Exception error) {
-                        displayErrorMessage();
+                        case SEED, PLANT, PLOWED, UNPLOWED, TREE, WITHERED -> JOptionPane.showMessageDialog(null,
+                                "Error! You can only use the Pickaxe Tool on Tiles that contains a Rock!",
+                                "Pickaxe Tool Tile Validation", JOptionPane.ERROR_MESSAGE);
                     }
-                    checkEndGame();
+                } catch (Exception error) {
+                    displayErrorMessage();
                 }
-                /* Register Farmer Button Action Command */
-                else if (buttonSource == farmView.getRegisterFarmerButton()) {
-                    System.out.println("Register Button Action Performed");
-                    /*	If player has met the minimum requirements, allow player the option to register into new role.
-                     * 	If player has reached maximum level, disable player to register anymore */
-                    try {
-                        if (farmModel.player.isRegisterable()) {
-                                if (JOptionPane.showConfirmDialog(null, "Do you want to register to a new Farmer Title?",
-                                        "Farmer Registration Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                                    farmModel.registerFarmer(farmModel.player);
-                                }
-                        } else if (farmModel.player.getRegisterCounter() == 3) {
-                            JOptionPane.showInternalMessageDialog(null, "You have reached the maximum status as a Farmer.",
-                                    "Farmer Registration", JOptionPane.INFORMATION_MESSAGE);
-                            System.out.println("\tYou have reached the maximum status as a Farmer.");
-                        } else {
-                            JOptionPane.showInternalMessageDialog(null, "You cannot register farmer at this time.",
-                                    "Farmer Registration", JOptionPane.INFORMATION_MESSAGE);
-                            System.out.println("You cannot register farmer at this time.");
-                        }
-                    } catch (Exception error) {
-                        displayErrorMessage();
+                checkEndGame();
+            }
+            /* Register Farmer Button Action Command */
+            else if (buttonSource == farmView.getRegisterFarmerButton()) {
+                System.out.println("Register Button Action Performed");
+                /*	If player has met the minimum requirements, allow player the option to register into new role.
+                 * 	If player has reached maximum level, disable player to register anymore */
+                try {
+                    if (farmModel.player.isRegisterable()) {
+                            if (JOptionPane.showConfirmDialog(null, "Do you want to register to a new Farmer Title?",
+                                    "Farmer Registration Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                                farmModel.registerFarmer(farmModel.player);
+                            }
+                    } else if (farmModel.player.getRegisterCounter() == 3) {
+                        JOptionPane.showInternalMessageDialog(null, "You have reached the maximum status as a Farmer.",
+                                "Farmer Registration", JOptionPane.INFORMATION_MESSAGE);
+                        System.out.println("\tYou have reached the maximum status as a Farmer.");
+                    } else {
+                        JOptionPane.showInternalMessageDialog(null, "You cannot register farmer at this time.",
+                                "Farmer Registration", JOptionPane.INFORMATION_MESSAGE);
+                        System.out.println("You cannot register farmer at this time.");
+                    }
+                } catch (Exception error) {
+                    displayErrorMessage();
+                }
+                updateTileStatuses();
+                updateGame();
+                checkEndGame();
+            }
+            /* Rest Farmer (Next Day) Button Action Command */
+            else if (buttonSource == farmView.getNextDayButton()) {
+                System.out.println("Next day Button Action Performed");
+                try {
+                    if (JOptionPane.showConfirmDialog(null,
+                            "Are you sure you want to rest for today?", "Rest Option", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        farmModel.nextDay(farmModel.MyFarm);
+                        farmView.getPlotDetailsLabel().setText("Day " + farmModel.MyFarm.getDaytime());
+                        System.out.println(farmModel.MyFarm.getDaytime());
                     }
                     updateTileStatuses();
                     updateGame();
-                    checkEndGame();
+                } catch (Exception error) {
+                    displayErrorMessage();
                 }
-                /* Rest Farmer (Next Day) Button Action Command */
-                else if (buttonSource == farmView.getNextDayButton()) {
-                    System.out.println("Next day Button Action Performed");
-                    try {
-                        if (JOptionPane.showConfirmDialog(null,
-                                "Are you sure you want to rest for today?", "Rest Option", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                            farmModel.nextDay(farmModel.MyFarm);
-                            farmView.getPlotDetailsLabel().setText("Day " + String.valueOf(farmModel.MyFarm.getDaytime()));
-                            System.out.println(farmModel.MyFarm.getDaytime());
-                        }
-                        updateTileStatuses();
-                        updateGame();
-                    } catch (Exception error) {
-                        displayErrorMessage();
+                checkEndGame();
+            }
+            /* Quit Game Action Command */
+            else if (buttonSource == farmView.getQuitGameButton()){
+                try {
+                    if (JOptionPane.showConfirmDialog(null,
+                            "Are you sure you to quit game?", "Quit Game Option", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        System.exit(0);
                     }
-                    checkEndGame();
-                }
-                /* Quit Game Action Command */
-                else if (buttonSource == farmView.getQuitGameButton()){
-                    try {
-                        if (JOptionPane.showConfirmDialog(null,
-                                "Are you sure you to quit game?", "Quit Game Option", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                            System.exit(0);
-                        }
-                        updateTileStatuses();
-                        updateGame();
-                    } catch (Exception error) {
-                        displayErrorMessage();
-                    }
+                    updateTileStatuses();
+                    updateGame();
+                } catch (Exception error) {
+                    displayErrorMessage();
                 }
             }
         };
@@ -438,7 +429,7 @@ public class MyFarmController {
     }
 
     /**
-     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * An event listener for the Plow Option which listens to the cursor and mouse movements of the user.
      * Once this method is called, it changes some attributes of the game label for the Plow Button,
      * and it manipulates information on the farmer details label for the user's convenience.
      */
@@ -453,7 +444,7 @@ public class MyFarmController {
     }
 
     /**
-     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * An event listener for the WaterCan Option which listens to the cursor and mouse movements of the user.
      * Once this method is called, it changes some attributes of the game label for the WaterCan Button,
      * and it manipulates information on the farmer details label for the user's convenience.
      */
@@ -469,7 +460,7 @@ public class MyFarmController {
     }
 
     /**
-     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * An event listener for the Fertilize Option which listens to the cursor and mouse movements of the user.
      * Once this method is called, it changes some attributes of the game label for the Fertilizer Button,
      * and it manipulates information on the farmer details label for the user's convenience.
      */
@@ -485,7 +476,7 @@ public class MyFarmController {
     }
 
     /**
-     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * An event listener for the Shovel Option which listens to the cursor and mouse movements of the user.
      * Once this method is called, it changes some attributes of the game label for the Shovel Button,
      * and it manipulates information on the farmer details label for the user's convenience.
      */
@@ -502,7 +493,7 @@ public class MyFarmController {
     }
 
     /**
-     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * An event listener for the Pickaxe Option which listens to the cursor and mouse movements of the user.
      * Once this method is called, it changes some attributes of the game label for the Pickaxe Button,
      * and it manipulates information on the farmer details label for the user's convenience.
      */
@@ -518,7 +509,7 @@ public class MyFarmController {
     }
 
     /**
-     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * An event listener for the Seed Shop Buttons which listens to the cursor and mouse movements of the user.
      * Once this method is called, it changes some attributes of the game label for each of the Seed Buttons,
      * It shows important information for every seed.
      */
@@ -537,7 +528,7 @@ public class MyFarmController {
     }
 
     /**
-     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * An event listener for each of the tiles in the plot which listens to the cursor and mouse movements of the user.
      * Once this method is called, it changes some attributes of the game label for one Tile Button,
      * Each tile contains different information, hence this method shows vital information of a certain tile
      * at the game label for the user's convenience.
@@ -553,7 +544,7 @@ public class MyFarmController {
     }
 
     /**
-     * This function simply disables the options at the seed shop after buying a certain seed. and it updates after
+     * Disables the options at the seed shop after buying a certain seed, and it updates after
      * the user executed the buy seed method.
      */
     private void buySeedUpdater() {
@@ -565,7 +556,7 @@ public class MyFarmController {
     }
 
     /**
-     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * An event listener for the Buy Seed Option which listens to the cursor and mouse movements of the user.
      * Once this method is called, it changes some attributes of the game label for the buy Seed Button,
      * This method shows vital information of the BuySeed button at the game label for the user's convenience.
      */
@@ -590,88 +581,72 @@ public class MyFarmController {
     }
 
     /**
-     * This method listens to what the user clicks at a certain button from the farmer market or seed shop. This multipurpose
+     * Listens to what the user clicks at a certain button from the farmer market or seed shop. This multipurpose
      * actionListener method contains every listener for each of the seed buttons at the farmer supermarket. Once a button has
      * been selected, it executes the buySeed method from the Model and disables the seed shop right after.
      */
     private void buySeedActionListener() {
-        farmView.getSeedShopButtons().get(1).addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
-                farmModel.player.buySeed(1, (ArrayList<Crop>) farmModel.seedList);
-                inventory = " " + farmModel.seedList.get(0).getName()
-                        + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(0));
-                farmView.getFarmerSeedInventoryButtons().get(1).setText(inventory);
-                buySeedUpdater();
-            }
+        farmView.getSeedShopButtons().get(1).addActionListener(e -> {
+            farmModel.player.buySeed(1, (ArrayList<Crop>) farmModel.seedList);
+            inventory = " " + farmModel.seedList.get(0).getName()
+                    + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(0));
+            farmView.getFarmerSeedInventoryButtons().get(1).setText(inventory);
+            buySeedUpdater();
         });
-        farmView.getSeedShopButtons().get(2).addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
-                farmModel.player.buySeed(2, (ArrayList<Crop>) farmModel.seedList);
-                inventory = " " + farmModel.seedList.get(1).getName()
-                        + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(1));
-                farmView.getFarmerSeedInventoryButtons().get(2).setText(inventory);
-                buySeedUpdater();
-            }
+        farmView.getSeedShopButtons().get(2).addActionListener(e -> {
+            farmModel.player.buySeed(2, (ArrayList<Crop>) farmModel.seedList);
+            inventory = " " + farmModel.seedList.get(1).getName()
+                    + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(1));
+            farmView.getFarmerSeedInventoryButtons().get(2).setText(inventory);
+            buySeedUpdater();
         });
-        farmView.getSeedShopButtons().get(3).addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
-                farmModel.player.buySeed(3, (ArrayList<Crop>) farmModel.seedList);
-                inventory = " " + farmModel.seedList.get(2).getName()
-                        + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(2));
-                farmView.getFarmerSeedInventoryButtons().get(3).setText(inventory);
-                buySeedUpdater();
-            }
+        farmView.getSeedShopButtons().get(3).addActionListener(e -> {
+            farmModel.player.buySeed(3, (ArrayList<Crop>) farmModel.seedList);
+            inventory = " " + farmModel.seedList.get(2).getName()
+                    + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(2));
+            farmView.getFarmerSeedInventoryButtons().get(3).setText(inventory);
+            buySeedUpdater();
         });
-        farmView.getSeedShopButtons().get(4).addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
-                farmModel.player.buySeed(4, (ArrayList<Crop>) farmModel.seedList);
-                inventory = " " + farmModel.seedList.get(3).getName()
-                        + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(3));
-                farmView.getFarmerSeedInventoryButtons().get(4).setText(inventory);
-                buySeedUpdater();
-            }
+        farmView.getSeedShopButtons().get(4).addActionListener(e -> {
+            farmModel.player.buySeed(4, (ArrayList<Crop>) farmModel.seedList);
+            inventory = " " + farmModel.seedList.get(3).getName()
+                    + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(3));
+            farmView.getFarmerSeedInventoryButtons().get(4).setText(inventory);
+            buySeedUpdater();
         });
-        farmView.getSeedShopButtons().get(5).addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
-                farmModel.player.buySeed(5, (ArrayList<Crop>) farmModel.seedList);
-                inventory = " " + farmModel.seedList.get(4).getName()
-                        + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(4));
-                farmView.getFarmerSeedInventoryButtons().get(5).setText(inventory);
-                buySeedUpdater();
-            }
+        farmView.getSeedShopButtons().get(5).addActionListener(e -> {
+            farmModel.player.buySeed(5, (ArrayList<Crop>) farmModel.seedList);
+            inventory = " " + farmModel.seedList.get(4).getName()
+                    + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(4));
+            farmView.getFarmerSeedInventoryButtons().get(5).setText(inventory);
+            buySeedUpdater();
         });
-        farmView.getSeedShopButtons().get(6).addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
-                farmModel.player.buySeed(6, (ArrayList<Crop>) farmModel.seedList);
-                inventory = " " + farmModel.seedList.get(5).getName()
-                        + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(5));
-                farmView.getFarmerSeedInventoryButtons().get(6).setText(inventory);
-                buySeedUpdater();
-            }
+        farmView.getSeedShopButtons().get(6).addActionListener(e -> {
+            farmModel.player.buySeed(6, (ArrayList<Crop>) farmModel.seedList);
+            inventory = " " + farmModel.seedList.get(5).getName()
+                    + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(5));
+            farmView.getFarmerSeedInventoryButtons().get(6).setText(inventory);
+            buySeedUpdater();
         });
-        farmView.getSeedShopButtons().get(7).addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
-                farmModel.player.buySeed(7, (ArrayList<Crop>) farmModel.seedList);
-                inventory = " " + farmModel.seedList.get(6).getName()
-                        + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(6));
-                farmView.getFarmerSeedInventoryButtons().get(7).setText(inventory);
-                buySeedUpdater();
-            }
+        farmView.getSeedShopButtons().get(7).addActionListener(e -> {
+            farmModel.player.buySeed(7, (ArrayList<Crop>) farmModel.seedList);
+            inventory = " " + farmModel.seedList.get(6).getName()
+                    + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(6));
+            farmView.getFarmerSeedInventoryButtons().get(7).setText(inventory);
+            buySeedUpdater();
         });
-        farmView.getSeedShopButtons().get(8).addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
-                farmModel.player.buySeed(8, (ArrayList<Crop>) farmModel.seedList);
-                inventory = " " + farmModel.seedList.get(7).getName()
-                        + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(7));
-                farmView.getFarmerSeedInventoryButtons().get(8).setText(inventory);
-                buySeedUpdater();
-            }
+        farmView.getSeedShopButtons().get(8).addActionListener(e -> {
+            farmModel.player.buySeed(8, (ArrayList<Crop>) farmModel.seedList);
+            inventory = " " + farmModel.seedList.get(7).getName()
+                    + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(7));
+            farmView.getFarmerSeedInventoryButtons().get(8).setText(inventory);
+            buySeedUpdater();
         });
 
     }
 
     /**
-     * This method mouseListener function listens to what is being clicked, or hovered by the user. Once this method is called,
+     * Listens to what is being clicked, or hovered by the user in the Plant Seed Button. Once this method is called,
      * It shows vital information at the game label panel for the user's convenience, and it also enables the farmer inventory
      * buttons depending on the seeds that the farmer currently owns.
      */
@@ -706,49 +681,47 @@ public class MyFarmController {
     }
 
     /**
-     * This method is the action Listener for the plantSeed Method. Once this method has been called and once the user clicks
+     * An action Listener for the plantSeed Method; once this method has been called and once the user clicks
      * on the button, it executes the plantSeed Method from the Model, and it updates certain attributes at the model and updates
      * some information at the interface after execution.
      */
     private void plantSeedActionListener() {
         for (int i = 1; i <= farmView.getFarmerSeedInventoryButtons().size(); i++) {
             int finalI = i - 1;
-            farmView.getFarmerSeedInventoryButtons().get(i).addActionListener(new ActionListener() {
-                @Override public void actionPerformed(ActionEvent e) {
-                    try {
-                        int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Plant On", "Plant Selection",
-                                JOptionPane.QUESTION_MESSAGE));
-                        if (JOptionPane.showConfirmDialog(null, "Are you sure to Plant on this tile?",
-                                "Plant Seed Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                            if (farmModel.checkTileStatus(farmModel.plot, "plant")) {
-                                farmModel.player.plantSeed(farmModel.plot, tileIndex, farmModel.seedList.get(finalI));
-                                updateGame();
-                            } else {
-                                JOptionPane.showInternalMessageDialog(null, "Error! You can only plant on unoccupied, PLOWED tiles.",
-                                        "Plant Seed Validation", JOptionPane.INFORMATION_MESSAGE);
-                                System.out.println("Error! You can only plant on unoccupied, PLOWED tiles.");
-                            }
+            farmView.getFarmerSeedInventoryButtons().get(i).addActionListener(e -> {
+                try {
+                    int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Plant On", "Plant Selection",
+                            JOptionPane.QUESTION_MESSAGE));
+                    if (JOptionPane.showConfirmDialog(null, "Are you sure to Plant on this tile?",
+                            "Plant Seed Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        if (farmModel.checkTileStatus(farmModel.plot, "plant")) {
+                            farmModel.player.plantSeed(farmModel.plot, tileIndex, farmModel.seedList.get(finalI));
+                            updateGame();
+                        } else {
+                            JOptionPane.showInternalMessageDialog(null, "Error! You can only plant on unoccupied, PLOWED tiles.",
+                                    "Plant Seed Validation", JOptionPane.INFORMATION_MESSAGE);
+                            System.out.println("Error! You can only plant on unoccupied, PLOWED tiles.");
                         }
-                        /* Update Farmer Inventory Seed Button Restrictions */
-                        for (int i = 1; i <= farmModel.seedList.size(); i++) {
-                            farmView.getFarmerSeedInventoryButtons().get(i).setEnabled(false);
-                        }
-                        updateTileStatuses();
-                        updateGame();
-                    } catch (Exception error){
-                        /* Update Farmer Inventory Seed Button Restrictions */
-                        for (int i = 1; i <= farmModel.seedList.size(); i++) {
-                            farmView.getFarmerSeedInventoryButtons().get(i).setEnabled(false);
-                        }
-                        JOptionPane.showInternalMessageDialog(null, "Cancelled Plant Seed Action", "Plant Seed Validation", JOptionPane.INFORMATION_MESSAGE);
                     }
+                    /* Update Farmer Inventory Seed Button Restrictions */
+                    for (int i1 = 1; i1 <= farmModel.seedList.size(); i1++) {
+                        farmView.getFarmerSeedInventoryButtons().get(i1).setEnabled(false);
+                    }
+                    updateTileStatuses();
+                    updateGame();
+                } catch (Exception error){
+                    /* Update Farmer Inventory Seed Button Restrictions */
+                    for (int i1 = 1; i1 <= farmModel.seedList.size(); i1++) {
+                        farmView.getFarmerSeedInventoryButtons().get(i1).setEnabled(false);
+                    }
+                    JOptionPane.showInternalMessageDialog(null, "Cancelled Plant Seed Action", "Plant Seed Validation", JOptionPane.INFORMATION_MESSAGE);
                 }
             });
         }
     }
 
     /**
-     * This method is the action Listener for the harvestPlant Method. Once this method has been called and once the user clicks
+     * An action Listener for the harvestPlant Method; once this method has been called and once the user clicks
      * on the button, it executes the harvestPlant Method from the Model, and it updates certain attributes at the model and updates
      * some information at the interface after execution. It also gives the user feedback on the amount of crops that the user harvested,
      * the amount of objectCoins the user gained, and the amount of experience the user earned. It also resets that tile after execution.
@@ -765,7 +738,7 @@ public class MyFarmController {
                             if (JOptionPane.showConfirmDialog(null, "Are you sure to Harvest on this Plant?",
                                     "Harvest Plant Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                                 if (farmModel.checkTileStatus(farmModel.plot, "harvest")) {
-                                    String feedback = farmModel.player.harvestPlant(farmModel.player, farmModel.plot, tileIndex, null);
+                                    String feedback = farmModel.player.harvestPlant(farmModel.player, farmModel.plot, tileIndex);
                                     updateGame();
                                     JOptionPane.showMessageDialog(
                                             null, feedback,
@@ -801,7 +774,7 @@ public class MyFarmController {
     }
 
     /**
-     * This mouseListener method simply displays some information at the game label interface after certain cursor movements and conditions
+     * Displays some information at the game label about the Register Farmer Option interface after certain cursor movements and conditions
      * are met. This simply gives information depending on what is being labelled at the registerFarmer Button and some conditions for registering.
      */
     private void registerFarmerMouseListener() {
@@ -821,13 +794,13 @@ public class MyFarmController {
     }
 
     /**
-     * This mouseListener method simply displays some information at the game label interface after certain cursor movements and conditions
+     * Displays some information about the Rest or Next Day Option at the game label interface after certain cursor movements and conditions
      * are met. This simply gives information depending on what is being labelled at the Rest Button and what to expect after this button is clicked.
      */
     private void nextDayMouseListener() {
         farmView.getNextDayButton().addMouseListener(new MouseAdapter() {
             @Override public void mouseClicked(MouseEvent e) {
-                farmView.getPlotDetailsLabel().setText("Day " + String.valueOf(farmModel.MyFarm.getDaytime()));
+                farmView.getPlotDetailsLabel().setText("Day " + farmModel.MyFarm.getDaytime());
                 updateFarmerDetailsPanel();
             }
             @Override public void mouseEntered(MouseEvent e) {
@@ -840,7 +813,7 @@ public class MyFarmController {
     }
 
     /**
-     * This method simply throws an Error Message at the user if certain conditions are not met, or if the user wants to cancel
+     * Simply throws an Error Message at the user if certain conditions are not met, or if the user wants to cancel
      * his or her action command. This error message will be called and displayed at the interface.
      */
     private void displayErrorMessage() {

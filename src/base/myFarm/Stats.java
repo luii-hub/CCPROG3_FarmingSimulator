@@ -1,5 +1,7 @@
 package base.myFarm;
-/* This Class is simply the Player's overall statisics or progress within the duration of the game */
+/**
+ * This simply the Player's overall statistics or progress within the duration of the game
+ * */
 public class Stats {
 
     private int timesPlanted = 0;
@@ -10,23 +12,23 @@ public class Stats {
     private int timesBoughtSeeds = 0;
 
     /* Methods for Incrementation  */
-    public int addTimesPlowed() {
-        return ++timesPlowed;
+    public void addTimesPlowed() {
+        ++timesPlowed;
     }
-    public int addTimesWatered() {
-        return ++timesWatered;
+    public void addTimesWatered() {
+        ++timesWatered;
     }
-    public int addTimesFertilized() {
-        return ++timesFertilized;
+    public void addTimesFertilized() {
+        ++timesFertilized;
     }
-    public int addTimesPlanted() {
-        return ++timesPlanted;
+    public void addTimesPlanted() {
+         ++timesPlanted;
     }
-    public int addTimesHarvested() {
-        return ++timesHarvested;
+    public void addTimesHarvested() {
+         ++timesHarvested;
     }
-    public int addTimesBoughtSeeds(){
-        return ++timesBoughtSeeds;
+    public void addTimesBoughtSeeds(){
+         ++timesBoughtSeeds;
     }
 
     public int getTimesPlowed() {

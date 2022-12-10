@@ -7,7 +7,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-/* MyFarm Model of the GUI */
+/**
+ * This class represents the Model of the GUI which contains all the back-end general logic, attributes, and methods of the program.
+ */
 public class MyFarmModel {
     protected boolean isRunning = true;
     protected final Farmer player = new Farmer(FarmerType.DEFAULT);
@@ -16,7 +18,7 @@ public class MyFarmModel {
 
     protected final FarmPlot MyFarm = new FarmPlot(plot);
 
-    protected final List<Crop> seedList = new ArrayList<Crop>(Arrays.asList(
+    protected final List<Crop> seedList = new ArrayList<>(Arrays.asList(
             new Crop("Turnip", CropType.ROOT_CROP, 2, 1, 2, 0, 1, 5, 6, 1, 2, 5),
             new Crop("Carrot", CropType.ROOT_CROP, 3, 1, 2, 0, 1, 10, 9, 1, 2, 7.5),
             new Crop("Potato", CropType.ROOT_CROP, 5, 3, 4, 1, 2, 20, 3, 1, 10, 12.5),
@@ -27,7 +29,7 @@ public class MyFarmModel {
             new Crop("Apple", CropType.FRUIT_TREE, 10, 7, 7, 5, 5, 200, 5, 10, 15, 25)
     ));
 
-    protected final List<Tool> toolList = new ArrayList<Tool>(Arrays.asList(
+    protected final List<Tool> toolList = new ArrayList<>(Arrays.asList(
             new Tool("Plow Tool", 0, 25),
             new Tool("Watering Can", 0, 0.5),
             new Tool("Fertilizer", 10, 4),
@@ -110,7 +112,7 @@ public class MyFarmModel {
     /**	This method lets the user register himself/herself for a new farmer status, which costs ObjectCoins depending on the type of
      * 	status the player wishes to register. You cannot jump status and the method updates the registerCounter so that the program
      * 	disables the function once the player reaches maximum level.
-     * 	@param player
+     * 	@param player The player object which is basically the farmer
      */
     public void registerFarmer(Farmer player){
 		/* 	Register the farmer (player) depending on the type of farmer status given,
@@ -155,9 +157,7 @@ public class MyFarmModel {
                     }
                 }
             }
-            case 3 -> {
-                System.out.println("You have reached maximum farmer status");
-            }
+            case 3 -> System.out.println("You have reached maximum farmer status");
             default -> System.out.println("\tRegistration Cancelled. Going back to MyFarm...");
         }
     }
@@ -175,12 +175,12 @@ public class MyFarmModel {
         System.out.println("\tError! Insufficient ObjectCoins!");
     }
     /**	This multipurpose method checks the tileStatus of the tile and returns the boolean value depending on the inputted name
-     * 	of the tool. Different farmer tools require different tile statuses to proceed & it helps in error handling and method
+     * 	of the tool. Different farmer tools require different tile statuses to proceed, and it helps in error handling and method
      * 	requirements as imposed in the Machine Project Specifications.
      *
-     * 	@param plot
-     * 	@param toolName
-     * 	@returns status
+     * 	@param plot A hashmap of tiles which dictates the farm board
+     * 	@param toolName The tool's name which determines what line of code is to be executed
+     * 	@return A boolean value of status if we can proceed unto the next method
      */
     public boolean checkTileStatus(HashMap<Integer, Tile> plot, String toolName){
         /* Returns TRUE if the condition(s) of using a tool is met before using it on a TILE */
@@ -222,8 +222,8 @@ public class MyFarmModel {
      * 	If the conditions are met, return isRunning with a boolean value of false and will let the program know to stop and terminate the
      * 	program within the main function.
      *
-     * 	@param isRunning
-     * 	@returns isRunning
+     * 	@param isRunning A boolean attribute which dictates if the program should still run or not
+     * 	@return the isRunning boolean value which tells us if we should continue or terminate the program
      */
     public boolean checkGameConditions(boolean isRunning) {
         int condOneCounter = 0;

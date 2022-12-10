@@ -10,7 +10,7 @@ public class FarmPlot {
 
     /** This method generates the farmable plot of the MyFarm Game. This function is only executed once
      *
-     *  @param plot
+     *  @param plot A hashmap of tiles which dictates the farm board
      */
     public FarmPlot(HashMap<Integer, Tile> plot){
         this.daytime = 1;
@@ -30,10 +30,16 @@ public class FarmPlot {
 
     }
 
+    /**
+     * Generates the rocks of the tiles in the farm board via file input by the user
+     *
+     * @param plot A hashmap of tiles which dictates the farm board
+     * @throws IOException For File handling
+     */
     private void generateManualRocks(HashMap<Integer, Tile> plot) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader("rocks2.txt"));
+        BufferedReader br = new BufferedReader(new FileReader("rocks.txt"));
 
-        String line = null;
+        String line;
         int rockValue;
         int tileIndex = 1;
         while((line = br.readLine()) != null){
@@ -56,7 +62,7 @@ public class FarmPlot {
 
     /** This method declared what tile index is at the edge of the board. This function is only executed once
      *
-     *  @param plot
+     *  @param plot A hashmap of tiles which dictates the farm board
      */
     private void generateEdges(HashMap<Integer, Tile> plot){
         for(int i = 1; i <= 50; i++){
@@ -71,23 +77,22 @@ public class FarmPlot {
 
     /** This method simply prints the FarmPlot at the interface. This method is only executed once.
      *
-     * @param plot
+     * @param plot A hashmap of tiles which dictates the farm board
      */
     public void printFarmPlot(HashMap<Integer, Tile> plot){
-        String tileStatus = "" ;
         int tileCount = 1, i, j;
         while(tileCount <= 50){
             for(i = 0; i < 10; i++){
                 for(j = 0; j < 5; j++){
-                    tileStatus = switch (plot.get(tileCount).getStatus()) {
-                        case UNPLOWED -> "UNPLOWED";
-                        case PLOWED -> "PLOWED";
-                        case ROCK -> "ROCK";
-                        case SEED -> "SEED";
-                        case WITHERED -> "WITHERED";
-                        case PLANT -> "PLANT";
-                        case TREE -> "FTREE";
-                    };
+                    switch (plot.get(tileCount).getStatus()) {
+                        case UNPLOWED -> System.out.print("UNPLOWED\t\t");
+                        case PLOWED -> System.out.print("PLOWED\t\t");
+                        case ROCK -> System.out.print("ROCK\t\t");
+                        case SEED -> System.out.print("SEED\t");
+                        case WITHERED -> System.out.print("WITHERED\t\t");
+                        case PLANT -> System.out.print("PLANT\t\t");
+                        case TREE -> System.out.print("FTREE\t\t");
+                    }
                     tileCount++;
                 }
                 System.out.println(" ");

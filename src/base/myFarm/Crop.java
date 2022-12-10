@@ -1,22 +1,22 @@
 package base.myFarm;
 public class Crop { 
-	private String name; 
-	private  CropType type;
-	private int harvestTime;
+	private final String name;
+	private final CropType type;
+	private final int harvestTime;
 	private int growTime;
-	private int water;  
-	private int waterNeeded; 
-	private int waterBonus;
+	private int water;
+	private final int waterNeeded;
+	private final int waterBonus;
 	private boolean isWatered;
 	private int fertilizer; 
-	private int fertilizerNeeded; 
-	private int fertilizerBonus;
+	private final int fertilizerNeeded;
+	private final int fertilizerBonus;
 	private boolean isFertilized;
-	private int buyCost;
-	private int sellPrice;
-	private int maxProduce;
-	private int minProduce;
-	private double expYield;
+	private final int buyCost;
+	private final int sellPrice;
+	private final int maxProduce;
+	private final int minProduce;
+	private final double expYield;
 	private boolean isChoosable;
 
 	public Crop(String name, CropType type, int harvestTime, int waterNeeded, int waterBonus, int fertilizerNeeded,
@@ -74,6 +74,10 @@ public class Crop {
 	public boolean isWatered() {
 		return isWatered;
 	}
+	public boolean isChoosable() {
+		return isChoosable;
+	}
+
 	public String getName() { 
 		return name; 
 	}
@@ -82,6 +86,9 @@ public class Crop {
 	}
 	public int getWaterNeeded() { 
 		return waterNeeded; 
+	}
+	public int getWaterBonus() {
+		return waterBonus;
 	}
 	public int getFertilizer() { 
 		return fertilizer; 
@@ -92,14 +99,14 @@ public class Crop {
 	public int getFertilizerNeeded() { 
 		return fertilizerNeeded; 
 	}
+	public int getFertilizerBonus() {
+		return fertilizerBonus;
+	}
 	public int getHarvestTime() {
 		return harvestTime;
 	}
 	public int getGrowTime() {
 		return growTime;
-	}
-	public void addGrowTime() {
-		this.growTime += 1;
 	}
 	public CropType getType() {
 		return type;
@@ -116,17 +123,8 @@ public class Crop {
 	public int getMinProduce() {
 		return minProduce;
 	}
-	public int getFertilizerBonus() {
-		return fertilizerBonus;
-	}
-	public int getWaterBonus() {
-		return waterBonus;
-	}
 	public double getExpYield() {
 		return expYield;
-	}
-	public boolean isChoosable() {
-		return isChoosable;
 	}
 
 	/* Required Setters */
@@ -143,6 +141,9 @@ public class Crop {
 		isChoosable = choosable;
 	}
 
+	public void addGrowTime() {
+		this.growTime += 1;
+	}
 	public int productProduce(int minProduce, int maxProduce){
 		return (int) Math.floor(Math.random()*(maxProduce - minProduce +1)+ minProduce);
 	}
