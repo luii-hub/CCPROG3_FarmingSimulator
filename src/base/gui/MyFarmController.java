@@ -11,6 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
+/**
+ * This is the Controller Class of MyFarm where all the interactions between the view and the model take place.
+ */
 public class MyFarmController {
     private final MyFarmView farmView;
     private final MyFarmModel farmModel;
@@ -22,6 +25,10 @@ public class MyFarmController {
         this.farmModel = model;
     }
 
+    /**
+     * This Method is basically the "start game" or the method where is nests all the necessary functions such as game initializations,
+     * game and file updaters, event listeners, and commands.
+     */
     public void runGame() {
         farmView.init();
         farmView.initializePanels();
@@ -31,6 +38,10 @@ public class MyFarmController {
         actionCommand();
     }
 
+    /**
+     * This method checks where the program should stop running if some conditions are met. This function will determine if the program
+     * should keep running or not once certain conditions are met.
+     */
     private void checkEndGame(){
         if(!farmModel.checkGameConditions(farmModel.isRunning())){
             JOptionPane.showMessageDialog(null,
@@ -51,14 +62,23 @@ public class MyFarmController {
             farmView.getNextDayButton().setEnabled(false);
         }
     }
+
+    /**
+     * This method nests all the game updaters and label updaters. Once this method is called,
+     * it updates what is being viewed by the user in the interface.
+     */
     public void updateGame() {
-        gameConditionUpdater();
+        updateSeedShop();
         updateFarmerLevel();
         updateFarmPlotPanel();
         updateFarmerDetailsPanel();
         updateFarmerInventory();
     }
 
+    /**
+     * This method updates the farmer details in the farmer panel located at the top left of the screen.
+     * Once this method is called, it updates what is inside the farmer details interface.
+     */
     private void updateFarmerDetailsPanel() {
         farmView.getFarmerDetailsTitle().setText(" - Farmer Details -");
         farmView.getFarmerLevelLabel().setText(" Farmer Level: " + String.valueOf(farmModel.player.getFarmerLevel()));
@@ -70,11 +90,21 @@ public class MyFarmController {
 
     }
 
+    /**
+     * This method updates the farm plot in the game board located at the middle of the screen.
+     * Once this method is called, it updates what is inside the farm plot interface once certain
+     * attributes are manipulated by certain events.
+     */
     private void updateFarmPlotPanel() {
         farmView.getPlotDetailsTitle().setText("Mi Sakahan");
         farmView.getPlotDetailsLabel().setText("Day: " + String.valueOf(farmModel.MyFarm.getDaytime()));
     }
 
+    /**
+     * This method updates the farmer inventory located on the left side of the screen.
+     * Once this method is called, whether the farmer buys a seed or plants a seed,
+     * it updates the amount of each seed that the farmer has.
+     */
     private void updateFarmerInventory() {
         farmView.getFarmerInventoryTitle().setText(" - Farmer Seed Inventory -");
         for (int i = 0; i < farmModel.seedList.size(); i++) {
@@ -83,16 +113,11 @@ public class MyFarmController {
             farmView.getFarmerSeedInventoryButtons().get(inputIndex).setText(inventory);
         }
     }
-    private void famerStatusMouseListener(){
-        farmView.getFarmerDetailsPanel().addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent e) {
-                farmView.getGameTextLabel().setText(String.valueOf(farmModel.player.getType().toString()));
-            }
-            @Override public void mouseExited(MouseEvent e) {
-                farmView.getGameTextLabel().setText("");
-            }
-        });
-    }
+
+    /**
+     * This method updates the farmer's level once the farmer's level reaches a certain threshold. This method
+     * also allows the farmer to register once the farmer reaches a certain level.
+     */
     public void updateFarmerLevel() {
         /* Reset the Farmer's Exp Counter since the CAP is 100 */
         if (farmModel.player.getExperience() >= 100){
@@ -102,7 +127,7 @@ public class MyFarmController {
             }
             System.out.println("\tCongratulations, you have leveled up! You are now Level " + farmModel.player.getFarmerLevel());
         }
-
+        /* Allow the farmer to register once he reaches a certain level  */
         if(farmModel.player.getFarmerLevel() >= 5 && farmModel.player.getRegisterCounter() == 0){
             System.out.println("\tCongratulations, you are now eligible to promote to a 'Registered Farmer'. (Costs 200 ObjetCoins)");
             farmModel.player.setRegisterable(true);
@@ -117,6 +142,9 @@ public class MyFarmController {
         }
     }
 
+    /**
+     * This method basically generates and setups the farmer market or the seed shop for the user.
+     */
     private void farmMarket() {
         farmView.getSeedShopTitle().setText("- Farmer SuperMarket -");
         for (int i = 0; i < farmModel.seedList.size(); i++) {
@@ -127,12 +155,17 @@ public class MyFarmController {
         }
     }
 
+    /**
+     * This multipurpose method is an all-in-one method where it nests all the event listeners and holds all the
+     * farmer's action commands. This contains the farmer tool options, farmers self options, and also what the
+     * farmer basically wants to do within the game.
+     */
     private void actionCommand() {
 
         /* Misc Methods & Details */
         showTileInfoListener();
         updateTileStatuses();
-        famerStatusMouseListener();
+        farmerStatusMouseListener();
 
         /* Farmer Action Command MouseListeners */
         plowMouseListener();
@@ -151,24 +184,56 @@ public class MyFarmController {
         /* Farmer Action Button Listener */
         farmCommandActionListener();
     }
+
+    /**
+     * This method basically updates every tile and its tile status depending on after a tile has been manipulated or not.
+     * Once this method is called, it sets the tile status for all the tiles in the farm-plot in the interface
+     */
     private void updateTileStatuses(){
         for (int position = 1; position <= 50; position++) {
             farmView.getFarmPlotButtons().get(position).setText(String.valueOf(farmModel.plot.get(position).getStatus()));
         }
     }
-    private void gameConditionUpdater() {
+
+    /**
+     * This method basically updates the farmer's options at the farmer supermarket or seedshop. If the farmer does not have
+     * enough ObjectCoins to purchase a seed, That seed's button will be disabled by the user at the interface.
+     */
+    private void updateSeedShop() {
 
         /* Buy Seed Conditions */
         farmView.getBuySeedButton().setEnabled(!(farmModel.player.getObjectCoins() <= 0));
 
     }
 
+    /**
+     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * Once this method is called, it changes some attributes of the game label, and it manipulates information
+     * on the farmer details label for the user's convenience.
+     */
+    private void farmerStatusMouseListener(){
+        farmView.getFarmerDetailsPanel().addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                farmView.getGameTextLabel().setText(String.valueOf(farmModel.player.getType().toString()));
+            }
+            @Override public void mouseExited(MouseEvent e) {
+                farmView.getGameTextLabel().setText("");
+            }
+        });
+    }
+
+    /**
+     * This multipurpose method contains all the action listeners for every farmer command action (button).
+     * This method make sures that only one button can only be executed, and it listens to that button after the user
+     * clicks on that button (via mouseListener).
+     */
     private void farmCommandActionListener() {
         ActionListener commandListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Object buttonSource = e.getSource();
 
+                /* Plow Tool Button Action Command */
                 if (buttonSource == farmView.getPlowButton()) {
                     System.out.println("Plow Button Action Performed");
                     try {
@@ -193,7 +258,9 @@ public class MyFarmController {
                     } catch (Exception error) {
                         displayErrorMessage();
                     }
-                } else if (buttonSource == farmView.getWaterButton()) {
+                }
+                /* Water Tool Button Action Command */
+                else if (buttonSource == farmView.getWaterButton()) {
                     System.out.println("Water Button Action Performed");
                     try {
                         int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Water On", "Water Selection",
@@ -217,7 +284,9 @@ public class MyFarmController {
                         displayErrorMessage();
                     }
                     checkEndGame();
-                } else if (buttonSource == farmView.getFertilizerButton()) {
+                }
+                /* Fertilizer Tool Button Action Command */
+                else if (buttonSource == farmView.getFertilizerButton()) {
                     System.out.println("Fertilizer Button Action Performed");
                     try {
                         int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Fertilize On", "Fertilize Selection",
@@ -241,7 +310,9 @@ public class MyFarmController {
                         displayErrorMessage();
                     }
                     checkEndGame();
-                } else if (buttonSource == farmView.getShovelButton()) {
+                }
+                /* Shovel Tool Button Action Command */
+                else if (buttonSource == farmView.getShovelButton()) {
                     System.out.println("Shovel Button Action Performed");
                     try {
                         int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Shovel On", "Shovel Selection",
@@ -264,7 +335,9 @@ public class MyFarmController {
                         displayErrorMessage();
                     }
                     checkEndGame();
-                } else if (buttonSource == farmView.getPickaxeButton()) {
+                }
+                /* Pickaxe Tool Button Action Command */
+                else if (buttonSource == farmView.getPickaxeButton()) {
                     System.out.println("Pickaxe Button Action Performed");
                     try {
                         int tileIndex = Integer.parseInt(JOptionPane.showInputDialog(null, "Select a Tile that you want to Pickaxe On", "Pickaxe Selection",
@@ -292,7 +365,9 @@ public class MyFarmController {
                         displayErrorMessage();
                     }
                     checkEndGame();
-                } else if (buttonSource == farmView.getRegisterFarmerButton()) {
+                }
+                /* Register Farmer Button Action Command */
+                else if (buttonSource == farmView.getRegisterFarmerButton()) {
                     System.out.println("Register Button Action Performed");
                     /*	If player has met the minimum requirements, allow player the option to register into new role.
                      * 	If player has reached maximum level, disable player to register anymore */
@@ -317,7 +392,9 @@ public class MyFarmController {
                     updateTileStatuses();
                     updateGame();
                     checkEndGame();
-                } else if (buttonSource == farmView.getNextDayButton()) {
+                }
+                /* Rest Farmer (Next Day) Button Action Command */
+                else if (buttonSource == farmView.getNextDayButton()) {
                     System.out.println("Next day Button Action Performed");
                     try {
                         if (JOptionPane.showConfirmDialog(null,
@@ -332,7 +409,9 @@ public class MyFarmController {
                         displayErrorMessage();
                     }
                     checkEndGame();
-                } else if (buttonSource == farmView.getQuitGameButton()){
+                }
+                /* Quit Game Action Command */
+                else if (buttonSource == farmView.getQuitGameButton()){
                     try {
                         if (JOptionPane.showConfirmDialog(null,
                                 "Are you sure you to quit game?", "Quit Game Option", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -346,6 +425,7 @@ public class MyFarmController {
                 }
             }
         };
+        /* Add an action listener for every farmer action command button */
         farmView.getPlowButton().addActionListener(commandListener);
         farmView.getWaterButton().addActionListener(commandListener);
         farmView.getFertilizerButton().addActionListener(commandListener);
@@ -357,6 +437,11 @@ public class MyFarmController {
         updateTileStatuses();
     }
 
+    /**
+     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * Once this method is called, it changes some attributes of the game label for the Plow Button,
+     * and it manipulates information on the farmer details label for the user's convenience.
+     */
     private void plowMouseListener() {
         farmView.getPlowButton().addMouseListener(new MouseAdapter() {
             @Override public void mouseEntered(MouseEvent e) {farmView.getGameTextLabel().setText(
@@ -367,6 +452,11 @@ public class MyFarmController {
         });
     }
 
+    /**
+     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * Once this method is called, it changes some attributes of the game label for the WaterCan Button,
+     * and it manipulates information on the farmer details label for the user's convenience.
+     */
     private void waterMouseListener() {
         farmView.getWaterButton().addMouseListener(new MouseAdapter() {
             @Override public void mouseEntered(MouseEvent e) {farmView.getGameTextLabel().setText(
@@ -378,6 +468,11 @@ public class MyFarmController {
         });
     }
 
+    /**
+     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * Once this method is called, it changes some attributes of the game label for the Fertilizer Button,
+     * and it manipulates information on the farmer details label for the user's convenience.
+     */
     private void fertMouseListener() {
         farmView.getFertilizerButton().addMouseListener(new MouseAdapter() {
             @Override public void mouseEntered(MouseEvent e) {farmView.getGameTextLabel().setText(
@@ -389,6 +484,11 @@ public class MyFarmController {
         });
     }
 
+    /**
+     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * Once this method is called, it changes some attributes of the game label for the Shovel Button,
+     * and it manipulates information on the farmer details label for the user's convenience.
+     */
     private void shovelMouseListener() {
         farmView.getShovelButton().addMouseListener(new MouseAdapter() {
             @Override public void mouseEntered(MouseEvent e) {
@@ -401,6 +501,11 @@ public class MyFarmController {
         });
     }
 
+    /**
+     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * Once this method is called, it changes some attributes of the game label for the Pickaxe Button,
+     * and it manipulates information on the farmer details label for the user's convenience.
+     */
     private void pickaxeMouseListener() {
         farmView.getPickaxeButton().addMouseListener(new MouseAdapter() {
             @Override public void mouseEntered(MouseEvent e) {
@@ -412,6 +517,11 @@ public class MyFarmController {
         });
     }
 
+    /**
+     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * Once this method is called, it changes some attributes of the game label for each of the Seed Buttons,
+     * It shows important information for every seed.
+     */
     private void showSeedInfoListener() {
         for (int i = 1; i <= farmView.getSeedShopButtons().size(); i++) {
             int finalI = i - 1;
@@ -426,6 +536,12 @@ public class MyFarmController {
         }
     }
 
+    /**
+     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * Once this method is called, it changes some attributes of the game label for one Tile Button,
+     * Each tile contains different information, hence this method shows vital information of a certain tile
+     * at the game label for the user's convenience.
+     */
     private void showTileInfoListener() {
         for (int i = 1; i <= farmModel.plot.size(); i++) {
             int finalI = i;
@@ -436,6 +552,10 @@ public class MyFarmController {
         }
     }
 
+    /**
+     * This function simply disables the options at the seed shop after buying a certain seed. and it updates after
+     * the user executed the buy seed method.
+     */
     private void buySeedUpdater() {
         updateGame();
         /* Update Buy Seed Button Restrictions */
@@ -444,6 +564,11 @@ public class MyFarmController {
         }
     }
 
+    /**
+     * This method contains an event listener which listens to the cursor and mouse movements of the user.
+     * Once this method is called, it changes some attributes of the game label for the buy Seed Button,
+     * This method shows vital information of the BuySeed button at the game label for the user's convenience.
+     */
     private void buySeedMouseListener() {
         farmView.getBuySeedButton().addMouseListener(new MouseAdapter() {
             @Override public void mouseClicked(MouseEvent e) {
@@ -464,6 +589,11 @@ public class MyFarmController {
         buySeedActionListener();
     }
 
+    /**
+     * This method listens to what the user clicks at a certain button from the farmer market or seed shop. This multipurpose
+     * actionListener method contains every listener for each of the seed buttons at the farmer supermarket. Once a button has
+     * been selected, it executes the buySeed method from the Model and disables the seed shop right after.
+     */
     private void buySeedActionListener() {
         farmView.getSeedShopButtons().get(1).addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
@@ -540,11 +670,16 @@ public class MyFarmController {
 
     }
 
+    /**
+     * This method mouseListener function listens to what is being clicked, or hovered by the user. Once this method is called,
+     * It shows vital information at the game label panel for the user's convenience, and it also enables the farmer inventory
+     * buttons depending on the seeds that the farmer currently owns.
+     */
     private void plantSeedMouseListener() {
         farmView.getPlantSeedButton().addMouseListener(new MouseAdapter() {
             @Override public void mouseClicked(MouseEvent e) {
                 System.out.println("Plant Seed Button Clicked");
-                /* Access SeedShopButtons Depending on available Seeds */
+                /* Access FarmerInventoryButtons Depending on available Seeds */
                 boolean isAccessible = false;
                 for (int i = 0; i < farmModel.seedList.size(); i++) {
                     int inputIndex = i + 1;
@@ -554,6 +689,7 @@ public class MyFarmController {
                         isAccessible = true;
                     }
                 }
+                /* Disable plant seed method for user if the farmer does not have any seeds in his/her inventory */
                 if(!isAccessible){
                     JOptionPane.showInternalMessageDialog(null, "You cannot access this feature since you currently do not own any seeds",
                             "Plant Seed Validation", JOptionPane.INFORMATION_MESSAGE);
@@ -569,6 +705,11 @@ public class MyFarmController {
         });
     }
 
+    /**
+     * This method is the action Listener for the plantSeed Method. Once this method has been called and once the user clicks
+     * on the button, it executes the plantSeed Method from the Model, and it updates certain attributes at the model and updates
+     * some information at the interface after execution.
+     */
     private void plantSeedActionListener() {
         for (int i = 1; i <= farmView.getFarmerSeedInventoryButtons().size(); i++) {
             int finalI = i - 1;
@@ -606,6 +747,12 @@ public class MyFarmController {
         }
     }
 
+    /**
+     * This method is the action Listener for the harvestPlant Method. Once this method has been called and once the user clicks
+     * on the button, it executes the harvestPlant Method from the Model, and it updates certain attributes at the model and updates
+     * some information at the interface after execution. It also gives the user feedback on the amount of crops that the user harvested,
+     * the amount of objectCoins the user gained, and the amount of experience the user earned. It also resets that tile after execution.
+     */
     private void harvestPlantMouseListener() {
         farmView.getHarvestSeedButton().addMouseListener(new MouseAdapter() {
             @Override public void mouseClicked(MouseEvent e) {
@@ -653,6 +800,10 @@ public class MyFarmController {
         });
     }
 
+    /**
+     * This mouseListener method simply displays some information at the game label interface after certain cursor movements and conditions
+     * are met. This simply gives information depending on what is being labelled at the registerFarmer Button and some conditions for registering.
+     */
     private void registerFarmerMouseListener() {
         farmView.getRegisterFarmerButton().addMouseListener(new MouseAdapter() {
             @Override
@@ -669,6 +820,10 @@ public class MyFarmController {
         });
     }
 
+    /**
+     * This mouseListener method simply displays some information at the game label interface after certain cursor movements and conditions
+     * are met. This simply gives information depending on what is being labelled at the Rest Button and what to expect after this button is clicked.
+     */
     private void nextDayMouseListener() {
         farmView.getNextDayButton().addMouseListener(new MouseAdapter() {
             @Override public void mouseClicked(MouseEvent e) {
@@ -683,6 +838,11 @@ public class MyFarmController {
             @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("Game User-Feedback Provider");}
         });
     }
+
+    /**
+     * This method simply throws an Error Message at the user if certain conditions are not met, or if the user wants to cancel
+     * his or her action command. This error message will be called and displayed at the interface.
+     */
     private void displayErrorMessage() {
         JOptionPane.showMessageDialog(null,
                 "Error!  Command action got disrupted OR Command action was unable to be executed.",

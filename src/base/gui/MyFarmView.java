@@ -1,44 +1,36 @@
 package base.gui;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.util.HashMap;
 
 public class MyFarmView extends JFrame {
 
-    //Major View Panel
+    /* Major JPanels of GUI */
     private JPanel centerPanel = new JPanel();
     private JPanel farmPlotPanel = new JPanel();
     private JPanel rightPanel = new JPanel();
     private JPanel leftPanel = new JPanel();
 
-    //FarmPlotPanel Attributes
+    /* FarmPlotPanel Attributes (Tiles) */
     private final HashMap<Integer, JButton> farmPlotButtons = new HashMap<>();
 
-    //Farm Plot Details Panel & Attributes
+    /* Farm Plot Details Panel & Attributes */
     private final JPanel plotDetailsPanel = new JPanel();
     private final JLabel plotDetailsLabel = new JLabel();
     private final JLabel plotDetailsTitle = new JLabel();
 
-    //Farmer Detail Panel & Attributes
+    /* Farmer Detail Panel & Attributes */
     private final JPanel farmerDetailsPanel = new JPanel();
     private final JLabel farmerDetailsTitle = new JLabel();
     private final JLabel farmerLevelLabel = new JLabel();
@@ -48,24 +40,24 @@ public class MyFarmView extends JFrame {
     private final JButton registerFarmerButton = new JButton();
     private final JButton nextDayButton = new JButton();
 
-    //Farmer Inventory Panel & Attributes
+    /* Farmer Inventory Panel & Attributes */
     private final JPanel farmerInventoryPanel = new JPanel();
     private final JLabel farmerInventoryTitle = new JLabel();
     private final HashMap<Integer, JButton> farmerSeedInventoryButtons = new HashMap<>();
 
-    //Game Text Field Presenter
+    /* Game Text Field Presenter */
     private final JPanel gameTextPanel = new JPanel();
     private final JLabel gameTextLabel = new JLabel();
 
-    //Farmer's Market Panel & Attributes
+    /* Farmer's Market Panel & Attributes */
     private final JPanel seedShopPanel = new JPanel();
     private final JLabel seedShopTitle = new JLabel();
     private final HashMap<Integer, JButton> seedShopButtons = new HashMap<>();
 
-    //Farmer Commands Panel & Attributes
+    /* Farmer Commands Panel & Attributes */
     private final JPanel farmerCommandPanel = new JPanel();
 
-    //Farmer Command Buttons
+    /* Farmer Command Buttons */
     private final JButton plowButton = new JButton();
     private final JButton waterButton = new JButton();
     private final JButton fertilizerButton = new JButton();
@@ -76,7 +68,7 @@ public class MyFarmView extends JFrame {
     private final JButton buySeedButton = new JButton();
     private final JButton quitGameButton = new JButton();
 
-    public MyFarmView() {
+    MyFarmView() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1280, 760);
         setLayout(null);
@@ -85,43 +77,46 @@ public class MyFarmView extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * This method basically initializes all the entirety of the GUI, the foundation
+     * and the skeleton of all the GUI Panels, Labels, and Buttons.
+     * This method basically sets up all the panels for every category of the GUI.
+     */
     public void init() {
-
         //LEFT PANEL
-        leftPanel.setBackground(Color.decode("#70a270"));
         leftPanel.setLayout(null);
         leftPanel.setBounds(0, 0, 320, 720);
-        setFarmerDetailsPanel();
-        setFarmerInventoryPanel();
+            /* Farmer Details Panel */
+            setFarmerDetailsPanel();
+            /* Farmer Inventory Panel */
+            setFarmerInventoryPanel();
 
         //RIGHT PANEL
-        rightPanel.setBackground(Color.decode("#70a270"));
         rightPanel.setLayout(null);
         rightPanel.setBounds(960, 0, 320, 720);
-        setGameTextLabel();
-        setSeedShopPanel();
+            /* Game Text or Game Feedback Label */
+            setGameTextLabel();
+            /* Farmer Seed Shop Panel */
+            setSeedShopPanel();
 
         //MIDDLE PANEL (TILES)
-        //centerPanel.setBackground(Color.decode("#70a270"));
         centerPanel.setLayout(null);
         centerPanel.setBounds(320, 0, 640, 720);
-
-        //plotDetailsPanel.setBackground(Color.decode("#70a270"));
-        plotDetailsLabel.setLayout(null);
-        setPlotDetailsPanel();
-
-        //farmPlotPanel.setBackground(Color.decode("#70a270"));
-        farmPlotPanel.setLayout(new GridLayout(10, 5, 5, 5));
-        setFarmPlotPanel();
-
-        //farmerCommandPanel.setBackground(Color.decode("#70a270"));
-        farmerCommandPanel.setLayout(new GridLayout(2, 5, 5, 5));
-        setFarmerCommandPanel();
-
+            /* Farm Plot Title Panel */
+            plotDetailsLabel.setLayout(null);
+            setPlotDetailsPanel();
+            /* Farm Plot Panel */
+            farmPlotPanel.setLayout(new GridLayout(10, 5, 5, 5));
+            setFarmPlotPanel();
+            /* Farmer Action Command Panel */
+            farmerCommandPanel.setLayout(new GridLayout(2, 5, 5, 5));
+            setFarmerCommandPanel();
     }
 
+    /**
+     * This method simply just adds all the panels, sub-panels, and the buttons in the frame.
+     */
     public void initializePanels() {
-
         this.add(rightPanel);
         this.rightPanel.add(gameTextPanel);
         gameTextLabel.setText("Game User-Feedback Provider");
@@ -146,6 +141,10 @@ public class MyFarmView extends JFrame {
 
     }
 
+    /**
+     * This method simply sets up the Farmer Details Panel (the top Left Panel) and also
+     * sets the formatting, layout, and the overall design of the Panel.
+     */
     private void setFarmerDetailsPanel() {
         Font OpenSansTitle = new Font("OpenSans", Font.BOLD | Font.ITALIC, 20);
         Font OpenSans = new Font("OpenSans", Font.ITALIC, 18);
@@ -169,6 +168,10 @@ public class MyFarmView extends JFrame {
 
     }
 
+    /**
+     * This method simply sets up the Plot Details Panel (the top-middle Panel) and also
+     * sets the formatting, layout, and the overall design of the Title Panel
+     */
     private void setPlotDetailsPanel() {
 
         Font OpenSans = new Font("OpenSans", Font.ITALIC, 24);
@@ -184,6 +187,11 @@ public class MyFarmView extends JFrame {
 
     }
 
+    /**
+     * This method simply sets up the Farm Plot Panel (the middle) and also
+     * sets the formatting, layout, and the overall design of the Panel, and
+     * each of the Tiles.
+     */
     private void setFarmPlotPanel() {
 
         farmPlotPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -199,6 +207,11 @@ public class MyFarmView extends JFrame {
         }
     }
 
+    /**
+     * This method simply sets up the Farmer Command Panel (the mid-btm panel)
+     * and also sets the formatting, layout, and the overall design of the Panel,
+     * and also adds all the action command buttons for the farmer to interact with.
+     */
     private void setFarmerCommandPanel() {
 
         farmerCommandPanel.setBorder(new EmptyBorder(10, 5, 10, 5));
@@ -224,6 +237,11 @@ public class MyFarmView extends JFrame {
 
     }
 
+    /**
+     * This method simply sets up the Farmer Inventory Panel (mid-right panel) and also
+     * sets the formatting, layout, and the overall design of the Inventory Panel. This
+     * also sets up all the Inventory Buttons for the user to interact with.
+     */
     private void setFarmerInventoryPanel() {
         Font OpenSansTitle = new Font("OpenSans", Font.BOLD | Font.ITALIC, 20);
         Font OpenSans = new Font("OpenSans", Font.ITALIC, 18);
@@ -249,12 +267,16 @@ public class MyFarmView extends JFrame {
         }
     }
 
+    /**
+     * This method simply sets up the Farmer Supermarket Panel (left-side panel) and also
+     * sets the formatting, layout, and the overall design of the Seed Shop Panel. This
+     * also sets up all the Farmer Seed Shop Buttons for the user to interact with.
+     */
     private void setSeedShopPanel(){
         Font OpenSansTitle = new Font("OpenSans", Font.BOLD | Font.ITALIC, 20);
         Font OpenSans = new Font("OpenSans", Font.ITALIC, 18);
         seedShopTitle.setFont(OpenSansTitle);
 
-        //seedShopPanel.setBackground(Color.RED);
         seedShopPanel.setBounds(0, 240, 320, 480);
         seedShopPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         seedShopPanel.setLayout(null);
@@ -273,6 +295,12 @@ public class MyFarmView extends JFrame {
         }
     }
 
+    /**
+     * This method sets up the Game Text Label (top-left panel) for the user to see.
+     * This is a vital part of the GUI since this panel shows the feedback and information
+     * for all attributes, methods, buttons, and panels of the GUI and guides the user within
+     * the whole duration of the game.
+     */
     private void setGameTextLabel(){
         Font OpenSansTitle = new Font("OpenSans", Font.BOLD | Font.ITALIC, 20);
         Font OpenSans = new Font("OpenSans", Font.ITALIC, 18);
@@ -287,95 +315,40 @@ public class MyFarmView extends JFrame {
         gameTextPanel.add(gameTextLabel);
     }
 
-    public JLabel getFarmerDetailsTitle() {
-        return farmerDetailsTitle;
-    }
+    /* Farmer Details Panel Getters */
+    public JPanel getFarmerDetailsPanel() {return farmerDetailsPanel;}
+    public JLabel getFarmerDetailsTitle() {return farmerDetailsTitle;}
+    public JLabel getFarmerExpLabel() {return farmerExpLabel;}
+    public JLabel getFarmerLevelLabel() {return farmerLevelLabel;}
+    public JLabel getFarmerTypeLabel() {return farmerTypeLabel;}
+    public JButton getRegisterFarmerButton() {return registerFarmerButton;}
+    public JButton getNextDayButton() {return nextDayButton;}
+    public JLabel getFarmerObjectCoinLabel() {return farmerObjectCoinLabel;}
 
-    public JLabel getFarmerExpLabel() {
-        return farmerExpLabel;
-    }
+    /* Farmer Seed Inventory Panel Getters */
+    public JLabel getFarmerInventoryTitle() {return farmerInventoryTitle;}
+    public HashMap<Integer, JButton> getFarmerSeedInventoryButtons() {return farmerSeedInventoryButtons;}
 
-    public JLabel getFarmerLevelLabel() {
-        return farmerLevelLabel;
-    }
+    /* Farmer Seed Shop Panel Getters */
+    public JLabel getSeedShopTitle() {return seedShopTitle;}
+    public HashMap<Integer, JButton> getSeedShopButtons() {return seedShopButtons;}
 
-    public JLabel getFarmerTypeLabel() {
-        return farmerTypeLabel;
-    }
-
-    public JButton getRegisterFarmerButton() {
-        return registerFarmerButton;
-    }
-
-    public JButton getNextDayButton() {
-        return nextDayButton;
-    }
-
-    public JLabel getFarmerObjectCoinLabel() {
-        return farmerObjectCoinLabel;
-    }
-
-    public JLabel getPlotDetailsTitle() {
-        return plotDetailsTitle;
-    }
-
-    public JLabel getPlotDetailsLabel() {
-        return plotDetailsLabel;
-    }
-
-    public JLabel getFarmerInventoryTitle() {
-        return farmerInventoryTitle;
-    }
-    public HashMap<Integer, JButton> getFarmerSeedInventoryButtons() {
-        return farmerSeedInventoryButtons;
-    }
-
-    public JLabel getSeedShopTitle() {
-        return seedShopTitle;
-    }
-    public HashMap<Integer, JButton> getSeedShopButtons() {
-        return seedShopButtons;
-    }
-
-    public JLabel getGameTextLabel() {
-        return gameTextLabel;
-    }
-
-    public JButton getPlowButton() {
-        return plowButton;
-    }
-
-    public JButton getWaterButton() {
-        return waterButton;
-    }
-
-    public JButton getFertilizerButton() {
-        return fertilizerButton;
-    }
-
-    public JButton getShovelButton() {
-        return shovelButton;
-    }
-
-    public JButton getPickaxeButton() {
-        return pickaxeButton;
-    }
-
-    public JButton getBuySeedButton() {
-        return buySeedButton;
-    }
-
-    public JButton getPlantSeedButton() {
-        return plantSeedButton;
-    }
-
-    public JButton getHarvestSeedButton() {
-        return harvestSeedButton;
-    }
+    /* Farmer Action Command Button Getters */
+    public JButton getPlowButton() {return plowButton;}
+    public JButton getWaterButton() {return waterButton;}
+    public JButton getFertilizerButton() {return fertilizerButton;}
+    public JButton getShovelButton() {return shovelButton;}
+    public JButton getPickaxeButton() {return pickaxeButton;}
+    public JButton getBuySeedButton() {return buySeedButton;}
+    public JButton getPlantSeedButton() {return plantSeedButton;}
+    public JButton getHarvestSeedButton() {return harvestSeedButton;}
     public JButton getQuitGameButton() {return quitGameButton;}
 
-    public HashMap<Integer, JButton> getFarmPlotButtons() {
-        return farmPlotButtons;
-    }
-    public JPanel getFarmerDetailsPanel() {return farmerDetailsPanel;}
+    /* Plot Middle Panel Getters */
+    public HashMap<Integer, JButton> getFarmPlotButtons() {return farmPlotButtons;}
+    public JLabel getPlotDetailsTitle() {return plotDetailsTitle;}
+    public JLabel getPlotDetailsLabel() {return plotDetailsLabel;}
+
+    /* Game Text Panel Getters */
+    public JLabel getGameTextLabel() {return gameTextLabel;}
 }

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+/* MyFarm Model of the GUI */
 public class MyFarmModel {
     protected boolean isRunning = true;
     protected final Farmer player = new Farmer(FarmerType.DEFAULT);
@@ -262,6 +263,7 @@ public class MyFarmModel {
         return isRunning;
     }
 
+    /* Needed Getters */
     public boolean isRunning() {
         return isRunning;
     }
