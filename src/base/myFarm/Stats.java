@@ -7,7 +7,6 @@ public class Stats {
     private int timesWatered = 0;
     private int timesFertilized = 0;
     private int timesHarvested = 0;
-    private int timesHarvestedSuccessfully = 0;
     private int timesBoughtSeeds = 0;
 
     /* Methods for Incrementation  */
@@ -29,56 +28,40 @@ public class Stats {
     public int addTimesBoughtSeeds(){
         return ++timesBoughtSeeds;
     }
-    public int addTimesHarvestedSuccessfully() {
-        return ++timesHarvestedSuccessfully;
-    }
 
     public int getTimesPlowed() {
         return timesPlowed;
-    }
-    public void setTimesPlowed(int timesPlowed) {
-        this.timesPlowed = timesPlowed;
     }
 
     public int getTimesWatered() {
         return timesWatered;
     }
-    public void setTimesWatered(int timesWatered) {
-        this.timesWatered = timesWatered;
-    }
 
     public int getTimesFertilized() {
         return timesFertilized;
-    }
-    public void setTimesFertilized(int timesFertilized) {
-        this.timesFertilized = timesFertilized;
     }
 
     public int getTimesPlanted() {
         return timesPlanted;
     }
-    public void setTimesPlanted(int timesPlanted) {
-        this.timesPlanted = timesPlanted;
-    }
 
     public int getTimesHarvested() {
         return timesHarvested;
     }
-    public void setTimesHarvested(int timesHarvested) {
-        this.timesHarvested = timesHarvested;
-    }
 
-    public int getTimesHarvestedSuccessfully() {
-        return timesHarvestedSuccessfully;
-    }
-    public void setTimesHarvestedSuccessfully(int timesHarvestedSuccessfully) {
-        this.timesHarvestedSuccessfully = timesHarvestedSuccessfully;
+    public int getTimesBoughtSeeds() {
+        return timesBoughtSeeds;
     }
 
     @Override
     public String toString() {
-        return "Stats [timesPlanted=" + timesPlanted + ", timesPlowed=" + timesPlowed + ", timesWatered=" + timesWatered
-                + ", timesFertilized=" + timesFertilized + ", timesHarvested=" + timesHarvested
-                + ", timesHarvestedSuccessfully=" + timesHarvestedSuccessfully + "]";
+        return "<html>Farmer Stats <p>" +
+                "<p>No. of Seeds Bought: " + getTimesBoughtSeeds() +
+                "<p>No. of times Planted: " + getTimesPlanted() +
+                "<p>No. of times Harvested: " + getTimesHarvested() +
+                "<p>No. of times Plowed: " + getTimesPlowed() +
+                "<p>No. of times Watered: " + getTimesWatered() +
+                "<p>No. of times Fertilized: " + getTimesFertilized() +
+                "</html>";
     }
 }

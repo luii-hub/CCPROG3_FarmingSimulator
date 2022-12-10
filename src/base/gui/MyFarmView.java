@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.Button;
@@ -73,6 +74,7 @@ public class MyFarmView extends JFrame {
     private final JButton plantSeedButton = new JButton();
     private final JButton harvestSeedButton = new JButton();
     private final JButton buySeedButton = new JButton();
+    private final JButton quitGameButton = new JButton();
 
     public MyFarmView() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -122,6 +124,8 @@ public class MyFarmView extends JFrame {
 
         this.add(rightPanel);
         this.rightPanel.add(gameTextPanel);
+        gameTextLabel.setText("Game User-Feedback Provider");
+        gameTextLabel.setHorizontalAlignment(SwingConstants.CENTER);
         this.rightPanel.add(seedShopPanel);
 
         this.add(leftPanel);
@@ -136,7 +140,9 @@ public class MyFarmView extends JFrame {
         this.add(centerPanel, BorderLayout.CENTER);
         this.centerPanel.add(plotDetailsPanel);
         this.centerPanel.add(farmPlotPanel);
+        this.centerPanel.add(quitGameButton);
         this.centerPanel.add(farmerCommandPanel);
+        quitGameButton.setBounds(244 , 685, 153, 28);
 
     }
 
@@ -195,15 +201,6 @@ public class MyFarmView extends JFrame {
 
     private void setFarmerCommandPanel() {
 
-        plowButton.setSize(100, 100);
-        waterButton.setSize(100, 100);
-        fertilizerButton.setSize(100, 100);
-        shovelButton.setSize(100, 100);
-        pickaxeButton.setSize(100, 100);
-        buySeedButton.setSize(100, 100);
-        plowButton.setSize(100, 100);
-        plowButton.setSize(100, 100);
-
         farmerCommandPanel.setBorder(new EmptyBorder(10, 5, 10, 5));
         farmerCommandPanel.setBounds(0, 610, 640, 80);
         plowButton.setText("Hoe");
@@ -214,6 +211,7 @@ public class MyFarmView extends JFrame {
         buySeedButton.setText("Buy Seed");
         plantSeedButton.setText("Plant Seed");
         harvestSeedButton.setText("Harvest Plant");
+        quitGameButton.setText("Quit Game");
 
         farmerCommandPanel.add(plowButton);
         farmerCommandPanel.add(waterButton);
@@ -223,7 +221,6 @@ public class MyFarmView extends JFrame {
         farmerCommandPanel.add(buySeedButton);
         farmerCommandPanel.add(plantSeedButton);
         farmerCommandPanel.add(harvestSeedButton);
-
 
     }
 
@@ -375,12 +372,10 @@ public class MyFarmView extends JFrame {
     public JButton getHarvestSeedButton() {
         return harvestSeedButton;
     }
+    public JButton getQuitGameButton() {return quitGameButton;}
 
     public HashMap<Integer, JButton> getFarmPlotButtons() {
         return farmPlotButtons;
     }
-
-    public JPanel getFarmerDetailsPanel() {
-        return farmerDetailsPanel;
-    }
+    public JPanel getFarmerDetailsPanel() {return farmerDetailsPanel;}
 }

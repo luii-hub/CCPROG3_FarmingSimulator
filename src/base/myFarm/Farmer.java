@@ -1,5 +1,6 @@
 package base.myFarm;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
@@ -15,14 +16,15 @@ public class Farmer {
     private boolean isRegisterable;
     private int registerCounter;
     private final ArrayList<Crop> inventory = new ArrayList<>();
+    private final DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
 
     public Farmer(FarmerType type){
         FarmerStats = new Stats();
         this.type = type;
-        this.farmerLevel = 4;
+        this.farmerLevel = 0;
         this.experience = 0.0;
-        this.objectCoins = 199;
+        this.objectCoins = 10;
         this.isRegisterable = false;
         this.registerCounter = 0;
     }
@@ -300,7 +302,7 @@ public class Farmer {
      * @param plot
      * @param index
      */
-    public void harvestPlant(Farmer player, HashMap<Integer, Tile> plot, int index) {
+    public String harvestPlant(Farmer player, HashMap<Integer, Tile> plot, int index, String feedback) {
 
         /* Get the Product Produce of the crop */
         int earnBonus = player.getType().getBonusEarnings();
@@ -324,7 +326,10 @@ public class Farmer {
         player.addExperience(totalExpGain);
 
         /* Display appropriate message based from the report given */
-        System.out.println("\tTotal Harvest Price: " + harvestTotal);
+        feedback = "<html> Congratulations! <p>" +
+                "<p> You have harvested & sold " + productsProduced + " " + plot.get(index).getPlantedCrop().getName() + " Crops!" +
+                "<p> Player has received " + decimalFormat.format(finalHarvestPrice) + " ObjectCoins and earned " + decimalFormat.format(totalExpGain) + " experience. <html>";
+
         System.out.println("\tBonus ObjectCoins from Watering: " + harvestWaterBonus);
         System.out.println("\tBonus ObjectCoins from Fertilizing: " + harvestFertilizerBonus);
         System.out.println( "\tCongratulations!\n\tYou have harvested & sold " + productsProduced + " " + plot.get(index).getPlantedCrop().getName() + " Crops!" +
@@ -333,6 +338,7 @@ public class Farmer {
         /* Remove crop from the tile, set a newly fresh tile */
         plot.replace(index, new Tile(index, null, TileStatus.UNPLOWED));
         getFarmerStats().addTimesHarvested();
+        return feedback;
     }
 
     /** This method simply prints out and display the farmer's information (i.e. type, level, objectcoins

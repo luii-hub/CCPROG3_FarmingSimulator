@@ -26,10 +26,31 @@ public class MyFarmController {
         farmView.init();
         farmView.initializePanels();
         updateGame();
+        checkEndGame();
         farmMarket();
         actionCommand();
     }
 
+    private void checkEndGame(){
+        if(!farmModel.checkGameConditions(farmModel.isRunning())){
+            JOptionPane.showMessageDialog(null,
+                    "<html> Game Over! <p><p> You cannot continue anymore because you have failed in being a Farmer.",
+                    "Game Over!", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                    String.valueOf(farmModel.player.getFarmerStats().toString()),
+                    "Final Game Statistics!", JOptionPane.INFORMATION_MESSAGE);
+            farmView.getPlowButton().setEnabled(false);
+            farmView.getWaterButton().setEnabled(false);
+            farmView.getFertilizerButton().setEnabled(false);
+            farmView.getPickaxeButton().setEnabled(false);
+            farmView.getShovelButton().setEnabled(false);
+            farmView.getRegisterFarmerButton().setEnabled(false);
+            farmView.getPlantSeedButton().setEnabled(false);
+            farmView.getHarvestSeedButton().setEnabled(false);
+            farmView.getBuySeedButton().setEnabled(false);
+            farmView.getNextDayButton().setEnabled(false);
+        }
+    }
     public void updateGame() {
         gameConditionUpdater();
         updateFarmerLevel();
@@ -60,7 +81,6 @@ public class MyFarmController {
             int inputIndex = i + 1;
             inventory = " " + farmModel.seedList.get(i).getName() + " Seed(s): " + Collections.frequency(farmModel.player.getInventory(), farmModel.seedList.get(i));
             farmView.getFarmerSeedInventoryButtons().get(inputIndex).setText(inventory);
-            System.out.println(inventory);
         }
     }
     private void famerStatusMouseListener(){
@@ -104,7 +124,6 @@ public class MyFarmController {
             farmView.getSeedShopButtons().get(inputIndex).setEnabled(false);
             inventory = farmModel.seedList.get(i).getName() + " Seed";
             farmView.getSeedShopButtons().get(inputIndex).setText(inventory);
-            System.out.println(inventory);
         }
     }
 
@@ -162,6 +181,7 @@ public class MyFarmController {
                                     farmModel.player.plowTool(farmModel.plot, (ArrayList<Tool>) farmModel.toolList, tileIndex);
                                     updateTileStatuses();
                                     updateGame();
+                                    checkEndGame();
                                 }
                             }
                             case SEED, PLANT, TREE, WITHERED, ROCK, PLOWED -> {
@@ -173,7 +193,6 @@ public class MyFarmController {
                     } catch (Exception error) {
                         displayErrorMessage();
                     }
-
                 } else if (buttonSource == farmView.getWaterButton()) {
                     System.out.println("Water Button Action Performed");
                     try {
@@ -197,6 +216,7 @@ public class MyFarmController {
                     } catch (Exception error) {
                         displayErrorMessage();
                     }
+                    checkEndGame();
                 } else if (buttonSource == farmView.getFertilizerButton()) {
                     System.out.println("Fertilizer Button Action Performed");
                     try {
@@ -220,6 +240,7 @@ public class MyFarmController {
                     } catch (Exception error) {
                         displayErrorMessage();
                     }
+                    checkEndGame();
                 } else if (buttonSource == farmView.getShovelButton()) {
                     System.out.println("Shovel Button Action Performed");
                     try {
@@ -242,6 +263,7 @@ public class MyFarmController {
                     } catch (Exception error) {
                         displayErrorMessage();
                     }
+                    checkEndGame();
                 } else if (buttonSource == farmView.getPickaxeButton()) {
                     System.out.println("Pickaxe Button Action Performed");
                     try {
@@ -269,6 +291,7 @@ public class MyFarmController {
                     } catch (Exception error) {
                         displayErrorMessage();
                     }
+                    checkEndGame();
                 } else if (buttonSource == farmView.getRegisterFarmerButton()) {
                     System.out.println("Register Button Action Performed");
                     /*	If player has met the minimum requirements, allow player the option to register into new role.
@@ -293,6 +316,7 @@ public class MyFarmController {
                     }
                     updateTileStatuses();
                     updateGame();
+                    checkEndGame();
                 } else if (buttonSource == farmView.getNextDayButton()) {
                     System.out.println("Next day Button Action Performed");
                     try {
@@ -301,6 +325,18 @@ public class MyFarmController {
                             farmModel.nextDay(farmModel.MyFarm);
                             farmView.getPlotDetailsLabel().setText("Day " + String.valueOf(farmModel.MyFarm.getDaytime()));
                             System.out.println(farmModel.MyFarm.getDaytime());
+                        }
+                        updateTileStatuses();
+                        updateGame();
+                    } catch (Exception error) {
+                        displayErrorMessage();
+                    }
+                    checkEndGame();
+                } else if (buttonSource == farmView.getQuitGameButton()){
+                    try {
+                        if (JOptionPane.showConfirmDialog(null,
+                                "Are you sure you to quit game?", "Quit Game Option", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                            System.exit(0);
                         }
                         updateTileStatuses();
                         updateGame();
@@ -317,6 +353,7 @@ public class MyFarmController {
         farmView.getShovelButton().addActionListener(commandListener);
         farmView.getRegisterFarmerButton().addActionListener(commandListener);
         farmView.getNextDayButton().addActionListener(commandListener);
+        farmView.getQuitGameButton().addActionListener(commandListener);
         updateTileStatuses();
     }
 
@@ -326,7 +363,7 @@ public class MyFarmController {
                         "<html> Plow Tool | Cost 0 ObjectCoins <p><p>" +
                                 "Converts an unplowed tile to a plowed tile. Can only be performed on an unplowed tile. </html> ");
             }
-            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("");}
+            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("Game User-Feedback Provider");}
         });
     }
 
@@ -337,7 +374,7 @@ public class MyFarmController {
                                 "Adds to the total number of times a tile/crop has been watered. " +
                                 "Can only be performed on a plowed tile with a crop. </html> ");
             }
-            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("");}
+            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("Game User-Feedback Provider");}
         });
     }
 
@@ -348,7 +385,7 @@ public class MyFarmController {
                                 "Adds to the total number of times a tile/crop has been applied with fertilizer. " +
                                 "Can only be performed on a plowed tile with a crop. ");
             }
-            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("");}
+            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("Game User-Feedback Provider");}
         });
     }
 
@@ -360,7 +397,7 @@ public class MyFarmController {
                                 "Removes a withered plant from a tile. " +
                                 "Can be used on any tile/crop with varying effects, as described above. </html> ");
             }
-            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("");}
+            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("Game User-Feedback Provider");}
         });
     }
 
@@ -371,7 +408,7 @@ public class MyFarmController {
                         "<html> Pickaxe Tool | Cost 50 ObjectCoins <p><p> + " +
                                 "Removes a rock from a tile. Can only be applied to tiles with a rock. </html> ");
             }
-            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("");}
+            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("Game User-Feedback Provider");}
         });
     }
 
@@ -380,7 +417,11 @@ public class MyFarmController {
             int finalI = i - 1;
             farmView.getSeedShopButtons().get(i).addMouseListener(new MouseAdapter() {
                 @Override public void mouseEntered(MouseEvent e) {farmView.getGameTextLabel().setText(farmModel.seedList.get(finalI).toString());}
-                @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("");}
+                @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("Game User-Feedback Provider");}
+            });
+            farmView.getFarmerSeedInventoryButtons().get(i).addMouseListener(new MouseAdapter() {
+                @Override public void mouseEntered(MouseEvent e) {farmView.getGameTextLabel().setText(farmModel.seedList.get(finalI).toString());}
+                @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("Game User-Feedback Provider");}
             });
         }
     }
@@ -390,7 +431,7 @@ public class MyFarmController {
             int finalI = i;
             farmView.getFarmPlotButtons().get(i).addMouseListener(new MouseAdapter() {
                 @Override public void mouseEntered(MouseEvent e) {farmView.getGameTextLabel().setText(farmModel.plot.get(finalI).toString());}
-                @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("");}
+                @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("Game User-Feedback Provider");}
             });
         }
     }
@@ -418,9 +459,7 @@ public class MyFarmController {
                         "<html> Buy a Seed from the super market. " +
                                 "Purchase your desired seed crops from there. </html> ");
             }
-            @Override public void mouseExited(MouseEvent e) {
-                farmView.getGameTextLabel().setText("");
-            }
+            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("Game User-Feedback Provider");}
         });
         buySeedActionListener();
     }
@@ -526,7 +565,7 @@ public class MyFarmController {
                                 "Fruit Tree Seeds cannot be planted on edges and can only be planted on an unoccupied, plowed tile" +
                                 "with no neighboring objects around the selected tile.</html> ");
             }
-            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("");}
+            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("Game User-Feedback Provider");}
         });
     }
 
@@ -556,6 +595,10 @@ public class MyFarmController {
                         updateTileStatuses();
                         updateGame();
                     } catch (Exception error){
+                        /* Update Farmer Inventory Seed Button Restrictions */
+                        for (int i = 1; i <= farmModel.seedList.size(); i++) {
+                            farmView.getFarmerSeedInventoryButtons().get(i).setEnabled(false);
+                        }
                         JOptionPane.showInternalMessageDialog(null, "Cancelled Plant Seed Action", "Plant Seed Validation", JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
@@ -575,10 +618,10 @@ public class MyFarmController {
                             if (JOptionPane.showConfirmDialog(null, "Are you sure to Harvest on this Plant?",
                                     "Harvest Plant Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                                 if (farmModel.checkTileStatus(farmModel.plot, "harvest")) {
-                                    farmModel.player.harvestPlant(farmModel.player, farmModel.plot, tileIndex);
+                                    String feedback = farmModel.player.harvestPlant(farmModel.player, farmModel.plot, tileIndex, null);
                                     updateGame();
                                     JOptionPane.showMessageDialog(
-                                            null, "You have successfully harvested a Plant",
+                                            null, feedback,
                                             "Harvest Plant Tile Message",
                                             JOptionPane.INFORMATION_MESSAGE);
                                 } else {
@@ -606,7 +649,7 @@ public class MyFarmController {
                                 "Different Crops have different attributes, harvesting them may contain other benefits" +
                                 "</html> ");
             }
-            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("");}
+            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("Game User-Feedback Provider");}
         });
     }
 
@@ -622,7 +665,7 @@ public class MyFarmController {
                                 "Legendary Farmer: Cost 400 OC" +
                                 "</html> ");
             }
-            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("");}
+            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("Game User-Feedback Provider");}
         });
     }
 
@@ -637,7 +680,7 @@ public class MyFarmController {
                         "<html> Take a good nights rest and advance unto the next day. " +
                                 "Resting resets all parameters and updates the gameplay.</html> ");
             }
-            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("");}
+            @Override public void mouseExited(MouseEvent e) {farmView.getGameTextLabel().setText("Game User-Feedback Provider");}
         });
     }
     private void displayErrorMessage() {

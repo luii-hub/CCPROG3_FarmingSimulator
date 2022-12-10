@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MyFarmModel {
-
+    protected boolean isRunning = true;
     protected final Farmer player = new Farmer(FarmerType.DEFAULT);
 
     protected final HashMap<Integer, Tile> plot = new HashMap<>();
@@ -217,5 +217,52 @@ public class MyFarmModel {
         return status;
     }
 
+    /**	This method determines that state of the game. It checks for conditions to determine whether the player cannot continue the game.
+     * 	If the conditions are met, return isRunning with a boolean value of false and will let the program know to stop and terminate the
+     * 	program within the main function.
+     *
+     * 	@param isRunning
+     * 	@returns isRunning
+     */
+    public boolean checkGameConditions(boolean isRunning) {
+        int condOneCounter = 0;
+        int condTwoCounter = 0;
+        boolean cond1 = false, cond2 = false;
+        for(int i = 1; i <= plot.size(); i++){
+            /* Condition 1.1: IF there are no more active and growing crops present in the farm plot */
+            if(plot.get(i).getStatus().equals(TileStatus.PLANT) || plot.get(i).getStatus().equals(TileStatus.SEED) || plot.get(i).getStatus().equals(TileStatus.TREE)){
+                condOneCounter++;
+            }
+            /* Condition 1.2: IF the farmer has no more ObjectCoins to buy new seeds and IF the farmer has no more seeds to plant */
+            if(player.getInventory().size() == 0 && player.getObjectCoins() == 0){
+                cond2 = true;
+            }
 
+            /* Condition 2: IF all available tiles are all occupied with WITHERED PLANTS */
+            if(plot.get(i).getStatus().equals(TileStatus.WITHERED)){
+                condTwoCounter++;
+            }
+            if(plot.get(i).getStatus().equals(TileStatus.ROCK)){
+                condTwoCounter++;
+            }
+        }
+        /* If Conditions are met, depending on the type of end-game condition, return value to false, else return true */
+        if(condOneCounter == 0){
+            cond1 = true;
+            System.out.println("First Condition Met");
+        }
+        if(condTwoCounter == 50){
+            isRunning = false;
+            System.out.println("Second Condition Met");
+        }
+        else if(cond1 && cond2){
+            isRunning = false;
+            System.out.println("Both First Conditions Met");
+        }
+        return isRunning;
+    }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
 }

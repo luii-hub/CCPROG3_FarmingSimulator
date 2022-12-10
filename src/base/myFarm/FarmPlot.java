@@ -31,7 +31,7 @@ public class FarmPlot {
     }
 
     private void generateManualRocks(HashMap<Integer, Tile> plot) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader("rocks.txt"));
+        BufferedReader br = new BufferedReader(new FileReader("rocks2.txt"));
 
         String line = null;
         int rockValue;
@@ -45,7 +45,7 @@ public class FarmPlot {
                         plot.get(tileIndex).setStatus(TileStatus.ROCK);
                     }
 
-                } catch (NumberFormatException nfe) {
+                } catch (NumberFormatException error) {
                     continue;
                 }
                 tileIndex++;
@@ -65,32 +65,6 @@ public class FarmPlot {
             }
             if((i % 5) == 1 || (i % 5) == 0){
                 plot.get(i).setEdge(true);
-            }
-        }
-    }
-    private int rngRockPosition(){
-        int lb = 1, ub = 50;
-        return (int) Math.floor(Math.random()*(ub-lb+1)+lb);
-    }
-
-    private int rngRockCount(){
-        int minRocks = 10, maxRocks = 30;
-        return (int) Math.floor(Math.random()*(maxRocks-minRocks+1)+minRocks);
-    }
-
-    private void generateRocks(HashMap<Integer, Tile> plot, int rockCount){
-        int index;
-        int counter = 0;
-        for(int i = 0; i < rockCount; i++){
-            while(counter != rockCount){
-                index = rngRockPosition();
-                if(plot.get(index).getStatus().equals(TileStatus.ROCK)){
-                    continue;
-                }
-                else {
-                    plot.get(index).setStatus(TileStatus.ROCK);
-                    counter++;
-                }
             }
         }
     }

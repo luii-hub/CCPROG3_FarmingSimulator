@@ -296,8 +296,10 @@ public class Application {
 						index = input.nextInt();
 						/* Check if selected tile in within the range */
 						if (index > 0 && index <= 50) {
+							String feedback = null;
 							/* Harvest Crop(s) from Tile, Update the Tile, Update Farmer ObjectCoin(s) and Experience */
-							player.harvestPlant(player, plot, index);
+							feedback = player.harvestPlant(player, plot, index, null);
+							System.out.println(feedback);
 						} else {
 							System.out.println("\tError! Tile Index is out of bounds");
 						}
@@ -398,7 +400,7 @@ public class Application {
 			if(plot.get(i).getStatus().equals(TileStatus.WITHERED)){
 				condTwoCounter++;
 			}
-			if(plot.get(i).getStatus().equals(TileStatus.ROCK)){
+			if(plot.get(i).getStatus().equals(TileStatus.ROCK) && player.getObjectCoins() < 50){
 				condTwoCounter++;
 			}
 		}
